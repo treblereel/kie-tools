@@ -32,6 +32,20 @@
   <name>Kogito SW Editor - Kogito App</name>
   <description>Kogito SW Editor - Kogito App</description>
 
+  <!-- CNCF SW Repos. -->
+  <repositories>
+    <repository>
+    <id>oss.sonatype.org-snapshot</id>
+    <url>http://oss.sonatype.org/content/repositories/snapshots</url>
+    <releases>
+      <enabled>false</enabled>
+    </releases>
+    <snapshots>
+      <enabled>true</enabled>
+    </snapshots>
+  </repository>
+  </repositories>
+
   <dependencies>
     <!--Logs-->
     <dependency>
@@ -367,6 +381,42 @@
           <artifactId>commons-logging</artifactId>
         </exclusion>
       </exclusions>
+    </dependency>
+
+    <!-- CNCF SW Java. -->
+    <dependency>
+      <groupId>io.serverlessworkflow</groupId>
+      <artifactId>serverlessworkflow-api</artifactId>
+      <version>5.0.0-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>io.serverlessworkflow</groupId>
+      <artifactId>serverlessworkflow-spi</artifactId>
+      <version>5.0.0-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>io.serverlessworkflow</groupId>
+      <artifactId>serverlessworkflow-validation</artifactId>
+      <version>5.0.0-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>io.serverlessworkflow</groupId>
+      <artifactId>serverlessworkflow-diagram</artifactId>
+      <version>5.0.0-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>io.serverlessworkflow</groupId>
+      <artifactId>serverlessworkflow-util</artifactId>
+      <version>5.0.0-SNAPSHOT</version>
+      <scope>test</scope>
     </dependency>
 
   </dependencies>
