@@ -25,7 +25,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.xml.stream.XMLStreamException;
 
-import elemental2.dom.DomGlobal;
 import org.kie.workbench.common.stunner.bpmn.BPMNDefinitionSet;
 import org.kie.workbench.common.stunner.bpmn.definition.BPMNViewDefinition;
 import org.kie.workbench.common.stunner.bpmn.definition.FlowElement;
@@ -37,6 +36,7 @@ import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EventGateway;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.ExclusiveGateway;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.ExtensionElements;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.FlowNodeRef;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.InclusiveGateway;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Incoming;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.ItemDefinition;
@@ -64,14 +64,22 @@ import org.kie.workbench.common.stunner.bpmn.definition.models.di.Waypoint;
 import org.kie.workbench.common.stunner.core.definition.adapter.binding.BindableAdapterUtils;
 import org.kie.workbench.common.stunner.core.diagram.Diagram;
 import org.kie.workbench.common.stunner.core.graph.Edge;
+import org.kie.workbench.common.stunner.core.graph.Graph;
+import org.kie.workbench.common.stunner.core.graph.Node;
+import org.kie.workbench.common.stunner.core.graph.content.definition.DefinitionSet;
+import org.kie.workbench.common.stunner.core.graph.content.relationship.Child;
 import org.kie.workbench.common.stunner.core.graph.content.view.Connection;
 import org.kie.workbench.common.stunner.core.graph.content.view.ControlPoint;
 import org.kie.workbench.common.stunner.core.graph.content.view.DiscreteConnection;
 import org.kie.workbench.common.stunner.core.graph.content.view.Point2D;
+import org.kie.workbench.common.stunner.core.graph.content.view.View;
 import org.kie.workbench.common.stunner.core.graph.content.view.ViewConnector;
 import org.kie.workbench.common.stunner.core.graph.content.view.ViewConnectorImpl;
 import org.kie.workbench.common.stunner.core.graph.content.view.ViewImpl;
 import org.kie.workbench.common.stunner.core.graph.impl.NodeImpl;
+import org.kie.workbench.common.stunner.core.graph.processing.traverse.content.ChildrenTraverseCallback;
+import org.kie.workbench.common.stunner.core.graph.processing.traverse.content.ChildrenTraverseProcessorImpl;
+import org.kie.workbench.common.stunner.core.graph.processing.traverse.tree.TreeWalkTraverseProcessorImpl;
 
 import static java.util.stream.StreamSupport.stream;
 
@@ -90,7 +98,7 @@ public class BPMNClientMarshalling {
 
     @SuppressWarnings("unchecked")
     public String marshall(final Diagram diagram) {
-        Definitions definitions = createDefinitions(diagram.getGraph().nodes());
+        Definitions definitions = createDefinitions(diagram.getGraph());
         try {
             return mapper.write(definitions);
         } catch (XMLStreamException e) {
@@ -98,7 +106,8 @@ public class BPMNClientMarshalling {
         }
     }
 
-    Definitions createDefinitions(Iterable<NodeImpl<ViewImpl<BPMNViewDefinition>>> nodes) {
+    Definitions createDefinitions(Graph graph) {
+        Iterable<NodeImpl<ViewImpl<BPMNViewDefinition>>> nodes = graph.nodes();
         IdGenerator.reset();
         Definitions definitions = new Definitions();
         BpmnDiagram bpmnDiagram = new BpmnDiagram();
@@ -116,22 +125,20 @@ public class BPMNClientMarshalling {
         definitions.setProcess(process);
         plane.setBpmnElement(process.getName());
 
-        nodes.forEach(DomGlobal.console::info);
-
         List<SequenceFlow> sequenceFlows = new ArrayList<>();
         for (final NodeImpl<ViewImpl<BPMNViewDefinition>> node : nodes) {
-            BPMNViewDefinition n = node.getContent().getDefinition();
-            if (n instanceof Process) {
+            BPMNViewDefinition definition = node.getContent().getDefinition();
+            if (definition instanceof Process) {
                 continue;
             }
 
-            if (n instanceof FlowElement) {
+            if (definition instanceof FlowElement) {
                 // All except Lanes
-                ((FlowElement) n).setId(IdGenerator.getNextIdFor(n, node.getUUID()));
+                ((FlowElement) definition).setId(IdGenerator.getNextIdFor(definition, node.getUUID()));
             }
 
-            if (n instanceof StartEvent) {
-                StartEvent startEvent = (StartEvent) n;
+            if (definition instanceof StartEvent) {
+                StartEvent startEvent = (StartEvent) definition;
                 process.getStartEvents().add(startEvent);
 
                 // Sequence Flows
@@ -156,8 +163,8 @@ public class BPMNClientMarshalling {
                 simulationElements.add(startEvent.getElementParameters());
             }
 
-            if (n instanceof EndEvent) {
-                EndEvent endEvent = (EndEvent) n;
+            if (definition instanceof EndEvent) {
+                EndEvent endEvent = (EndEvent) definition;
                 process.getEndEvents().add(endEvent);
 
                 // Sequence Flows
@@ -168,11 +175,11 @@ public class BPMNClientMarshalling {
                 simulationElements.add(endEvent.getElementParameters());
             }
 
-            if (n instanceof BaseTask) {
-                BaseTask task = (BaseTask) n;
-                if (n instanceof ScriptTask) {
+            if (definition instanceof BaseTask) {
+                BaseTask task = (BaseTask) definition;
+                if (definition instanceof ScriptTask) {
                     process.getScriptTasks().add(task);
-                } else if (n instanceof UserTask) {
+                } else if (definition instanceof UserTask) {
                     process.getUserTasks().add(task);
 
                     UserTask uTask = (UserTask) task;
@@ -188,8 +195,8 @@ public class BPMNClientMarshalling {
                 task.setOutgoing(outgoing);
             }
 
-            if (n instanceof BaseGateway) {
-                BaseGateway gateway = (BaseGateway) n;
+            if (definition instanceof BaseGateway) {
+                BaseGateway gateway = (BaseGateway) definition;
 
                 if (gateway instanceof ExclusiveGateway) {
                     process.getExclusiveGateways().add((ExclusiveGateway) gateway);
@@ -214,16 +221,24 @@ public class BPMNClientMarshalling {
                 gateway.setOutgoing(outgoing);
             }
 
-            if (n instanceof Lane) {
-                Lane lane = (Lane) n;
-                lane.setId(IdGenerator.getNextIdFor(n, node.getUUID()));
+            if (definition instanceof Lane) {
+                Lane lane = (Lane) definition;
+                lane.setId(IdGenerator.getNextIdFor(definition, node.getUUID()));
                 process.getLanes().add(lane);
             }
 
             // Adding Shape to Diagram
             plane.getBpmnShapes().add(
-                    createShapeForBounds(node.getContent().getBounds(), n.getId())
+                    createShapeForBounds(node.getContent().getBounds(), definition.getId())
             );
+        }
+
+        // When all IDs ready push children to lanes
+        for (final NodeImpl<ViewImpl<BPMNViewDefinition>> node : nodes) {
+            BPMNViewDefinition definition = node.getContent().getDefinition();
+            if (definition instanceof Lane) {
+                addChildrenToLane(graph, node);
+            }
         }
 
         // Set BpmnEdges ids now when all sources and targets are ready
@@ -254,6 +269,59 @@ public class BPMNClientMarshalling {
         definitions.setRelationship(relationship);
 
         return definitions;
+    }
+
+    private void addChildrenToLane(Graph graph, NodeImpl<ViewImpl<BPMNViewDefinition>> parent) {
+        ChildrenTraverseProcessorImpl processor = new ChildrenTraverseProcessorImpl(new TreeWalkTraverseProcessorImpl());
+        processor
+                .setRootUUID(parent.getUUID())
+                .traverse(graph,
+                          new ChildrenTraverseCallback<Node<View, Edge>, Edge<Child, Node>>() {
+
+                              @Override
+                              public void startGraphTraversal(Graph<DefinitionSet, Node<View, Edge>> graph) {
+
+                              }
+
+                              @Override
+                              public void startEdgeTraversal(Edge<Child, Node> edge) {
+
+                              }
+
+                              @Override
+                              public void endEdgeTraversal(Edge<Child, Node> edge) {
+
+                              }
+
+                              @Override
+                              public void startNodeTraversal(Node<View, Edge> node) {
+
+                              }
+
+                              @Override
+                              public void endNodeTraversal(Node<View, Edge> node) {
+
+                              }
+
+                              @Override
+                              public void endGraphTraversal() {
+
+                              }
+
+                              @Override
+                              public boolean startNodeTraversal(List<Node<View, Edge>> parents,
+                                                                Node<View, Edge> node) {
+                                  Lane lane = (Lane) parent.getContent().getDefinition();
+                                  if (node.getContent().getDefinition() instanceof FlowElement) {
+                                      FlowElement element = (FlowElement) node.getContent().getDefinition();
+
+                                      FlowNodeRef ref = new FlowNodeRef();
+                                      ref.setValue(element.getId());
+                                      lane.getFlowNodeRefs().add(ref);
+                                  }
+                                  return false;
+                              }
+                          });
     }
 
     private void setProcessVariablesToDefinitions(Definitions definitions, List<Property> processVariables) {

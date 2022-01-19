@@ -132,7 +132,7 @@ public class Lane implements BPMNViewDefinition {
 
     @XmlUnwrappedCollection
     @XmlElement(name = "flowNodeRef")
-    private List<FlowNodeRef> flowNodeRef = new ArrayList<>();
+    private List<FlowNodeRef> flowNodeRefs = new ArrayList<>();
 
     @Labels
     private final Set<String> labels = new Sets.Builder<String>()
@@ -262,12 +262,12 @@ to the new forms.
         this.extensionElements = extensionElements;
     }
 
-    public List<FlowNodeRef> getFlowNodeRef() {
-        return flowNodeRef;
+    public List<FlowNodeRef> getFlowNodeRefs() {
+        return flowNodeRefs;
     }
 
-    public void setFlowNodeRef(List<FlowNodeRef> flowNodeRef) {
-        this.flowNodeRef = flowNodeRef;
+    public void setFlowNodeRefs(List<FlowNodeRef> flowNodeRefs) {
+        this.flowNodeRefs = flowNodeRefs;
     }
 
     @Override
