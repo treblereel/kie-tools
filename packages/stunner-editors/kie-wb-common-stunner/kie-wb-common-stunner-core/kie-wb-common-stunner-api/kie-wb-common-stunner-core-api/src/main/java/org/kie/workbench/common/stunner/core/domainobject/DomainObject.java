@@ -31,7 +31,6 @@ import org.kie.workbench.common.stunner.core.definition.annotation.definition.La
  * 1) It must be {@link Portable}
  * 2) It must be {@link Bindable}
  * 3) It must be a {@link Definition}
- * 4) It must have a {@link FormDefinition}
  * 5) It must have a {@link Category} property and associated public getter.
  * 6) It must have a {@link Labels} property and associated public getter.
  * 7) It must be included in a {@link DefinitionSet} declaration.

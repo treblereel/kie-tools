@@ -36,6 +36,7 @@
 
   <dependencies>
 
+<<<<<<< HEAD
     <!-- Form modeler. -->
     <dependency>
       <groupId>org.kie.kogito.stunner.editors</groupId>

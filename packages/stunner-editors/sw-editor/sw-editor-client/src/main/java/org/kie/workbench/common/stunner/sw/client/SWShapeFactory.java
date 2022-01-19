@@ -1,0 +1,117 @@
+/*
+ * Copyright 2017 Red Hat, Inc. and/or its affiliates.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.kie.workbench.common.stunner.sw.client;
+
+import java.util.Optional;
+import java.util.function.BiConsumer;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+
+import org.kie.workbench.common.stunner.core.client.shape.Shape;
+import org.kie.workbench.common.stunner.core.client.shape.factory.ShapeFactory;
+import org.kie.workbench.common.stunner.core.client.shape.view.HasTitle;
+import org.kie.workbench.common.stunner.core.client.shape.view.ShapeView;
+import org.kie.workbench.common.stunner.core.client.shape.view.handler.FontHandler;
+import org.kie.workbench.common.stunner.core.client.shape.view.handler.TitleHandler;
+import org.kie.workbench.common.stunner.core.client.shape.view.handler.ViewAttributesHandler;
+import org.kie.workbench.common.stunner.core.definition.shape.Glyph;
+import org.kie.workbench.common.stunner.shapes.client.factory.BasicShapesFactory;
+import org.kie.workbench.common.stunner.shapes.def.ConnectorGlyph;
+import org.kie.workbench.common.stunner.shapes.def.RectangleShapeDef;
+
+@ApplicationScoped
+public class SWShapeFactory
+        implements ShapeFactory<Object, Shape> {
+
+    private final BasicShapesFactory basicShapesFactory;
+
+    // CDI proxy.
+    protected SWShapeFactory() {
+        this.basicShapesFactory = null;
+    }
+
+    @Inject
+    public SWShapeFactory(final BasicShapesFactory basicShapesFactory) {
+        this.basicShapesFactory = basicShapesFactory;
+    }
+
+    @Override
+    @SuppressWarnings("all")
+    public Shape newShape(final Object definition) {
+        return basicShapesFactory.newShape(definition, new StageShapeDef());
+    }
+
+    @Override
+    @SuppressWarnings("all")
+    public Glyph getGlyph(final String definitionId) {
+        // TODO
+        return ConnectorGlyph.create();
+    }
+
+    private static class StageShapeDef implements RectangleShapeDef {
+
+        @Override
+        public Double getWidth(Object element) {
+            return 100d;
+        }
+
+        @Override
+        public Double getHeight(Object element) {
+            return 50d;
+        }
+
+        @Override
+        public double getCornerRadius(Object element) {
+            return 5d;
+        }
+
+        @Override
+        @SuppressWarnings("all")
+        public Optional<BiConsumer> titleHandler() {
+            TitleHandler<ShapeView> handler = new TitleHandler<>();
+            return Optional.of((o, o2) -> handler.handle((String) o, (ShapeView) o2));
+        }
+
+        @Override
+        @SuppressWarnings("all")
+        public Optional<BiConsumer> fontHandler() {
+            FontHandler<Object, ShapeView> handler = new FontHandler.Builder<Object, ShapeView>()
+                    .horizontalAlignment(o -> HasTitle.HorizontalAlignment.LEFT)
+                    //.verticalAlignment(o -> HasTitle.VerticalAlignment.TOP)
+                    .build();
+            return Optional.of((o, o2) -> handler.handle(o, (ShapeView) o2));
+        }
+
+        @Override
+        @SuppressWarnings("all")
+        public BiConsumer viewHandler() {
+            ViewAttributesHandler handler = new ViewAttributesHandlerBuilder().build();
+            return (o, o2) -> handler.handle(o, (ShapeView) o2);
+        }
+
+        private static class ViewAttributesHandlerBuilder<W extends Object, V extends ShapeView>
+                extends ViewAttributesHandler.Builder<W, V> {
+
+            public ViewAttributesHandlerBuilder() {
+                this.fillColor(bean -> "#FF0000")
+                        .strokeColor(bean -> "#FFFFFF")
+                        .strokeWidth(bean -> 1d);
+            }
+        }
+    }
+}

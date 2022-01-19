@@ -19,14 +19,16 @@
 
 <module>
 
-  <inherits name='org.gwtproject.user.User'/>
-  <inherits name="org.gwtbootstrap3.extras.notify.Notify"/>
-  <inherits name="org.gwtbootstrap3.extras.animate.Animate"/>
-  <inherits name="org.kie.workbench.common.stunner.core.StunnerBackendApi"/>
-  <inherits name="org.uberfire.ext.widgets.core.UberfireWidgetsCore"/>
-  <inherits name="org.uberfire.ext.widgets.common.UberfireWidgetsCommons"/>
-  <inherits name="org.uberfire.client.views.PatternFly"/>
+  <inherits name='com.google.gwt.user.User'/>
+  <inherits name="org.uberfire.UberfireClientAPI"/>
+  <inherits name="org.uberfire.ext.editor.commons.UberfireCommonsEditorClient"/>
+  <inherits name="org.kie.workbench.common.stunner.shapes.StunnerShapesClient"/>
+  <inherits name="org.kie.workbench.common.stunner.client.StunnerWidgets"/>
+  <inherits name="org.kie.soup.commons.KIESoupCommons"/>
+  <inherits name="org.uberfire.UberfireAPI"/>
+  <inherits name="org.kie.workbench.common.stunner.sw.SWEditorApi"/>
 
-  <source path="widgets"/>
+  <source path="client"/>
+  <source path="" includes="SWEntryPoint.java"/>
 
 </module>
