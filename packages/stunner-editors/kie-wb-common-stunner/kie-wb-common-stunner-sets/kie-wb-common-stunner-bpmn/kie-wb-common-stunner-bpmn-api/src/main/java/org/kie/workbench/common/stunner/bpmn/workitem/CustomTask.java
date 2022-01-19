@@ -26,14 +26,8 @@ import org.kie.workbench.common.forms.adf.definitions.annotations.FormDefinition
 import org.kie.workbench.common.forms.adf.definitions.annotations.FormField;
 import org.kie.workbench.common.forms.adf.definitions.settings.FieldPolicy;
 import org.kie.workbench.common.stunner.bpmn.definition.BPMNCategories;
-import org.kie.workbench.common.stunner.bpmn.definition.property.background.BackgroundSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.dataio.DataIOModel;
 import org.kie.workbench.common.stunner.bpmn.definition.property.dataio.DataIOSet;
-import org.kie.workbench.common.stunner.bpmn.definition.property.dimensions.RectangleDimensionsSet;
-import org.kie.workbench.common.stunner.bpmn.definition.property.font.FontSet;
-import org.kie.workbench.common.stunner.bpmn.definition.property.general.Documentation;
-import org.kie.workbench.common.stunner.bpmn.definition.property.general.Name;
-import org.kie.workbench.common.stunner.bpmn.definition.property.general.TaskGeneralSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.simulation.SimulationSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.task.TaskType;
 import org.kie.workbench.common.stunner.bpmn.definition.property.task.TaskTypes;
@@ -79,7 +73,7 @@ public class CustomTask extends BaseCustomTask implements DataIOModel {
 
     @Id
     @Title
-    private String name;
+    private String taskName;
 
     @Description
     private String description;
@@ -99,39 +93,32 @@ public class CustomTask extends BaseCustomTask implements DataIOModel {
              "Custom Task",
              BPMNCategories.CUSTOM_TASKS,
              "",
-             new TaskGeneralSet(new Name("Custom Task"),
-                                new Documentation()),
+             "Custom Task",
+             "",
              new DataIOSet(),
              new CustomTaskExecutionSet(),
-             new BackgroundSet(),
-             new FontSet(),
-             new RectangleDimensionsSet(),
              new SimulationSet(),
              new TaskType(TaskTypes.SERVICE_TASK),
              new AdvancedData());
     }
 
-    public CustomTask(@MapsTo("name") String name,
+    public CustomTask(@MapsTo("taskName") String taskName,
                       @MapsTo("description") String description,
                       @MapsTo("category") String category,
                       @MapsTo("defaultHandler") String defaultHandler,
-                      @MapsTo("general") TaskGeneralSet general,
+                      @MapsTo("name") String name,
+                      @MapsTo("documentation") String documentation,
                       @MapsTo("dataIOSet") DataIOSet dataIOSet,
                       @MapsTo("executionSet") CustomTaskExecutionSet executionSet,
-                      @MapsTo("backgroundSet") BackgroundSet backgroundSet,
-                      @MapsTo("fontSet") FontSet fontSet,
-                      @MapsTo("dimensionsSet") RectangleDimensionsSet dimensionsSet,
                       @MapsTo("simulationSet") SimulationSet simulationSet,
                       @MapsTo("taskType") TaskType taskType,
                       @MapsTo("advancedData") AdvancedData advancedData) {
-        super(general,
-              backgroundSet,
-              fontSet,
-              dimensionsSet,
+        super(name,
+              documentation,
               simulationSet,
               taskType,
               advancedData);
-        this.name = name;
+        this.taskName = taskName;
         this.description = description;
         this.category = category;
         this.defaultHandler = defaultHandler;
@@ -159,12 +146,12 @@ public class CustomTask extends BaseCustomTask implements DataIOModel {
         return false;
     }
 
-    public String getName() {
-        return name;
+    public String getTaskName() {
+        return taskName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
     }
 
     public String getDescription() {

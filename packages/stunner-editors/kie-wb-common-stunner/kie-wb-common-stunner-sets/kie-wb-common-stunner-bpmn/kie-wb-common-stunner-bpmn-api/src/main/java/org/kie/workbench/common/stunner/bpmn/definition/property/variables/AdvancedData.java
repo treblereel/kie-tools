@@ -16,6 +16,8 @@
 
 package org.kie.workbench.common.stunner.bpmn.definition.property.variables;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import javax.validation.Valid;
@@ -25,10 +27,13 @@ import org.jboss.errai.common.client.api.annotations.Portable;
 import org.jboss.errai.databinding.client.api.Bindable;
 import org.kie.workbench.common.forms.adf.definitions.annotations.FormDefinition;
 import org.kie.workbench.common.forms.adf.definitions.annotations.FormField;
-import org.kie.workbench.common.stunner.bpmn.definition.property.diagram.MetaDataAttributes;
+import org.kie.workbench.common.forms.adf.definitions.annotations.metaModel.FieldValue;
+import org.kie.workbench.common.stunner.bpmn.definition.models.drools.MetaData;
 import org.kie.workbench.common.stunner.bpmn.forms.model.MetaDataEditorFieldType;
 import org.kie.workbench.common.stunner.core.definition.annotation.Property;
+import org.kie.workbench.common.stunner.core.definition.annotation.property.Value;
 import org.kie.workbench.common.stunner.core.util.HashUtil;
+import org.kie.workbench.common.stunner.core.util.StringUtils;
 
 @Portable
 @Bindable
@@ -40,27 +45,40 @@ public class AdvancedData implements BaseAdvancedData {
             type = MetaDataEditorFieldType.class
     )
     @Valid
-    private MetaDataAttributes metaDataAttributes;
+    @Value
+    @FieldValue
+    private String metaDataAttributes;
 
     public AdvancedData() {
-        this(new MetaDataAttributes());
+        this("");
     }
 
-    public AdvancedData(final @MapsTo("metaDataAttributes") MetaDataAttributes metaDataAttributes) {
+    public AdvancedData(final @MapsTo("metaDataAttributes") String metaDataAttributes) {
         this.metaDataAttributes = metaDataAttributes;
     }
 
-    public AdvancedData(final String metaDataAttributes) {
-        this.metaDataAttributes = new MetaDataAttributes(metaDataAttributes);
-    }
-
     @Override
-    public MetaDataAttributes getMetaDataAttributes() {
+    public String getMetaDataAttributes() {
         return metaDataAttributes;
     }
 
-    public void setMetaDataAttributes(MetaDataAttributes metadataAttributes) {
+    public void setMetaDataAttributes(String metadataAttributes) {
         this.metaDataAttributes = metadataAttributes;
+    }
+
+    public List<MetaData> getAsMetaData() {
+        List<MetaData> metaData = new ArrayList<>();
+
+        if (StringUtils.nonEmpty(metaDataAttributes)) {
+            String[] metaArray = metaDataAttributes.split("Ø");
+            for (String md : metaArray) {
+                String[] metaNV = md.split("ß");
+                MetaData meta = new MetaData(metaNV[0], metaNV[1]);
+                metaData.add(meta);
+            }
+        }
+
+        return metaData;
     }
 
     @Override

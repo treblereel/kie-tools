@@ -22,7 +22,7 @@ import javax.enterprise.inject.Any;
 import javax.inject.Inject;
 
 import org.jboss.errai.ioc.client.api.ManagedInstance;
-import org.kie.workbench.common.stunner.bpmn.definition.BaseGateway;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BaseGateway;
 import org.kie.workbench.common.stunner.bpmn.qualifiers.BPMN;
 import org.kie.workbench.common.stunner.core.client.api.ClientFactoryManager;
 import org.kie.workbench.common.stunner.core.client.canvas.AbstractCanvasHandler;

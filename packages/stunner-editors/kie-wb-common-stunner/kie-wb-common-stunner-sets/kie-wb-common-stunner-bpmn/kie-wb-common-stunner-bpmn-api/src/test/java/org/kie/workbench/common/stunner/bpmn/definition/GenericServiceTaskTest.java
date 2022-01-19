@@ -17,12 +17,7 @@
 package org.kie.workbench.common.stunner.bpmn.definition;
 
 import org.junit.Test;
-import org.kie.workbench.common.stunner.bpmn.definition.property.background.BackgroundSet;
-import org.kie.workbench.common.stunner.bpmn.definition.property.dimensions.RectangleDimensionsSet;
-import org.kie.workbench.common.stunner.bpmn.definition.property.font.FontSet;
-import org.kie.workbench.common.stunner.bpmn.definition.property.general.Documentation;
-import org.kie.workbench.common.stunner.bpmn.definition.property.general.Name;
-import org.kie.workbench.common.stunner.bpmn.definition.property.general.TaskGeneralSet;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.GenericServiceTask;
 import org.kie.workbench.common.stunner.bpmn.definition.property.service.GenericServiceTaskExecutionSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.simulation.SimulationSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.task.TaskType;
@@ -35,12 +30,9 @@ public class GenericServiceTaskTest {
 
     @Test
     public void setAndGetExecutionSet() {
-        GenericServiceTask genericServiceTask = new GenericServiceTask(new TaskGeneralSet(new Name("Service Task"),
-                                                                                          new Documentation("")),
+        GenericServiceTask genericServiceTask = new GenericServiceTask("Service Task",
+                                                                       "",
                                                                        new GenericServiceTaskExecutionSet(),
-                                                                       new BackgroundSet(),
-                                                                       new FontSet(),
-                                                                       new RectangleDimensionsSet(),
                                                                        new SimulationSet(),
                                                                        new TaskType(TaskTypes.SERVICE_TASK),
                                                                        new AdvancedData());

@@ -22,17 +22,7 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.kie.workbench.common.stunner.bpmn.definition.AdHocSubprocess;
-import org.kie.workbench.common.stunner.bpmn.definition.BPMNDiagramImpl;
-import org.kie.workbench.common.stunner.bpmn.definition.BusinessRuleTask;
 import org.kie.workbench.common.stunner.bpmn.definition.DataObject;
-import org.kie.workbench.common.stunner.bpmn.definition.EmbeddedSubprocess;
-import org.kie.workbench.common.stunner.bpmn.definition.EndErrorEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.EndEscalationEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.EndMessageEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.EndSignalEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.EventSubprocess;
-import org.kie.workbench.common.stunner.bpmn.definition.GenericServiceTask;
 import org.kie.workbench.common.stunner.bpmn.definition.IntermediateErrorEventCatching;
 import org.kie.workbench.common.stunner.bpmn.definition.IntermediateEscalationEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.IntermediateEscalationEventThrowing;
@@ -42,13 +32,23 @@ import org.kie.workbench.common.stunner.bpmn.definition.IntermediateMessageEvent
 import org.kie.workbench.common.stunner.bpmn.definition.IntermediateMessageEventThrowing;
 import org.kie.workbench.common.stunner.bpmn.definition.IntermediateSignalEventCatching;
 import org.kie.workbench.common.stunner.bpmn.definition.IntermediateSignalEventThrowing;
-import org.kie.workbench.common.stunner.bpmn.definition.MultipleInstanceSubprocess;
-import org.kie.workbench.common.stunner.bpmn.definition.ReusableSubprocess;
-import org.kie.workbench.common.stunner.bpmn.definition.StartErrorEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.StartEscalationEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.StartMessageEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.StartSignalEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.UserTask;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.AdHocSubprocess;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BusinessRuleTask;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EmbeddedSubprocess;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndErrorEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndEscalationEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndMessageEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndSignalEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EventSubprocess;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.GenericServiceTask;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.MultipleInstanceSubprocess;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Process;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.ReusableSubprocess;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.StartErrorEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.StartEscalationEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.StartMessageEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.StartSignalEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.UserTask;
 import org.kie.workbench.common.stunner.bpmn.definition.property.dataio.AssignmentsInfo;
 import org.kie.workbench.common.stunner.bpmn.workitem.CustomTask;
 import org.kie.workbench.common.stunner.core.graph.content.view.View;
@@ -467,8 +467,8 @@ public class AbstractDataTypeCacheTest {
 
     @Test
     public void textExtractBPMNDiagram() {
-        BPMNDiagramImpl diagram = new BPMNDiagramImpl();
-        BPMNDiagramImpl diagram2 = new BPMNDiagramImpl();
+        Process diagram = new Process();
+        Process diagram2 = new Process();
 
         when(firstView.getDefinition()).thenReturn(diagram);
         when(lastView.getDefinition()).thenReturn(diagram2);

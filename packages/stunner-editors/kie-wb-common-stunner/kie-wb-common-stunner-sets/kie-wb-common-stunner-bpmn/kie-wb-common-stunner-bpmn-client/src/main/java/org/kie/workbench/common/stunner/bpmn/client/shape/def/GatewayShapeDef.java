@@ -21,11 +21,11 @@ import java.util.Map;
 import org.kie.soup.commons.util.Maps;
 import org.kie.workbench.common.stunner.bpmn.client.resources.BPMNGlyphFactory;
 import org.kie.workbench.common.stunner.bpmn.client.resources.BPMNSVGViewFactory;
-import org.kie.workbench.common.stunner.bpmn.definition.BaseGateway;
-import org.kie.workbench.common.stunner.bpmn.definition.EventGateway;
-import org.kie.workbench.common.stunner.bpmn.definition.ExclusiveGateway;
-import org.kie.workbench.common.stunner.bpmn.definition.InclusiveGateway;
-import org.kie.workbench.common.stunner.bpmn.definition.ParallelGateway;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BaseGateway;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EventGateway;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.ExclusiveGateway;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.InclusiveGateway;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.ParallelGateway;
 import org.kie.workbench.common.stunner.core.client.shape.view.HasTitle;
 import org.kie.workbench.common.stunner.core.client.shape.view.HasTitle.HorizontalAlignment;
 import org.kie.workbench.common.stunner.core.client.shape.view.HasTitle.ReferencePosition;
@@ -66,7 +66,7 @@ public class GatewayShapeDef
     @Override
     public SizeHandler<BaseGateway, SVGShapeView> newSizeHandler() {
         return newSizeHandlerBuilder()
-                .radius(task -> task.getDimensionsSet().getRadius().getValue())
+                .radius(task -> task.getDimensionsSet().getRadius())
                 .build();
     }
 

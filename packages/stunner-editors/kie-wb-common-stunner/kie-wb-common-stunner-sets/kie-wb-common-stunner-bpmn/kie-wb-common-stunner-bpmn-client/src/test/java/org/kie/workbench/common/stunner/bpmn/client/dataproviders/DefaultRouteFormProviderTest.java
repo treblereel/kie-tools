@@ -25,14 +25,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.kie.workbench.common.forms.dynamic.model.config.SelectorData;
 import org.kie.workbench.common.forms.dynamic.model.config.SelectorDataProvider;
-import org.kie.workbench.common.stunner.bpmn.definition.BPMNDefinition;
-import org.kie.workbench.common.stunner.bpmn.definition.ExclusiveGateway;
-import org.kie.workbench.common.stunner.bpmn.definition.InclusiveGateway;
-import org.kie.workbench.common.stunner.bpmn.definition.ScriptTask;
-import org.kie.workbench.common.stunner.bpmn.definition.UserTask;
-import org.kie.workbench.common.stunner.bpmn.definition.property.general.BPMNGeneralSet;
-import org.kie.workbench.common.stunner.bpmn.definition.property.general.Name;
-import org.kie.workbench.common.stunner.bpmn.definition.property.general.TaskGeneralSet;
+import org.kie.workbench.common.stunner.bpmn.definition.FlowElement;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.ExclusiveGateway;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.InclusiveGateway;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.ScriptTask;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.UserTask;
 import org.kie.workbench.common.stunner.core.api.DefinitionManager;
 import org.kie.workbench.common.stunner.core.client.canvas.controls.SelectionControl;
 import org.kie.workbench.common.stunner.core.definition.adapter.AdapterManager;
@@ -89,10 +86,7 @@ public class DefaultRouteFormProviderTest
 
         outEdges = new ArrayList<>();
 
-        UserTask userTask1 = new UserTask(new TaskGeneralSet(new Name("UserTask1"),
-                                                             null),
-                                          null,
-                                          null,
+        UserTask userTask1 = new UserTask("UserTask1",
                                           null,
                                           null,
                                           null,
@@ -102,10 +96,7 @@ public class DefaultRouteFormProviderTest
         outEdges.add(mockEdge("Edge1",
                               userTask1));
 
-        UserTask userTask2 = new UserTask(new TaskGeneralSet(new Name("UserTask2"),
-                                                             null),
-                                          null,
-                                          null,
+        UserTask userTask2 = new UserTask("UserTask2",
                                           null,
                                           null,
                                           null,
@@ -115,10 +106,7 @@ public class DefaultRouteFormProviderTest
         outEdges.add(mockEdge("Edge2",
                               userTask2));
 
-        ScriptTask scriptTask3 = new ScriptTask(new TaskGeneralSet(new Name("ScriptTask3"),
-                                                                   null),
-                                                null,
-                                                null,
+        ScriptTask scriptTask3 = new ScriptTask("ScriptTask3",
                                                 null,
                                                 null,
                                                 null,
@@ -128,7 +116,8 @@ public class DefaultRouteFormProviderTest
         outEdges.add(mockEdge("Edge3",
                               scriptTask3));
 
-        ExclusiveGateway gateway4 = new ExclusiveGateway(new BPMNGeneralSet("Gateway4"),
+        ExclusiveGateway gateway4 = new ExclusiveGateway("Gateway4",
+                                                         "",
                                                          null,
                                                          null,
                                                          null,
@@ -138,7 +127,8 @@ public class DefaultRouteFormProviderTest
         outEdges.add(mockEdge("Edge4",
                               gateway4));
 
-        InclusiveGateway gateway5 = new InclusiveGateway(new BPMNGeneralSet(""),
+        InclusiveGateway gateway5 = new InclusiveGateway("",
+                                                         "",
                                                          null,
                                                          null,
                                                          null,
@@ -191,7 +181,7 @@ public class DefaultRouteFormProviderTest
     }
 
     protected Edge mockEdge(String uuid,
-                            BPMNDefinition targetNodeDefinition) {
+                            FlowElement targetNodeDefinition) {
         Edge edge = mock(Edge.class);
         Node node = mockNode(targetNodeDefinition);
         when(edge.getUUID()).thenReturn(uuid);

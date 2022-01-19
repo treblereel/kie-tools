@@ -19,10 +19,7 @@ package org.kie.workbench.common.stunner.bpmn.client.documentation;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import com.google.gwtmockito.GwtMockitoTestRunner;
 import org.jboss.errai.common.client.api.IsElement;
@@ -33,36 +30,24 @@ import org.kie.workbench.common.stunner.bpmn.client.components.palette.BPMNCateg
 import org.kie.workbench.common.stunner.bpmn.client.documentation.decorator.PropertyDecorators;
 import org.kie.workbench.common.stunner.bpmn.client.shape.factory.BPMNShapeFactory;
 import org.kie.workbench.common.stunner.bpmn.definition.BPMNCategories;
-import org.kie.workbench.common.stunner.bpmn.definition.BPMNDiagramImpl;
-import org.kie.workbench.common.stunner.bpmn.definition.EmbeddedSubprocess;
-import org.kie.workbench.common.stunner.bpmn.definition.UserTask;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EmbeddedSubprocess;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Process;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.UserTask;
 import org.kie.workbench.common.stunner.bpmn.definition.property.assignee.Actors;
 import org.kie.workbench.common.stunner.bpmn.definition.property.assignee.Groupid;
 import org.kie.workbench.common.stunner.bpmn.definition.property.background.BackgroundSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.cm.CaseManagementSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.connectors.Priority;
 import org.kie.workbench.common.stunner.bpmn.definition.property.dataio.AssignmentsInfo;
-import org.kie.workbench.common.stunner.bpmn.definition.property.diagram.AdHoc;
-import org.kie.workbench.common.stunner.bpmn.definition.property.diagram.DiagramSet;
-import org.kie.workbench.common.stunner.bpmn.definition.property.diagram.Executable;
 import org.kie.workbench.common.stunner.bpmn.definition.property.diagram.GlobalVariables;
-import org.kie.workbench.common.stunner.bpmn.definition.property.diagram.Id;
 import org.kie.workbench.common.stunner.bpmn.definition.property.diagram.MetaDataAttributes;
-import org.kie.workbench.common.stunner.bpmn.definition.property.diagram.Package;
-import org.kie.workbench.common.stunner.bpmn.definition.property.diagram.ProcessInstanceDescription;
-import org.kie.workbench.common.stunner.bpmn.definition.property.diagram.ProcessType;
-import org.kie.workbench.common.stunner.bpmn.definition.property.diagram.Version;
 import org.kie.workbench.common.stunner.bpmn.definition.property.diagram.imports.DefaultImport;
 import org.kie.workbench.common.stunner.bpmn.definition.property.diagram.imports.Imports;
 import org.kie.workbench.common.stunner.bpmn.definition.property.diagram.imports.ImportsValue;
 import org.kie.workbench.common.stunner.bpmn.definition.property.diagram.imports.WSDLImport;
 import org.kie.workbench.common.stunner.bpmn.definition.property.dimensions.RectangleDimensionsSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.font.FontSet;
-import org.kie.workbench.common.stunner.bpmn.definition.property.general.BPMNGeneralSet;
-import org.kie.workbench.common.stunner.bpmn.definition.property.general.Documentation;
-import org.kie.workbench.common.stunner.bpmn.definition.property.general.Name;
 import org.kie.workbench.common.stunner.bpmn.definition.property.general.SLADueDate;
-import org.kie.workbench.common.stunner.bpmn.definition.property.general.TaskGeneralSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.notification.NotificationsInfo;
 import org.kie.workbench.common.stunner.bpmn.definition.property.reassignment.ReassignmentsInfo;
 import org.kie.workbench.common.stunner.bpmn.definition.property.simulation.SimulationSet;
@@ -91,7 +76,6 @@ import org.kie.workbench.common.stunner.bpmn.definition.property.task.TaskTypes;
 import org.kie.workbench.common.stunner.bpmn.definition.property.task.UserTaskExecutionSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.variables.AdvancedData;
 import org.kie.workbench.common.stunner.bpmn.definition.property.variables.ProcessData;
-import org.kie.workbench.common.stunner.bpmn.definition.property.variables.ProcessVariables;
 import org.kie.workbench.common.stunner.bpmn.definition.property.variables.RootProcessAdvancedData;
 import org.kie.workbench.common.stunner.bpmn.documentation.model.BPMNDocumentation;
 import org.kie.workbench.common.stunner.bpmn.documentation.model.element.Element;
@@ -229,33 +213,29 @@ public class ClientBPMNDocumentationServiceTest {
 
     private List<Node> nodes;
 
-    private BPMNDiagramImpl bpmnDiagram;
+    private Process bpmnDiagram;
 
-    private DiagramSet diagramSet;
+    private String processName;
 
-    private Name processName;
+    private String processDocumentation;
 
-    private Documentation processDocumentation;
+    private String processId;
 
-    private Id processId;
+    private String packageProperty;
 
-    private Package packageProperty;
+    private String type;
 
-    private ProcessType type;
+    private String version;
 
-    private Version version;
+    private Boolean adHoc;
 
-    private AdHoc adHoc;
+    private String processInstanceDescription;
 
-    private ProcessInstanceDescription processInstanceDescription;
-
-    private Executable executable;
+    private Boolean executable;
 
     private ProcessData processData;
 
     private RootProcessAdvancedData advancedData;
-
-    private ProcessVariables processVariables;
 
     private UserTask userTask;
 
@@ -300,25 +280,25 @@ public class ClientBPMNDocumentationServiceTest {
     private DefinitionId subprocessId;
 
     @Mock
-    private SLADueDate slaDueDate;
+    private String slaDueDate;
 
     @Before
     @SuppressWarnings("all")
     public void setUp() throws Exception {
 
         //DiagramSet
-        processName = new Name(PROCESS_NAME);
-        processDocumentation = new Documentation(PROCESS_DOCUMENTATION);
-        packageProperty = new Package(PROCESS_PACKAGE);
-        type = new ProcessType();
-        version = new Version(PROCESS_VERSION);
-        adHoc = new AdHoc(PROCESS_IS_ADHOC);
-        processInstanceDescription = new ProcessInstanceDescription(PROCESS_DECRIPTION);
-        executable = new Executable(PROCESS_IS_EXECUTABLE);
-        processId = new Id(PROCESS_UUID);
+        processName = PROCESS_NAME;
+        processDocumentation = PROCESS_DOCUMENTATION;
+        packageProperty = PROCESS_PACKAGE;
+        type = "";
+        version = PROCESS_VERSION;
+        adHoc = PROCESS_IS_ADHOC;
+        processInstanceDescription = PROCESS_DECRIPTION;
+        executable = PROCESS_IS_EXECUTABLE;
+        processId = PROCESS_UUID;
         globalVariables = new GlobalVariables(GLOBAL_VARIABLES);
         metaDataAttributes = new MetaDataAttributes(METADATA);
-        slaDueDate = new SLADueDate(SLA_DUE_DATE);
+        slaDueDate = SLA_DUE_DATE;
 
         ImportsValue importsValue = new ImportsValue();
         importsValue.addImport(new DefaultImport(CLASS_NAME + "1"));
@@ -330,28 +310,26 @@ public class ClientBPMNDocumentationServiceTest {
         importsValue.addImport(new WSDLImport(LOCATION + "4", NAMESPACE + "4"));
         imports = new Imports(importsValue);
 
-        diagramSet = new DiagramSet(processName,
-                                    processDocumentation,
-                                    processId,
-                                    packageProperty,
-                                    type,
-                                    version,
-                                    adHoc,
-                                    processInstanceDescription,
-                                    imports,
-                                    executable,
-                                    slaDueDate);
         //ProcessData
-        processVariables = new ProcessVariables(VARIABLES);
-        processData = new ProcessData(processVariables);
+        processData = new ProcessData(VARIABLES);
 
         //AdvancedData
         globalVariables = new GlobalVariables(GLOBAL_VARIABLES);
         metaDataAttributes = new MetaDataAttributes(METADATA);
         advancedData = new RootProcessAdvancedData(globalVariables, metaDataAttributes);
 
-        bpmnDiagram = new BPMNDiagramImpl(
-                diagramSet,
+        bpmnDiagram = new Process(
+                processName,
+                processDocumentation,
+                processId,
+                packageProperty,
+                type,
+                version,
+                adHoc,
+                processInstanceDescription,
+                imports,
+                executable,
+                slaDueDate,
                 processData,
                 new CaseManagementSet(),
                 new BackgroundSet(),
@@ -360,8 +338,8 @@ public class ClientBPMNDocumentationServiceTest {
                 advancedData
         );
 
-        userTask = new UserTask(new TaskGeneralSet(new Name(TASK_NAME),
-                                                   new Documentation(TASK_DOC)),
+        userTask = new UserTask(TASK_NAME,
+                                TASK_DOC,
                                 new UserTaskExecutionSet(new TaskName(TASK_NAME),
                                                          new Actors(),
                                                          new Groupid(TASK_GROUPID),
@@ -386,15 +364,12 @@ public class ClientBPMNDocumentationServiceTest {
                                                          new OnExitAction(new ScriptTypeListValue().addValue(new ScriptTypeValue())),
                                                          new Content(),
                                                          new SLADueDate()),
-                                new BackgroundSet(),
-                                new FontSet(),
-                                new RectangleDimensionsSet(),
                                 new SimulationSet(),
                                 new TaskType(TaskTypes.USER),
                                 new AdvancedData());
 
-        embeddedSubprocess = new EmbeddedSubprocess(new BPMNGeneralSet(new Name(SUB_PROCESS_NAME),
-                                                                       new Documentation(SUB_PROCESS_DOCUMENTATION)),
+        embeddedSubprocess = new EmbeddedSubprocess(SUB_PROCESS_NAME,
+                                                    SUB_PROCESS_DOCUMENTATION,
                                                     new BackgroundSet(),
                                                     new FontSet(),
                                                     new RectangleDimensionsSet(),
@@ -445,20 +420,19 @@ public class ClientBPMNDocumentationServiceTest {
         when(subprocessId.value()).thenReturn(EmbeddedSubprocess.class.getName());
 
         //adapters mock for task
-        final TaskGeneralSet taskGeneral = userTask.getGeneral();
         final UserTaskExecutionSet taskExecutionSet = userTask.getExecutionSet();
         when(definitionAdapter.getCategory(eq(userTask))).thenReturn(BPMNCategories.ACTIVITIES);
         when(definitionAdapter.getPropertyFields(eq(userTask))).thenReturn(new String[]{"taskGeneral.documentation", "taskGeneral.name", "taskExecutionSet.subject", "taskExecutionSet.groupId", "taskExecutionSet.priority", "taskExecutionSet.assignmentsInfo", "taskExecutionSet.description"});
-        when(definitionAdapter.getProperty(eq(userTask), eq("taskGeneral.documentation"))).thenReturn((Optional) Optional.of(taskGeneral.getDocumentation()));
-        when(definitionAdapter.getProperty(eq(userTask), eq("taskGeneral.name"))).thenReturn((Optional) Optional.of(taskGeneral.getName()));
+        when(definitionAdapter.getProperty(eq(userTask), eq("taskGeneral.documentation"))).thenReturn((Optional) Optional.of(userTask.getDocumentation()));
+        when(definitionAdapter.getProperty(eq(userTask), eq("taskGeneral.name"))).thenReturn((Optional) Optional.of(userTask.getName()));
         when(definitionAdapter.getProperty(eq(userTask), eq("taskExecutionSet.subject"))).thenReturn((Optional) Optional.of(taskExecutionSet.getSubject()));
         when(definitionAdapter.getProperty(eq(userTask), eq("taskExecutionSet.groupId"))).thenReturn((Optional) Optional.of(taskExecutionSet.getGroupid()));
         when(definitionAdapter.getProperty(eq(userTask), eq("taskExecutionSet.priority"))).thenReturn((Optional) Optional.of(taskExecutionSet.getPriority()));
         when(definitionAdapter.getProperty(eq(userTask), eq("taskExecutionSet.assignmentsInfo"))).thenReturn((Optional) Optional.of(taskExecutionSet.getAssignmentsinfo()));
         when(definitionAdapter.getProperty(eq(userTask), eq("taskExecutionSet.description"))).thenReturn((Optional) Optional.of(taskExecutionSet.getDescription()));
 
-        mockProperty(taskGeneral.getDocumentation(), TASK_DOCUMENTATION, DOCUMENTATION_CAPTION);
-        mockProperty(taskGeneral, TASK_NAME, NAME_CAPTION);
+        mockProperty(userTask.getDocumentation(), TASK_DOCUMENTATION, DOCUMENTATION_CAPTION);
+        mockProperty(userTask.getName(), TASK_NAME, NAME_CAPTION);
         mockProperty(taskExecutionSet.getSubject(), TASK_SUBJECT, SUBJECT_CAPTION);
         mockProperty(taskExecutionSet.getGroupid(), TASK_GROUPID, GROUP_CAPTION);
         mockProperty(taskExecutionSet.getPriority(), TASK_PRIORITY, PRIORITY_CAPTION);
@@ -467,18 +441,16 @@ public class ClientBPMNDocumentationServiceTest {
         when(decorators.getDecorator(taskExecutionSet.getAssignmentsinfo())).thenReturn(Optional.of(() -> ASSIGNEMNTS));
 
         //adapters mock for subprocess
-        final BPMNGeneralSet subprocessGeneral = embeddedSubprocess.getGeneral();
         final EmbeddedSubprocessExecutionSet subprocessExecutionSet = embeddedSubprocess.getExecutionSet();
         when(definitionAdapter.getCategory(eq(embeddedSubprocess))).thenReturn(BPMNCategories.SUB_PROCESSES);
         when(definitionAdapter.getPropertyFields(eq(embeddedSubprocess))).thenReturn(new String[]{"subprocessGeneral.documentation", "subprocessGeneral.name", "subprocessExecutionSet.onEntryAction", "subprocessExecutionSet.onExitAction", "subprocessExecutionSet.isAsync"});
-        when(definitionAdapter.getProperty(eq(embeddedSubprocess), eq("subprocessGeneral.documentation"))).thenReturn((Optional) Optional.of(subprocessGeneral.getDocumentation()));
-        when(definitionAdapter.getProperty(eq(embeddedSubprocess), eq("subprocessGeneral.name"))).thenReturn((Optional) Optional.of(subprocessGeneral.getName()));
+        when(definitionAdapter.getProperty(eq(embeddedSubprocess), eq("subprocessGeneral.documentation"))).thenReturn((Optional) Optional.of(embeddedSubprocess.getDocumentation()));
+        when(definitionAdapter.getProperty(eq(embeddedSubprocess), eq("subprocessGeneral.name"))).thenReturn((Optional) Optional.of(embeddedSubprocess.getName()));
         when(definitionAdapter.getProperty(eq(embeddedSubprocess), eq("subprocessExecutionSet.onEntryAction"))).thenReturn((Optional) Optional.of(subprocessExecutionSet.getOnEntryAction()));
         when(definitionAdapter.getProperty(eq(embeddedSubprocess), eq("subprocessExecutionSet.onExitAction"))).thenReturn((Optional) Optional.of(subprocessExecutionSet.getOnExitAction()));
         when(definitionAdapter.getProperty(eq(embeddedSubprocess), eq("subprocessExecutionSet.isAsync"))).thenReturn((Optional) Optional.of(subprocessExecutionSet.getIsAsync()));
 
-        mockProperty(subprocessGeneral.getDocumentation(), SUB_PROCESS_DOCUMENTATION, DOCUMENTATION_CAPTION);
-        mockProperty(subprocessGeneral, SUB_PROCESS_NAME, NAME_CAPTION);
+        mockProperty(embeddedSubprocess.getDocumentation(), SUB_PROCESS_DOCUMENTATION, DOCUMENTATION_CAPTION);
 
         mockProperty(subprocessExecutionSet.getOnEntryAction(), ON_ENTRY_ACTION, ON_ENTRY_CAPTION);
         mockProperty(subprocessExecutionSet.getOnExitAction(), ON_EXIT_ACTION, ON_EXIT_CAPTION);
@@ -501,10 +473,6 @@ public class ClientBPMNDocumentationServiceTest {
         when(propertyAdapter.getValue(property)).thenReturn(value);
         when(propertyAdapter.getId(property)).thenReturn(property.getClass().getName());
         when(propertyAdapter.getCaption(property)).thenReturn(caption);
-    }
-
-    private Set toSet(Object... elements) {
-        return Stream.of(elements).collect(Collectors.toSet());
     }
 
     private Node createNode(Object content) {
@@ -615,7 +583,7 @@ public class ClientBPMNDocumentationServiceTest {
         assertProperty(taskProperties[1], TASK_DESCRIPTION, DESCRIPTION_CAPTION,
                        userTask.getExecutionSet().getDescription());
         assertProperty(taskProperties[2], TASK_DOCUMENTATION, DOCUMENTATION_CAPTION,
-                       userTask.getGeneral().getDocumentation());
+                       userTask.getDocumentation());
         assertProperty(taskProperties[3], TASK_GROUPID, GROUP_CAPTION,
                        userTask.getExecutionSet().getGroupid());
         assertProperty(taskProperties[4], TASK_PRIORITY, PRIORITY_CAPTION,
@@ -634,7 +602,7 @@ public class ClientBPMNDocumentationServiceTest {
         //assert subprocess properties
         final KeyValue[] subprocessProperties = subprocess.getProperties();
         assertProperty(subprocessProperties[0], SUB_PROCESS_DOCUMENTATION, DOCUMENTATION_CAPTION,
-                       embeddedSubprocess.getGeneral().getDocumentation());
+                       embeddedSubprocess.getDocumentation());
         assertProperty(subprocessProperties[1], "false", ISASYNC_CAPTION,
                        embeddedSubprocess.getExecutionSet().getIsAsync());
         assertProperty(subprocessProperties[2], ON_ENTRY_ACTION, ON_ENTRY_CAPTION,

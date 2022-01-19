@@ -24,8 +24,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.kie.workbench.common.forms.dynamic.model.config.SelectorData;
 import org.kie.workbench.common.forms.dynamic.model.config.SelectorDataProvider;
-import org.kie.workbench.common.stunner.bpmn.definition.BPMNDiagramImpl;
 import org.kie.workbench.common.stunner.bpmn.definition.DataObject;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Process;
 import org.kie.workbench.common.stunner.bpmn.definition.property.artifacts.DataObjectType;
 import org.kie.workbench.common.stunner.bpmn.definition.property.artifacts.DataObjectTypeValue;
 import org.kie.workbench.common.stunner.bpmn.definition.property.cm.CaseFileVariables;
@@ -34,8 +34,6 @@ import org.kie.workbench.common.stunner.bpmn.definition.property.cm.CaseManageme
 import org.kie.workbench.common.stunner.bpmn.definition.property.cm.CaseRoles;
 import org.kie.workbench.common.stunner.bpmn.definition.property.general.Name;
 import org.kie.workbench.common.stunner.bpmn.definition.property.variables.ProcessData;
-import org.kie.workbench.common.stunner.bpmn.definition.property.variables.ProcessVariables;
-import org.kie.workbench.common.stunner.core.definition.annotation.Definition;
 import org.kie.workbench.common.stunner.core.diagram.Metadata;
 import org.kie.workbench.common.stunner.core.graph.Element;
 import org.kie.workbench.common.stunner.core.graph.Node;
@@ -61,13 +59,7 @@ public class VariableProviderTest
     private static final String CASE_FILE_VARIABLES = "var1:String,var2:String";
 
     @Mock
-    private View view;
-
-    @Mock
     private Metadata metadata;
-
-    @Mock
-    private Definition definition;
 
     @Before
     public void setUp() throws Exception {
@@ -89,8 +81,8 @@ public class VariableProviderTest
         Node<View<DataObject>, ?> dataObjectNode;
 
         DataObject dataObject = new DataObject();
-        dataObject.getGeneral().getDocumentation().setValue("doc");
-        dataObject.setName(new Name("name"));
+        dataObject.setDocumentation("doc");
+        dataObject.setDataObjectName(new Name("name"));
         dataObject.setType(new DataObjectType(new DataObjectTypeValue("name")));
 
         dataObjectNode = new NodeImpl<>(UUID.uuid());
@@ -106,8 +98,8 @@ public class VariableProviderTest
         Node<View<DataObject>, ?> dataObjectNode;
 
         DataObject dataObject = new DataObject();
-        dataObject.getGeneral().getDocumentation().setValue("doc");
-        dataObject.setName(new Name("name"));
+        dataObject.setDocumentation("doc");
+        dataObject.setDataObjectName(new Name("name"));
         dataObject.setType(new DataObjectType(new DataObjectTypeValue("name")));
 
         dataObjectNode = new NodeImpl<>(UUID.uuid());
@@ -174,8 +166,8 @@ public class VariableProviderTest
     }
 
     private Element mockRootNode(String processVariables, String caseFileVariables) {
-        BPMNDiagramImpl rootNode = new BPMNDiagramImpl();
-        rootNode.setProcessData(new ProcessData(new ProcessVariables(processVariables)));
+        Process rootNode = new Process();
+        rootNode.setProcessData(new ProcessData(processVariables));
         rootNode.setCaseManagementSet((new CaseManagementSet(
                 new CaseIdPrefix(""),
                 new CaseRoles(""),
@@ -184,8 +176,8 @@ public class VariableProviderTest
     }
 
     private Element mockRootNodeWithoutVariables() {
-        BPMNDiagramImpl rootNode = new BPMNDiagramImpl();
-        rootNode.setProcessData(new ProcessData(new ProcessVariables("")));
+        Process rootNode = new Process();
+        rootNode.setProcessData(new ProcessData(""));
         return mockNode(rootNode);
     }
 }

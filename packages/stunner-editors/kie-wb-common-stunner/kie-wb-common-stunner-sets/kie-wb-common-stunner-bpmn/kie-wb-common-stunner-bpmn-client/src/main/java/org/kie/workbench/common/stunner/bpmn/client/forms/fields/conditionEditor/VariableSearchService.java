@@ -28,11 +28,11 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.kie.workbench.common.stunner.bpmn.definition.AdHocSubprocess;
-import org.kie.workbench.common.stunner.bpmn.definition.BPMNDiagramImpl;
-import org.kie.workbench.common.stunner.bpmn.definition.EmbeddedSubprocess;
-import org.kie.workbench.common.stunner.bpmn.definition.EventSubprocess;
-import org.kie.workbench.common.stunner.bpmn.definition.MultipleInstanceSubprocess;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.AdHocSubprocess;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EmbeddedSubprocess;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EventSubprocess;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.MultipleInstanceSubprocess;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Process;
 import org.kie.workbench.common.stunner.bpmn.definition.property.cm.CaseManagementSet;
 import org.kie.workbench.common.stunner.bpmn.forms.conditions.TypeMetadata;
 import org.kie.workbench.common.stunner.bpmn.forms.conditions.TypeMetadataQuery;
@@ -142,21 +142,21 @@ public class VariableSearchService implements LiveSearchService<String> {
             return null;
         }
         if (view.getDefinition() instanceof EventSubprocess) {
-            return ((EventSubprocess) view.getDefinition()).getProcessData().getProcessVariables().getValue();
+            return ((EventSubprocess) view.getDefinition()).getProcessData().getProcessVariables();
         }
         if (view.getDefinition() instanceof AdHocSubprocess) {
-            return ((AdHocSubprocess) view.getDefinition()).getProcessData().getProcessVariables().getValue();
+            return ((AdHocSubprocess) view.getDefinition()).getProcessData().getProcessVariables();
         }
         if (view.getDefinition() instanceof EmbeddedSubprocess) {
-            return ((EmbeddedSubprocess) view.getDefinition()).getProcessData().getProcessVariables().getValue();
+            return ((EmbeddedSubprocess) view.getDefinition()).getProcessData().getProcessVariables();
         }
         if (view.getDefinition() instanceof MultipleInstanceSubprocess) {
-            return ((MultipleInstanceSubprocess) view.getDefinition()).getProcessData().getProcessVariables().getValue();
+            return ((MultipleInstanceSubprocess) view.getDefinition()).getProcessData().getProcessVariables();
         }
-        if (view.getDefinition() instanceof BPMNDiagramImpl) {
-            BPMNDiagramImpl bpmnDiagram = ((BPMNDiagramImpl) view.getDefinition());
+        if (view.getDefinition() instanceof Process) {
+            Process bpmnDiagram = ((Process) view.getDefinition());
             StringBuilder variablesBuilder = new StringBuilder();
-            String processVariables = bpmnDiagram.getProcessData().getProcessVariables().getValue();
+            String processVariables = bpmnDiagram.getProcessData().getProcessVariables();
             if (!isEmpty(processVariables)) {
                 variablesBuilder.append(processVariables);
             }

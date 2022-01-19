@@ -47,10 +47,10 @@ import org.kie.workbench.common.stunner.bpmn.client.forms.fields.model.Assignmen
 import org.kie.workbench.common.stunner.bpmn.client.forms.fields.model.Variable;
 import org.kie.workbench.common.stunner.bpmn.client.forms.util.StringUtils;
 import org.kie.workbench.common.stunner.bpmn.client.util.VariableUtils;
-import org.kie.workbench.common.stunner.bpmn.definition.BPMNDefinition;
-import org.kie.workbench.common.stunner.bpmn.definition.BaseTask;
-import org.kie.workbench.common.stunner.bpmn.definition.BaseUserTask;
 import org.kie.workbench.common.stunner.bpmn.definition.DataObject;
+import org.kie.workbench.common.stunner.bpmn.definition.FlowElement;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BaseTask;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BaseUserTask;
 import org.kie.workbench.common.stunner.bpmn.definition.property.dataio.DataIOModel;
 import org.kie.workbench.common.stunner.bpmn.util.DataObjectUtils;
 import org.kie.workbench.common.stunner.core.client.api.SessionManager;
@@ -92,9 +92,9 @@ public class AssignmentsEditorWidget extends Composite implements HasValue<Strin
     private GraphUtils graphUtils;
     @Inject
     private DataTypeNamesService clientDataTypesService;
-    private BPMNDefinition bpmnModel;
+    private FlowElement bpmnModel;
 
-    AssignmentsEditorWidget(final BPMNDefinition bpmnModel,
+    AssignmentsEditorWidget(final FlowElement bpmnModel,
                             final String assignmentsInfo,
                             final boolean hasInputVars,
                             final boolean isSingleInputVar,
@@ -250,7 +250,7 @@ public class AssignmentsEditorWidget extends Composite implements HasValue<Strin
     }
 
     protected static String dataObjectToProcessVariableFormat(DataObject dataObject) {
-        return dataObject.getName().getValue().replace("\n", "") + ":" + dataObject.getType().getValue().getType();
+        return dataObject.getDataObjectName().getValue().replace("\n", "") + ":" + dataObject.getType().getValue().getType();
     }
 
     protected String getSelectedElementUUID(ClientSession clientSession) {
@@ -268,10 +268,10 @@ public class AssignmentsEditorWidget extends Composite implements HasValue<Strin
 
     protected boolean isBPMNDefinition(Node node) {
         return node.getContent() instanceof View &&
-                ((View) node.getContent()).getDefinition() instanceof BPMNDefinition;
+                ((View) node.getContent()).getDefinition() instanceof FlowElement;
     }
 
-    protected void setBPMNModel(final BPMNDefinition bpmnModel) {
+    protected void setBPMNModel(final FlowElement bpmnModel) {
         this.bpmnModel = bpmnModel;
 
         if (bpmnModel instanceof DataIOModel) {
@@ -416,17 +416,14 @@ public class AssignmentsEditorWidget extends Composite implements HasValue<Strin
         String taskName = "Task";
         if (bpmnModel instanceof BaseTask) {
             BaseTask task = (BaseTask) bpmnModel;
-            if (task.getGeneral() != null && task.getGeneral().getName() != null &&
-                    task.getGeneral().getName().getValue() != null && task.getGeneral().getName().getValue().length() > 0) {
-                taskName = task.getGeneral().getName().getValue();
+            if (StringUtils.nonEmpty(task.getName())) {
+                taskName = task.getName();
             }
         }
         return taskName;
     }
 
     protected String formatDataTypes(final List<String> dataTypes) {
-
-        Set<String> set = getSetDataTypes();
         StringBuilder sb = new StringBuilder();
         if (dataTypes != null && !dataTypes.isEmpty()) {
             List<String> formattedDataTypes = new ArrayList<>(dataTypes.size());

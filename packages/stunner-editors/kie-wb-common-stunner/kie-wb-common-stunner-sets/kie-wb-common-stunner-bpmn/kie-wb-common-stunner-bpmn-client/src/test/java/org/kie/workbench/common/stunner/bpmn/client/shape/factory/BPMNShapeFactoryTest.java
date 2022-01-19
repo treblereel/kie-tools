@@ -35,23 +35,9 @@ import org.kie.workbench.common.stunner.bpmn.client.shape.def.StartEventShapeDef
 import org.kie.workbench.common.stunner.bpmn.client.shape.def.SubprocessShapeDef;
 import org.kie.workbench.common.stunner.bpmn.client.shape.def.TaskShapeDef;
 import org.kie.workbench.common.stunner.bpmn.client.shape.def.ThrowingIntermediateEventShapeDef;
-import org.kie.workbench.common.stunner.bpmn.definition.AdHocSubprocess;
-import org.kie.workbench.common.stunner.bpmn.definition.BPMNDefinition;
-import org.kie.workbench.common.stunner.bpmn.definition.BPMNDiagramImpl;
-import org.kie.workbench.common.stunner.bpmn.definition.BusinessRuleTask;
 import org.kie.workbench.common.stunner.bpmn.definition.DirectionalAssociation;
-import org.kie.workbench.common.stunner.bpmn.definition.EmbeddedSubprocess;
-import org.kie.workbench.common.stunner.bpmn.definition.EndCompensationEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.EndErrorEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.EndEscalationEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.EndMessageEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.EndNoneEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.EndSignalEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.EndTerminateEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.EventGateway;
-import org.kie.workbench.common.stunner.bpmn.definition.EventSubprocess;
-import org.kie.workbench.common.stunner.bpmn.definition.ExclusiveGateway;
-import org.kie.workbench.common.stunner.bpmn.definition.InclusiveGateway;
+import org.kie.workbench.common.stunner.bpmn.definition.FlowElement;
+import org.kie.workbench.common.stunner.bpmn.definition.FlowElementInterface;
 import org.kie.workbench.common.stunner.bpmn.definition.IntermediateCompensationEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.IntermediateCompensationEventThrowing;
 import org.kie.workbench.common.stunner.bpmn.definition.IntermediateConditionalEvent;
@@ -65,22 +51,37 @@ import org.kie.workbench.common.stunner.bpmn.definition.IntermediateMessageEvent
 import org.kie.workbench.common.stunner.bpmn.definition.IntermediateSignalEventCatching;
 import org.kie.workbench.common.stunner.bpmn.definition.IntermediateSignalEventThrowing;
 import org.kie.workbench.common.stunner.bpmn.definition.IntermediateTimerEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.Lane;
-import org.kie.workbench.common.stunner.bpmn.definition.MultipleInstanceSubprocess;
-import org.kie.workbench.common.stunner.bpmn.definition.NoneTask;
-import org.kie.workbench.common.stunner.bpmn.definition.ParallelGateway;
-import org.kie.workbench.common.stunner.bpmn.definition.ReusableSubprocess;
-import org.kie.workbench.common.stunner.bpmn.definition.ScriptTask;
-import org.kie.workbench.common.stunner.bpmn.definition.SequenceFlow;
-import org.kie.workbench.common.stunner.bpmn.definition.StartCompensationEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.StartConditionalEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.StartErrorEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.StartEscalationEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.StartMessageEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.StartNoneEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.StartSignalEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.StartTimerEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.UserTask;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.AdHocSubprocess;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BusinessRuleTask;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EmbeddedSubprocess;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndCompensationEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndErrorEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndEscalationEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndMessageEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndNoneEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndSignalEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndTerminateEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EventGateway;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EventSubprocess;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.ExclusiveGateway;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.InclusiveGateway;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Lane;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.MultipleInstanceSubprocess;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.NoneTask;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.ParallelGateway;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Process;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.ReusableSubprocess;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.ScriptTask;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.SequenceFlow;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.StartCompensationEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.StartConditionalEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.StartErrorEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.StartEscalationEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.StartMessageEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.StartNoneEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.StartSignalEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.StartTimerEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.UserTask;
 import org.kie.workbench.common.stunner.bpmn.workitem.WorkItemDefinitionRegistry;
 import org.kie.workbench.common.stunner.client.lienzo.shape.view.wires.ext.WiresConnectorViewExt;
 import org.kie.workbench.common.stunner.core.client.preferences.StunnerPreferencesRegistries;
@@ -118,7 +119,7 @@ public class BPMNShapeFactoryTest {
     private WorkItemDefinitionRegistry workItemDefinitionRegistry;
 
     @Mock
-    private DelegateShapeFactory<BPMNDefinition, Shape> delegateShapeFactory;
+    private DelegateShapeFactory<FlowElementInterface, Shape> delegateShapeFactory;
 
     private BPMNShapeFactory tested;
 
@@ -162,7 +163,7 @@ public class BPMNShapeFactoryTest {
         final ArgumentCaptor<Supplier> factoryArgumentCaptor =
                 ArgumentCaptor.forClass(Supplier.class);
         verify(delegateShapeFactory,
-               times(1)).delegate(eq(BPMNDiagramImpl.class),
+               times(1)).delegate(eq(Process.class),
                                   any(BPMNDiagramShapeDef.class),
                                   factoryArgumentCaptor.capture());
         verify(delegateShapeFactory,
@@ -378,7 +379,7 @@ public class BPMNShapeFactoryTest {
 
     @Test
     public void testNewShape() {
-        final BPMNDefinition definition = mock(BPMNDefinition.class);
+        final FlowElement definition = mock(FlowElement.class);
         tested.newShape(definition);
         verify(delegateShapeFactory,
                times(1)).newShape(eq(definition));
@@ -393,6 +394,6 @@ public class BPMNShapeFactoryTest {
         verify(delegateShapeFactory,
                times(1)).getGlyph(eq(id));
         verify(delegateShapeFactory,
-               never()).newShape(any(BPMNDefinition.class));
+               never()).newShape(any(FlowElement.class));
     }
 }

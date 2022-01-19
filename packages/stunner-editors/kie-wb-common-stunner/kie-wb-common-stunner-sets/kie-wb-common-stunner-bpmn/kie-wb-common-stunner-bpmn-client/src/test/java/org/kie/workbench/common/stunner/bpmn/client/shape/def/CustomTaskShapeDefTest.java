@@ -99,9 +99,7 @@ public class CustomTaskShapeDefTest {
     @SuppressWarnings("unchecked")
     public void init() throws Exception {
         this.task = new CustomTask();
-        task.getDimensionsSet().getWidth().setValue(WIDTH);
-        task.getDimensionsSet().getHeight().setValue(HEIGHT);
-        this.task.setName(WID_ID_1);
+        this.task.setTaskName(WID_ID_1);
         when(node.getDefinition()).thenReturn(task);
         when(node.getBounds()).thenReturn(BOUNDS);
         when(registry.items()).thenReturn(Collections.singleton(DEF_1));

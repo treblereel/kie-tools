@@ -20,18 +20,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.kie.workbench.common.stunner.bpmn.definition.AdHocSubprocess;
 import org.kie.workbench.common.stunner.bpmn.definition.BPMNDiagram;
-import org.kie.workbench.common.stunner.bpmn.definition.BPMNDiagramImpl;
-import org.kie.workbench.common.stunner.bpmn.definition.BusinessRuleTask;
 import org.kie.workbench.common.stunner.bpmn.definition.DataObject;
-import org.kie.workbench.common.stunner.bpmn.definition.EmbeddedSubprocess;
-import org.kie.workbench.common.stunner.bpmn.definition.EndErrorEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.EndEscalationEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.EndMessageEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.EndSignalEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.EventSubprocess;
-import org.kie.workbench.common.stunner.bpmn.definition.GenericServiceTask;
 import org.kie.workbench.common.stunner.bpmn.definition.IntermediateErrorEventCatching;
 import org.kie.workbench.common.stunner.bpmn.definition.IntermediateEscalationEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.IntermediateEscalationEventThrowing;
@@ -41,13 +31,23 @@ import org.kie.workbench.common.stunner.bpmn.definition.IntermediateMessageEvent
 import org.kie.workbench.common.stunner.bpmn.definition.IntermediateMessageEventThrowing;
 import org.kie.workbench.common.stunner.bpmn.definition.IntermediateSignalEventCatching;
 import org.kie.workbench.common.stunner.bpmn.definition.IntermediateSignalEventThrowing;
-import org.kie.workbench.common.stunner.bpmn.definition.MultipleInstanceSubprocess;
-import org.kie.workbench.common.stunner.bpmn.definition.ReusableSubprocess;
-import org.kie.workbench.common.stunner.bpmn.definition.StartErrorEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.StartEscalationEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.StartMessageEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.StartSignalEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.UserTask;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.AdHocSubprocess;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BusinessRuleTask;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EmbeddedSubprocess;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndErrorEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndEscalationEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndMessageEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndSignalEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EventSubprocess;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.GenericServiceTask;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.MultipleInstanceSubprocess;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Process;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.ReusableSubprocess;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.StartErrorEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.StartEscalationEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.StartMessageEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.StartSignalEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.UserTask;
 import org.kie.workbench.common.stunner.bpmn.definition.property.dataio.AssignmentsInfo;
 import org.kie.workbench.common.stunner.bpmn.definition.property.diagram.imports.DefaultImport;
 import org.kie.workbench.common.stunner.bpmn.definition.property.variables.BaseProcessData;
@@ -74,19 +74,19 @@ public abstract class AbstractDataTypeCache {
             allDataTypes.add(dataObject.getType().getValue().getType());
         } else if (definition instanceof AdHocSubprocess) {
             AdHocSubprocess adhoc = (AdHocSubprocess) definition;
-            allDataTypes.addAll(getDataTypes(adhoc.getProcessData().getProcessVariables().getValue()));
-        } else if (definition instanceof BPMNDiagramImpl) {
-            BPMNDiagramImpl diagram = (BPMNDiagramImpl) definition;
-            allDataTypes.addAll(getDataTypes(diagram.getProcessData().getProcessVariables().getValue()));
+            allDataTypes.addAll(getDataTypes(adhoc.getProcessData().getProcessVariables()));
+        } else if (definition instanceof Process) {
+            Process diagram = (Process) definition;
+            allDataTypes.addAll(getDataTypes(diagram.getProcessData().getProcessVariables()));
         } else if (definition instanceof EmbeddedSubprocess) {
             EmbeddedSubprocess embeddedSubprocess = (EmbeddedSubprocess) definition;
-            allDataTypes.addAll(getDataTypes(embeddedSubprocess.getProcessData().getProcessVariables().getValue()));
+            allDataTypes.addAll(getDataTypes(embeddedSubprocess.getProcessData().getProcessVariables()));
         } else if (definition instanceof EventSubprocess) {
             EventSubprocess eventSubprocess = (EventSubprocess) definition;
-            allDataTypes.addAll(getDataTypes(eventSubprocess.getProcessData().getProcessVariables().getValue()));
+            allDataTypes.addAll(getDataTypes(eventSubprocess.getProcessData().getProcessVariables()));
         } else if (definition instanceof MultipleInstanceSubprocess) {
             MultipleInstanceSubprocess multipleInstanceSubprocess = (MultipleInstanceSubprocess) definition;
-            allDataTypes.addAll(getDataTypes(multipleInstanceSubprocess.getProcessData().getProcessVariables().getValue()));
+            allDataTypes.addAll(getDataTypes(multipleInstanceSubprocess.getProcessData().getProcessVariables()));
             allDataTypes.addAll(getDataTypes(multipleInstanceSubprocess.getExecutionSet().getMultipleInstanceDataInput().getValue()));
             allDataTypes.addAll(getDataTypes(multipleInstanceSubprocess.getExecutionSet().getMultipleInstanceDataOutput().getValue()));
         } else if (definition instanceof UserTask) {
@@ -173,8 +173,8 @@ public abstract class AbstractDataTypeCache {
     public void initCache(Object diagramRoot, Node<View<? extends BPMNDiagram<? extends BaseDiagramSet, ? extends BaseProcessData, ? extends BaseRootProcessAdvancedData>>, Edge> value) {
         allDataTypes.clear();
         final BPMNDiagram<? extends BaseDiagramSet, ? extends BaseProcessData, ? extends BaseRootProcessAdvancedData> definition = value.getContent().getDefinition();
-        cacheImports(definition.getDiagramSet().getImports().getValue().getDefaultImports());
-        cacheProcessVariables(definition.getProcessData().getProcessVariables().getValue());
+        cacheImports(definition.getImports().getValue().getDefaultImports());
+        cacheProcessVariables(definition.getProcessData().getProcessVariables());
         cacheGlobalVariables(definition.getAdvancedData().getGlobalVariables().getValue());
         cacheDataTypes(diagramRoot);
     }

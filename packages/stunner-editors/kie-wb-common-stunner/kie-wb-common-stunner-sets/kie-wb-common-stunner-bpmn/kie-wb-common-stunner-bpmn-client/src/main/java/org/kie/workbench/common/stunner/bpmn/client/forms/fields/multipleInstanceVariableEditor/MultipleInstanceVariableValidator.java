@@ -24,10 +24,10 @@ import com.google.gwt.regexp.shared.RegExp;
 import com.google.gwt.regexp.shared.SplitResult;
 import org.kie.workbench.common.forms.processing.engine.handling.CustomFieldValidator;
 import org.kie.workbench.common.forms.processing.engine.handling.ValidationResult;
-import org.kie.workbench.common.stunner.bpmn.definition.BPMNDefinition;
-import org.kie.workbench.common.stunner.bpmn.definition.MultipleInstanceSubprocess;
-import org.kie.workbench.common.stunner.bpmn.definition.ReusableSubprocess;
-import org.kie.workbench.common.stunner.bpmn.definition.UserTask;
+import org.kie.workbench.common.stunner.bpmn.definition.FlowElement;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.MultipleInstanceSubprocess;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.ReusableSubprocess;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.UserTask;
 import org.kie.workbench.common.stunner.core.client.i18n.ClientTranslationService;
 import org.kie.workbench.common.stunner.core.graph.Edge;
 import org.kie.workbench.common.stunner.core.graph.Node;
@@ -47,11 +47,11 @@ public class MultipleInstanceVariableValidator implements CustomFieldValidator<S
     private static final RegExp ENCODED_NAME_DELIMITER = RegExp.compile(":");
     private static final RegExp VARIABLE_NAME = RegExp.compile(ALPHA_NUM_REGEXP);
 
-    private final BPMNDefinition definition;
+    private final FlowElement definition;
 
     private final ClientTranslationService translationService;
 
-    public MultipleInstanceVariableValidator(Node<View<BPMNDefinition>, Edge> node,
+    public MultipleInstanceVariableValidator(Node<View<FlowElement>, Edge> node,
                                              ClientTranslationService translationService) {
         this.definition = node != null && node.getContent() != null ? node.getContent().getDefinition() : null;
         this.translationService = translationService;

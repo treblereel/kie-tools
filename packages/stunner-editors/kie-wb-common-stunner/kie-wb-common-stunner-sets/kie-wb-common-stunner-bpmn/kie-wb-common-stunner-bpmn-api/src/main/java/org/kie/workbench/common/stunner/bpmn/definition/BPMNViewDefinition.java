@@ -16,15 +16,9 @@
 
 package org.kie.workbench.common.stunner.bpmn.definition;
 
-import org.kie.workbench.common.stunner.bpmn.definition.property.background.BackgroundSet;
-import org.kie.workbench.common.stunner.bpmn.definition.property.font.FontSet;
-
 /**
  * Marker interface for all BPMN definitions.
  */
-public interface BPMNViewDefinition extends BPMNDefinition {
+public interface BPMNViewDefinition extends FlowElementInterface {
 
-    BackgroundSet getBackgroundSet();
-
-    FontSet getFontSet();
 }

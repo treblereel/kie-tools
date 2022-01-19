@@ -132,8 +132,6 @@
 
     <!-- Uberfire & Errai. -->
 
-
-
     <dependency>
       <groupId>org.kie.kogito.stunner.editors</groupId>
       <artifactId>errai-common</artifactId>
@@ -163,6 +161,23 @@
     <dependency>
       <groupId>org.kie.soup</groupId>
       <artifactId>kie-soup-commons</artifactId>
+    </dependency>
+
+    <!-- New Marshaller -->
+    <dependency>
+      <groupId>org.treblereel.gwt.xml.mapper</groupId>
+      <artifactId>gwt-backend</artifactId>
+      <!-- <scope>provided</scope> -->
+    </dependency>
+
+    <dependency>
+      <groupId>org.treblereel.gwt.xml.mapper</groupId>
+      <artifactId>api</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.treblereel.gwt.xml.mapper</groupId>
+      <artifactId>processor</artifactId>
     </dependency>
 
     <!-- Testing -->
@@ -233,10 +248,30 @@
       </exclusions>
     </dependency>
 
+    <!-- New Marshalling Testing -->
+    <dependency>
+      <groupId>org.treblereel.gwt.xml.mapper</groupId>
+      <artifactId>jre-backend</artifactId>
+      <scope>test</scope>
+    </dependency>
+
   </dependencies>
 
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>2.2</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>test-jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>

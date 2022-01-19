@@ -23,11 +23,13 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import elemental2.promise.Promise;
-import org.kie.workbench.common.stunner.bpmn.client.marshall.converters.util.ConverterUtils;
 import org.kie.workbench.common.stunner.bpmn.client.workitem.WorkItemDefinitionClientService;
 import org.kie.workbench.common.stunner.bpmn.definition.BPMNDiagram;
-import org.kie.workbench.common.stunner.bpmn.definition.BPMNDiagramImpl;
-import org.kie.workbench.common.stunner.bpmn.definition.property.diagram.BaseDiagramSet;
+import org.kie.workbench.common.stunner.bpmn.definition.BPMNViewDefinition;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Definitions;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Process;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.StartEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmndi.BpmnShape;
 import org.kie.workbench.common.stunner.bpmn.factory.BPMNDiagramFactory;
 import org.kie.workbench.common.stunner.bpmn.workitem.WorkItemDefinition;
 import org.kie.workbench.common.stunner.core.api.DefinitionManager;
@@ -43,7 +45,8 @@ import org.kie.workbench.common.stunner.core.diagram.MetadataImpl;
 import org.kie.workbench.common.stunner.core.graph.Graph;
 import org.kie.workbench.common.stunner.core.graph.Node;
 import org.kie.workbench.common.stunner.core.graph.content.definition.Definition;
-import org.kie.workbench.common.stunner.core.graph.content.definition.DefinitionSet;
+import org.kie.workbench.common.stunner.core.graph.content.view.ViewImpl;
+import org.kie.workbench.common.stunner.core.graph.impl.NodeImpl;
 import org.kie.workbench.common.stunner.core.graph.util.GraphUtils;
 import org.kie.workbench.common.stunner.kogito.client.service.AbstractKogitoClientDiagramService;
 import org.uberfire.client.promise.Promises;
@@ -131,21 +134,21 @@ public class BPMNClientDiagramService extends AbstractKogitoClientDiagramService
     }
 
     private void updateDiagramSet(Node<Definition<BPMNDiagram>, ?> diagramNode, String name) {
-        final BaseDiagramSet diagramSet = diagramNode.getContent().getDefinition().getDiagramSet();
+        final BPMNDiagram diagramSet = diagramNode.getContent().getDefinition();
 
-        if (diagramSet.getPackageProperty().getValue() == null ||
-                diagramSet.getName().getValue().isEmpty()) {
-            diagramSet.getName().setValue(name);
+        if (diagramSet.getPackageName() == null ||
+                diagramSet.getName().isEmpty()) {
+            diagramSet.setName(name);
         }
 
-        if (diagramSet.getPackageProperty().getValue() == null ||
-                diagramSet.getId().getValue().isEmpty()) {
-            diagramSet.getId().setValue(createValidId(name));
+        if (diagramSet.getPackageName() == null ||
+                diagramSet.getId().isEmpty()) {
+            diagramSet.setId(createValidId(name));
         }
 
-        if (diagramSet.getPackageProperty().getValue() == null ||
-                diagramSet.getPackageProperty().getValue().isEmpty()) {
-            diagramSet.getPackageProperty().setValue(DEFAULT_PACKAGE);
+        if (diagramSet.getPackageName() == null ||
+                diagramSet.getPackageName().isEmpty()) {
+            diagramSet.setPackageName(DEFAULT_PACKAGE);
         }
     }
 
@@ -158,7 +161,7 @@ public class BPMNClientDiagramService extends AbstractKogitoClientDiagramService
                                                           defSetId,
                                                           metadata);
 
-        final Node<Definition<BPMNDiagram>, ?> diagramNode = GraphUtils.getFirstNode((Graph<?, Node>) diagram.getGraph(), BPMNDiagramImpl.class);
+        final Node<Definition<BPMNDiagram>, ?> diagramNode = GraphUtils.getFirstNode((Graph<?, Node>) diagram.getGraph(), Process.class);
 
         updateDiagramSet(diagramNode, fileName);
         updateClientMetadata(diagram);
@@ -168,20 +171,33 @@ public class BPMNClientDiagramService extends AbstractKogitoClientDiagramService
     @SuppressWarnings("unchecked")
     private Diagram parse(final String fileName, final String raw) {
         final Metadata metadata = createMetadata();
-        final Graph<DefinitionSet, ?> graph = marshalling.unmarshall(metadata, raw);
-        final Node<Definition<BPMNDiagram>, ?> diagramNode = GraphUtils.getFirstNode((Graph<?, Node>) graph, BPMNDiagramImpl.class);
-        if (null == diagramNode) {
-            throw new NullPointerException(NO_DIAGRAM_MESSAGE);
+        final String title = createDiagramTitleFromFilePath(fileName);
+        final String defSetId = BPMNClientMarshalling.getDefinitionSetId();
+        metadata.setTitle(title);
+
+        final Definitions definitions = marshalling.unmarshall(raw);
+        final Diagram diagram = factoryManager.newDiagram(title,
+                                                          defSetId,
+                                                          metadata);
+
+        final Node<Definition<BPMNDiagram>, ?> diagramNode = GraphUtils.getFirstNode((Graph<?, Node>) diagram.getGraph(), Process.class);
+
+        diagramNode.getContent().setDefinition(definitions.getProcess());
+
+
+        for (StartEvent event : definitions.getProcess().getStartEvents()) {
+            for (BpmnShape shape : definitions.getBpmnDiagram().getBpmnPlane().getBpmnShapes()) {
+                if (shape.getBpmnElement().equals(event.getId())) {
+                    NodeImpl<ViewImpl<BPMNViewDefinition>> node = new NodeImpl<>(event.getId());
+                    node.getContent().setDefinition(event);
+                    diagram.getGraph().addNode((Node) event);
+                }
+            }
         }
 
         updateDiagramSet(diagramNode, fileName);
-
-        final String title = diagramNode.getContent().getDefinition().getDiagramSet().getName().getValue();
-        metadata.setTitle(title);
-        final Diagram diagram = diagramFactory.build(title,
-                                                     metadata,
-                                                     graph);
         updateClientMetadata(diagram);
+
         return diagram;
     }
 
@@ -194,7 +210,7 @@ public class BPMNClientDiagramService extends AbstractKogitoClientDiagramService
     private void updateClientMetadata(final Diagram diagram) {
         if (null != diagram) {
             final Metadata metadata = diagram.getMetadata();
-            if (Objects.nonNull(metadata) && ConverterUtils.isEmpty(metadata.getShapeSetId())) {
+            if (Objects.nonNull(metadata)) {
                 final String sId = shapeManager.getDefaultShapeSet(metadata.getDefinitionSetId()).getId();
                 metadata.setShapeSetId(sId);
             }

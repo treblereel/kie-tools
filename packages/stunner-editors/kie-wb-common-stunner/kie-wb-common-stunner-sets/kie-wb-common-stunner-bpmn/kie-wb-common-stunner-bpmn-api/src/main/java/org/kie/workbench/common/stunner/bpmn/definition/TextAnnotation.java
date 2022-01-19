@@ -18,25 +18,19 @@ package org.kie.workbench.common.stunner.bpmn.definition;
 
 import java.util.Set;
 
-import javax.validation.Valid;
-
 import org.jboss.errai.common.client.api.annotations.MapsTo;
 import org.jboss.errai.common.client.api.annotations.Portable;
 import org.jboss.errai.databinding.client.api.Bindable;
 import org.kie.soup.commons.util.Sets;
 import org.kie.workbench.common.forms.adf.definitions.annotations.FieldParam;
 import org.kie.workbench.common.forms.adf.definitions.annotations.FormDefinition;
-import org.kie.workbench.common.forms.adf.definitions.annotations.FormField;
 import org.kie.workbench.common.forms.adf.definitions.settings.FieldPolicy;
 import org.kie.workbench.common.stunner.bpmn.definition.property.background.BackgroundSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.dimensions.RectangleDimensionsSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.font.FontSet;
-import org.kie.workbench.common.stunner.bpmn.definition.property.general.BPMNGeneralSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.variables.AdvancedData;
 import org.kie.workbench.common.stunner.core.definition.annotation.Definition;
-import org.kie.workbench.common.stunner.core.definition.annotation.Property;
 import org.kie.workbench.common.stunner.core.definition.annotation.definition.Labels;
-import org.kie.workbench.common.stunner.core.util.HashUtil;
 
 import static org.kie.workbench.common.forms.adf.engine.shared.formGeneration.processing.fields.fieldInitializers.nestedForms.SubFormFieldInitializer.COLLAPSIBLE_CONTAINER;
 import static org.kie.workbench.common.forms.adf.engine.shared.formGeneration.processing.fields.fieldInitializers.nestedForms.SubFormFieldInitializer.FIELD_CONTAINER_PARAM;
@@ -51,11 +45,6 @@ import static org.kie.workbench.common.forms.adf.engine.shared.formGeneration.pr
 )
 public class TextAnnotation extends BaseArtifacts {
 
-    @Property
-    @FormField
-    @Valid
-    protected BPMNGeneralSet general;
-
     @Labels
     private final static Set<String> labels = new Sets.Builder<String>()
             .add("text_annotation")
@@ -64,47 +53,24 @@ public class TextAnnotation extends BaseArtifacts {
             .build();
 
     public TextAnnotation() {
-        this(new BPMNGeneralSet("Text Annotation"),
+        this("Text Annotation",
+             "",
              new BackgroundSet(),
              new FontSet(),
              new RectangleDimensionsSet(),
              new AdvancedData());
     }
 
-    public TextAnnotation(final @MapsTo("general") BPMNGeneralSet general,
+    public TextAnnotation(final @MapsTo("name") String name,
+                          final @MapsTo("documentation") String documentation,
                           final @MapsTo("backgroundSet") BackgroundSet backgroundSet,
                           final @MapsTo("fontSet") FontSet fontSet,
                           final @MapsTo("dimensionsSet") RectangleDimensionsSet dimensionsSet,
-                          final @MapsTo("advancedData")AdvancedData advancedData) {
-        super(backgroundSet, fontSet, dimensionsSet, advancedData);
-        this.general = general;
+                          final @MapsTo("advancedData") AdvancedData advancedData) {
+        super(name, documentation, backgroundSet, fontSet, dimensionsSet, advancedData);
     }
 
     public Set<String> getLabels() {
         return labels;
-    }
-
-    public BPMNGeneralSet getGeneral() {
-        return general;
-    }
-
-    public void setGeneral(final BPMNGeneralSet general) {
-        this.general = general;
-    }
-
-    @Override
-    public int hashCode() {
-        return HashUtil.combineHashCodes(super.hashCode(),
-                                         general.hashCode());
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o instanceof TextAnnotation) {
-            TextAnnotation other = (TextAnnotation) o;
-            return super.equals(other) &&
-                    general.equals(other.general);
-        }
-        return false;
     }
 }

@@ -186,17 +186,6 @@
     </dependency>
     <dependency>
       <groupId>org.kie.kogito.stunner.editors</groupId>
-      <artifactId>kie-wb-common-stunner-bpmn-emf</artifactId>
-      <scope>provided</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>xml-apis</groupId>
-          <artifactId>xml-apis</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.kie.kogito.stunner.editors</groupId>
       <artifactId>kie-wb-common-stunner-bpmn-marshalling</artifactId>
       <scope>provided</scope>
     </dependency>
@@ -217,6 +206,28 @@
       <groupId>org.kie.kogito.stunner.editors</groupId>
       <artifactId>lienzo-core</artifactId>
       <scope>provided</scope>
+    </dependency>
+
+
+    <!-- New Marshalling -->
+
+    <dependency>
+      <groupId>org.treblereel.gwt.xml.mapper</groupId>
+      <artifactId>gwt-backend</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.treblereel.gwt.xml.mapper</groupId>
+      <artifactId>api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.treblereel.gwt.xml.mapper</groupId>
+      <artifactId>processor</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.treblereel.gwt.xml.mapper</groupId>
+      <artifactId>jre-backend</artifactId>
+      <scope>test</scope>
     </dependency>
 
     <!-- Form modeler -->
@@ -616,7 +627,6 @@
             <compileSourcesArtifact>org.kie.kogito.stunner.editors:kie-wb-common-stunner-svg-client</compileSourcesArtifact>
             <compileSourcesArtifact>org.kie.kogito.stunner.editors:kie-wb-common-stunner-widgets</compileSourcesArtifact>
             <compileSourcesArtifact>org.kie.kogito.stunner.editors:kie-wb-common-stunner-bpmn-api</compileSourcesArtifact>
-            <compileSourcesArtifact>org.kie.kogito.stunner.editors:kie-wb-common-stunner-bpmn-emf</compileSourcesArtifact>
             <compileSourcesArtifact>org.kie.kogito.stunner.editors:kie-wb-common-stunner-bpmn-marshalling</compileSourcesArtifact>
             <compileSourcesArtifact>org.kie.kogito.stunner.editors:kie-wb-common-stunner-bpmn-client</compileSourcesArtifact>
             <compileSourcesArtifact>org.kie.kogito.stunner.editors:kie-wb-common-stunner-forms-api</compileSourcesArtifact>

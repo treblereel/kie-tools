@@ -25,14 +25,14 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.kie.workbench.common.stunner.bpmn.definition.BPMNDefinition;
 import org.kie.workbench.common.stunner.bpmn.definition.BaseCatchingIntermediateEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.BaseEndEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.BaseGateway;
-import org.kie.workbench.common.stunner.bpmn.definition.BaseStartEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.BaseSubprocess;
-import org.kie.workbench.common.stunner.bpmn.definition.BaseTask;
 import org.kie.workbench.common.stunner.bpmn.definition.BaseThrowingIntermediateEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.FlowElement;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BaseGateway;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BaseSubprocess;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BaseTask;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.StartEvent;
 import org.kie.workbench.common.stunner.core.api.DefinitionManager;
 import org.kie.workbench.common.stunner.core.client.api.SessionManager;
 import org.kie.workbench.common.stunner.core.client.canvas.controls.SelectionControl;
@@ -81,17 +81,17 @@ public class DefaultRouteFormProvider
                             // UI value for the route is the target node name or target node type
                             String targetName = null;
                             String targetNodeType = null;
-                            BPMNDefinition bpmnDefinition = getEdgeTarget(outEdge);
+                            FlowElement bpmnDefinition = getEdgeTarget(outEdge);
                             if (bpmnDefinition != null) {
                                 targetNodeType = definitionManager.adapters().forDefinition().getTitle(bpmnDefinition);
-                                if (bpmnDefinition instanceof BaseStartEvent ||
+                                if (bpmnDefinition instanceof StartEvent ||
                                         bpmnDefinition instanceof BaseCatchingIntermediateEvent ||
                                         bpmnDefinition instanceof BaseThrowingIntermediateEvent ||
-                                        bpmnDefinition instanceof BaseEndEvent ||
+                                        bpmnDefinition instanceof EndEvent ||
                                         bpmnDefinition instanceof BaseTask ||
                                         bpmnDefinition instanceof BaseGateway ||
                                         bpmnDefinition instanceof BaseSubprocess) {
-                                    targetName = bpmnDefinition.getGeneral().getName().getValue();
+                                    targetName = bpmnDefinition.getName();
                                 }
                             }
                             if (targetName != null && !targetName.isEmpty()) {
@@ -132,12 +132,12 @@ public class DefaultRouteFormProvider
         return null;
     }
 
-    protected BPMNDefinition getEdgeTarget(Edge edge) {
+    protected FlowElement getEdgeTarget(Edge edge) {
         Node targetNode = edge.getTargetNode();
         if (targetNode != null && targetNode.getContent() instanceof View) {
             Object definition = ((View) targetNode.getContent()).getDefinition();
-            if (definition instanceof BPMNDefinition) {
-                return (BPMNDefinition) definition;
+            if (definition instanceof FlowElement) {
+                return (FlowElement) definition;
             }
         }
         return null;

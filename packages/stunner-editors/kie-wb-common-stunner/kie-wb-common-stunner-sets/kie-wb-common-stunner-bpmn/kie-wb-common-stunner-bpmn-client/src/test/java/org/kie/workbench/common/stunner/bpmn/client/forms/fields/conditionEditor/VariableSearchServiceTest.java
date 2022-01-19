@@ -29,15 +29,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kie.workbench.common.stunner.bpmn.client.forms.util.PromiseMock;
-import org.kie.workbench.common.stunner.bpmn.definition.AdHocSubprocess;
-import org.kie.workbench.common.stunner.bpmn.definition.BPMNDiagramImpl;
-import org.kie.workbench.common.stunner.bpmn.definition.EmbeddedSubprocess;
-import org.kie.workbench.common.stunner.bpmn.definition.EventSubprocess;
-import org.kie.workbench.common.stunner.bpmn.definition.MultipleInstanceSubprocess;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.AdHocSubprocess;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EmbeddedSubprocess;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EventSubprocess;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.MultipleInstanceSubprocess;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Process;
 import org.kie.workbench.common.stunner.bpmn.definition.property.cm.CaseFileVariables;
 import org.kie.workbench.common.stunner.bpmn.definition.property.cm.CaseManagementSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.variables.ProcessData;
-import org.kie.workbench.common.stunner.bpmn.definition.property.variables.ProcessVariables;
 import org.kie.workbench.common.stunner.bpmn.forms.conditions.FieldMetadata;
 import org.kie.workbench.common.stunner.bpmn.forms.conditions.TypeMetadata;
 import org.kie.workbench.common.stunner.bpmn.forms.conditions.TypeMetadataQuery;
@@ -397,8 +396,8 @@ public class VariableSearchServiceTest {
         return multipleInstanceSubprocess;
     }
 
-    protected BPMNDiagramImpl mockBPMNDiagram(String variables, String caseVariables) {
-        BPMNDiagramImpl bpmnDiagram = mock(BPMNDiagramImpl.class);
+    protected Process mockBPMNDiagram(String variables, String caseVariables) {
+        Process bpmnDiagram = mock(Process.class);
         ProcessData processData = mockProcessData(variables);
         when(bpmnDiagram.getProcessData()).thenReturn(processData);
         CaseManagementSet caseManagementSet = mock(CaseManagementSet.class);
@@ -411,9 +410,7 @@ public class VariableSearchServiceTest {
 
     protected ProcessData mockProcessData(String variables) {
         ProcessData processData = mock(ProcessData.class);
-        ProcessVariables processVariables = mock(ProcessVariables.class);
-        when(processData.getProcessVariables()).thenReturn(processVariables);
-        when(processVariables.getValue()).thenReturn(variables);
+        when(processData.getProcessVariables()).thenReturn(variables);
         return processData;
     }
 

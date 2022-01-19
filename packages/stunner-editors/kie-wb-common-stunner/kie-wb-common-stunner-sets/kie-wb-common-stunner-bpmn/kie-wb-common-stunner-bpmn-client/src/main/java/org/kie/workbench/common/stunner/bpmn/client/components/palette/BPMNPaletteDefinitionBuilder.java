@@ -39,11 +39,11 @@ import org.kie.soup.commons.util.Lists;
 import org.kie.soup.commons.util.Maps;
 import org.kie.workbench.common.stunner.bpmn.definition.Association;
 import org.kie.workbench.common.stunner.bpmn.definition.BPMNCategories;
-import org.kie.workbench.common.stunner.bpmn.definition.BPMNDiagramImpl;
-import org.kie.workbench.common.stunner.bpmn.definition.BaseSubprocess;
-import org.kie.workbench.common.stunner.bpmn.definition.Lane;
-import org.kie.workbench.common.stunner.bpmn.definition.NoneTask;
-import org.kie.workbench.common.stunner.bpmn.definition.SequenceFlow;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BaseSubprocess;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Lane;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.NoneTask;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Process;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.SequenceFlow;
 import org.kie.workbench.common.stunner.bpmn.qualifiers.BPMN;
 import org.kie.workbench.common.stunner.bpmn.workitem.CustomTask;
 import org.kie.workbench.common.stunner.bpmn.workitem.CustomTaskFactory;
@@ -191,7 +191,7 @@ public class BPMNPaletteDefinitionBuilder
     }
 
     private Predicate<String> isDefinitionAllowed() {
-        return isType(BPMNDiagramImpl.class)
+        return isType(Process.class)
                 .or(isType(NoneTask.class))
                 .or(isType(SequenceFlow.class))
                 .or(isType(Association.class))
