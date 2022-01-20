@@ -1,0 +1,15 @@
+- State (DefaultState)
+  - id (String)
+  - name (String)
+  - type (Type)
+  - end (End)
+  - stateDataFilters (StateDataFilter)
+  - transition (Transition)
+  - onErrors (List<Error)
+  - compensatedBy (String)
+  - timeouts (TimeoutsDefinition)
+  - metadata (Map<String, String>)
+
+  - InjectState
+    - data (JsonNode)
+    - usedForCompensation (boolean)

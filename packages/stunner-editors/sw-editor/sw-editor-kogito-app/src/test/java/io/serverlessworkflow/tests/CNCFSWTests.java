@@ -16,10 +16,15 @@
 
 package io.serverlessworkflow.tests;
 
+import java.util.List;
+
 import io.serverlessworkflow.api.Workflow;
+import io.serverlessworkflow.api.interfaces.State;
+import io.serverlessworkflow.api.start.Start;
 import io.serverlessworkflow.api.states.DefaultState;
 import io.serverlessworkflow.api.states.InjectState;
 import io.serverlessworkflow.api.states.OperationState;
+import io.serverlessworkflow.api.workflow.Events;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -69,8 +74,13 @@ public class CNCFSWTests {
         assertEquals("Greet", operationState.getName());
         assertEquals(DefaultState.Type.OPERATION, operationState.getType());
 
+        Start start = workflow.getStart();
+        List<State> states = workflow.getStates();
+        Events events = workflow.getEvents();
+
         InjectState injectState = null;
 
+        injectState.getEnd();
         System.out.println(workflow.getId());
         System.out.println(workflow.getName());
         System.out.println(workflow.getDescription());

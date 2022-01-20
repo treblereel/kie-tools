@@ -22,6 +22,8 @@ import java.util.function.BiConsumer;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import org.kie.workbench.common.stunner.core.client.resources.StunnerCommonImageResources;
+import org.kie.workbench.common.stunner.core.client.shape.ImageDataUriGlyph;
 import org.kie.workbench.common.stunner.core.client.shape.Shape;
 import org.kie.workbench.common.stunner.core.client.shape.factory.ShapeFactory;
 import org.kie.workbench.common.stunner.core.client.shape.view.HasTitle;
@@ -31,7 +33,6 @@ import org.kie.workbench.common.stunner.core.client.shape.view.handler.TitleHand
 import org.kie.workbench.common.stunner.core.client.shape.view.handler.ViewAttributesHandler;
 import org.kie.workbench.common.stunner.core.definition.shape.Glyph;
 import org.kie.workbench.common.stunner.shapes.client.factory.BasicShapesFactory;
-import org.kie.workbench.common.stunner.shapes.def.ConnectorGlyph;
 import org.kie.workbench.common.stunner.shapes.def.RectangleShapeDef;
 
 @ApplicationScoped
@@ -60,7 +61,7 @@ public class SWShapeFactory
     @SuppressWarnings("all")
     public Glyph getGlyph(final String definitionId) {
         // TODO
-        return ConnectorGlyph.create();
+        return ImageDataUriGlyph.create(StunnerCommonImageResources.INSTANCE.gears().getSafeUri());
     }
 
     private static class StageShapeDef implements RectangleShapeDef {

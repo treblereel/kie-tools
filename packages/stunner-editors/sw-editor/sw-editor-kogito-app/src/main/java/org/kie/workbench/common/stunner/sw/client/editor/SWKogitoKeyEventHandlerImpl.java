@@ -38,6 +38,7 @@ import org.kie.workbench.common.stunner.core.client.canvas.controls.keyboard.Key
 import org.kie.workbench.common.stunner.core.client.canvas.controls.keyboard.KeyboardControlImpl.SessionKeyShortcutCallback;
 import org.kie.workbench.common.stunner.core.client.event.keyboard.KeyboardEvent;
 
+// TODO: This shoud be no necessary!
 // TODO: This is just a copy/paste of org.kie.workbench.common.stunner.kogito.client.session.command.impl.KogitoKeyEventHandlerImpl from stunner-kogito-client
 
 @Dependent

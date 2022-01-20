@@ -40,10 +40,10 @@ import org.kie.workbench.common.stunner.core.graph.content.definition.Definition
 import org.kie.workbench.common.stunner.core.graph.content.view.View;
 import org.kie.workbench.common.stunner.core.graph.content.view.ViewImpl;
 import org.kie.workbench.common.stunner.core.graph.impl.GraphImpl;
-import org.kie.workbench.common.stunner.core.graph.impl.NodeImpl;
 import org.kie.workbench.common.stunner.core.util.DefinitionUtils;
 import org.kie.workbench.common.stunner.sw.SWDefinitions;
 import org.kie.workbench.common.stunner.sw.definition.State;
+import org.kie.workbench.common.stunner.sw.definition.StateNode;
 import org.kie.workbench.common.stunner.sw.factory.SWDiagramFactory;
 import org.uberfire.client.promise.Promises;
 
@@ -137,18 +137,24 @@ public class SWClientDiagramService {
         return diagram;
     }
 
+    private static void testNodeApi() {
+        StateNode state1 = new StateNode("state1");
+        State definition = state1.getContent().getDefinition();
+    }
+
     @SuppressWarnings("all")
     private Graph unmarshall(final Metadata metadata,
                              final String raw) {
 
         final State state1 = new State();
         state1.setName("State1");
-        final NodeImpl stage1Node = new NodeImpl<>("state1");
+        // final NodeImpl stage1Node = new NodeImpl<>("state1");
+        final StateNode stage1Node = new StateNode("state1");
         final Bounds bounds = definitionUtils.buildBounds(state1,
                                                           50d,
                                                           50d);
-        final View<Object> content = new ViewImpl<>(state1,
-                                                    bounds);
+        final View<State> content = new ViewImpl<>(state1,
+                                                   bounds);
         stage1Node.setContent(content);
         appendLabels(stage1Node.getLabels(),
                      state1);

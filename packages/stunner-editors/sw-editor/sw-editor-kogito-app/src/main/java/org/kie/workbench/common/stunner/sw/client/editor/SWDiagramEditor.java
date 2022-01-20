@@ -28,6 +28,7 @@ import org.kie.workbench.common.stunner.client.widgets.editor.StunnerEditor;
 import org.kie.workbench.common.stunner.client.widgets.presenters.session.SessionPresenter;
 import org.kie.workbench.common.stunner.core.client.service.ClientRuntimeError;
 import org.kie.workbench.common.stunner.core.client.service.ServiceCallback;
+import org.kie.workbench.common.stunner.core.client.session.ClientSession;
 import org.kie.workbench.common.stunner.core.client.util.WindowJSType;
 import org.kie.workbench.common.stunner.core.diagram.Diagram;
 import org.kie.workbench.common.stunner.core.diagram.Metadata;
@@ -57,7 +58,7 @@ public class SWDiagramEditor {
     }
 
     public void onStartup(final PlaceRequest place) {
-        stunnerEditor.setReadOnly(true);
+        stunnerEditor.setReadOnly(false);
     }
 
     public void onOpen() {
@@ -128,7 +129,19 @@ public class SWDiagramEditor {
         Path path = PathFactory.newPath(title, "/" + title + ".sw");
         metadata.setPath(path);
         initLienzoType();
+        initSWApiTest();
     }
+
+    private void initSWApiTest() {
+        ClientSession session = stunnerEditor.getSession();
+        JsSWDiagramEditor jsSWDiagramEditor = new JsSWDiagramEditor();
+        jsSWDiagramEditor.session = session;
+        setupSWApiTest(jsSWDiagramEditor);
+    }
+
+    private native void setupSWApiTest(Object jsSWDiagramEditor) /*-{
+        $wnd.sweditor = jsSWDiagramEditor;
+    }-*/;
 
     private void initLienzoType() {
         LienzoCanvas canvas = (LienzoCanvas) stunnerEditor.getCanvasHandler().getCanvas();

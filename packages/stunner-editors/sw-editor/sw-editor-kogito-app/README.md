@@ -46,3 +46,41 @@ VM Options:
         -logLevel [ERROR, WARN, INFO, TRACE, DEBUG, SPAM, or ALL]
 
 Start page: `test.html`
+
+## Kogito Editor API
+
+    // For creating a process
+    window.frames.editorFrame.contentWindow.gwtEditorBeans.get("BPMNDiagramEditor").get().setContent("", "")
+
+    // For loading a process (the raw xml)
+    window.frames.editorFrame.contentWindow.gwtEditorBeans.get("BPMNDiagramEditor").get().setContent("", raw)
+
+    // Get the actual process' content
+    window.frames.editorFrame.contentWindow.gwtEditorBeans.get("BPMNDiagramEditor").get().getContent()
+
+## Low level JsInterop API
+
+    // Lienzo JS API
+    var jsl = window.frames.editorFrame.contentWindow.canvas
+    jsl.getNodeIds() // Get id of all nodes
+    jsl.getBackgroundColor('_A9481DBC-3E87-40EE-9925-733B24404BC0')         // gets background color
+    jsl.setBackgroundColor('_A9481DBC-3E87-40EE-9925-733B24404BC0', 'blue') // sets background color
+    jsl.getBorderColor('_A9481DBC-3E87-40EE-9925-733B24404BC0')             // gets border color
+    jsl.setBorderColor('_A9481DBC-3E87-40EE-9925-733B24404BC0', 'red')      // sets border color
+    jsl.getLocation('_A9481DBC-3E87-40EE-9925-733B24404BC0', 'red')         // gets location
+    jsl.getAbsoluteLocation('_A9481DBC-3E87-40EE-9925-733B24404BC0', 'red') // gets absolute location
+    jsl.getDimensions('_A9481DBC-3E87-40EE-9925-733B24404BC0', 'red')       // gets dimensions
+
+    // Lienzo Wires Shapes API
+    var jsl = window.frames.editorFrame.contentWindow.canvas
+    jsl.log().logWiresShapes()
+    var s = jsl.getWiresShape('_A9481DBC-3E87-40EE-9925-733B24404BC0')
+    s.getChild(1).fillColor = "red"
+
+    // Lienzo Events API
+    jsl.events().click(jsl.getShape('redRectangle'))
+    jsl.events().drag(jsl.getShape('redRectangle'), 400, 400, () => console.log('DONE DRAG'))
+
+    // SW Editor API (JsSWDiagramEditor)
+    var sweditor = window.frames.editorFrame.contentWindow.sweditor
+    sweditor.logNodes();

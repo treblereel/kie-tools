@@ -18,6 +18,7 @@ package org.kie.workbench.common.stunner.sw.definition;
 
 import java.util.Set;
 
+import jsinterop.annotations.JsType;
 import org.jboss.errai.common.client.api.annotations.Portable;
 import org.jboss.errai.databinding.client.api.Bindable;
 import org.kie.soup.commons.util.Sets;
@@ -30,6 +31,7 @@ import org.kie.workbench.common.stunner.core.definition.property.PropertyMetaTyp
 @Portable
 @Bindable
 @Definition
+@JsType
 public class State {
 
     @Category
@@ -41,7 +43,7 @@ public class State {
             .build();
 
     @Property(meta = PropertyMetaTypes.NAME)
-    private String name;
+    public String name;
 
     public void setName(String name) {
         this.name = name;
@@ -53,5 +55,9 @@ public class State {
 
     public Set<String> getLabels() {
         return labels;
+    }
+
+    public String getCategory() {
+        return category;
     }
 }
