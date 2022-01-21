@@ -27,6 +27,10 @@
         document.getElementById("download_btn").disabled = false;
       }
 
+      function callPreview() {
+        window.frames.editorFrame.contentWindow.gwtEditorBeans.get("SWDiagramEditor").get().getPreview();
+      }
+
       function download() {
         window.frames.editorFrame.contentWindow.gwtEditorBeans
           .get("SWDiagramEditor")
@@ -60,6 +64,7 @@
     <div id="editor">
       Wait until the editor is loaded to open a SW file:<br />
       <input type="button" onclick="loadDiagram('{}')" value="Load example" />
+      <input type="button" onclick="callPreview()" value="Call Preview" />
       or
       <input type="file" onchange="openFile(event)" value="Choose SW file" accept="sw,txt" />
       When you are ready you can

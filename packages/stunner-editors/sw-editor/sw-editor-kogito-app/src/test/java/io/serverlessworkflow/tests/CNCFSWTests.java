@@ -19,6 +19,7 @@ package io.serverlessworkflow.tests;
 import java.util.List;
 
 import io.serverlessworkflow.api.Workflow;
+import io.serverlessworkflow.api.end.End;
 import io.serverlessworkflow.api.interfaces.State;
 import io.serverlessworkflow.api.start.Start;
 import io.serverlessworkflow.api.states.DefaultState;
@@ -78,6 +79,7 @@ public class CNCFSWTests {
         List<State> states = workflow.getStates();
         Events events = workflow.getEvents();
 
+        End end = operationState.getEnd();
         InjectState injectState = null;
 
         injectState.getEnd();

@@ -34,6 +34,7 @@ import org.kie.workbench.common.stunner.core.diagram.Diagram;
 import org.kie.workbench.common.stunner.core.diagram.Metadata;
 import org.kie.workbench.common.stunner.sw.client.services.SWClientDiagramService;
 import org.kie.workbench.common.stunner.sw.client.services.SWGraphExamples;
+import org.kie.workbench.common.stunner.sw.client.services.SWMarshallerTests;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.backend.vfs.PathFactory;
 import org.uberfire.client.promise.Promises;
@@ -82,6 +83,7 @@ public class SWDiagramEditor {
     }
 
     public Promise<String> getPreview() {
+        SWMarshallerTests.test();
         return promises.resolve("");
     }
 
