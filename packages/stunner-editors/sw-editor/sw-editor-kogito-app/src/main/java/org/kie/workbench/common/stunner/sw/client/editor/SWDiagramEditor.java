@@ -33,6 +33,7 @@ import org.kie.workbench.common.stunner.core.client.util.WindowJSType;
 import org.kie.workbench.common.stunner.core.diagram.Diagram;
 import org.kie.workbench.common.stunner.core.diagram.Metadata;
 import org.kie.workbench.common.stunner.sw.client.services.SWClientDiagramService;
+import org.kie.workbench.common.stunner.sw.client.services.SWGraphExamples;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.backend.vfs.PathFactory;
 import org.uberfire.client.promise.Promises;
@@ -132,10 +133,14 @@ public class SWDiagramEditor {
         initSWApiTest();
     }
 
+    @Inject
+    private SWGraphExamples graphExamples;
+
     private void initSWApiTest() {
         ClientSession session = stunnerEditor.getSession();
         JsSWDiagramEditor jsSWDiagramEditor = new JsSWDiagramEditor();
         jsSWDiagramEditor.session = session;
+        jsSWDiagramEditor.graphExamples = graphExamples;
         setupSWApiTest(jsSWDiagramEditor);
     }
 

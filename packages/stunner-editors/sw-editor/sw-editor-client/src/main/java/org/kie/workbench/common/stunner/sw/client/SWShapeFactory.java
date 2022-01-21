@@ -22,7 +22,7 @@ import java.util.function.BiConsumer;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import org.kie.workbench.common.stunner.core.client.resources.StunnerCommonImageResources;
+import com.google.gwt.resources.client.ImageResource;
 import org.kie.workbench.common.stunner.core.client.shape.ImageDataUriGlyph;
 import org.kie.workbench.common.stunner.core.client.shape.Shape;
 import org.kie.workbench.common.stunner.core.client.shape.factory.ShapeFactory;
@@ -33,7 +33,18 @@ import org.kie.workbench.common.stunner.core.client.shape.view.handler.TitleHand
 import org.kie.workbench.common.stunner.core.client.shape.view.handler.ViewAttributesHandler;
 import org.kie.workbench.common.stunner.core.definition.shape.Glyph;
 import org.kie.workbench.common.stunner.shapes.client.factory.BasicShapesFactory;
+import org.kie.workbench.common.stunner.shapes.def.CircleShapeDef;
+import org.kie.workbench.common.stunner.shapes.def.ConnectorShapeDef;
 import org.kie.workbench.common.stunner.shapes.def.RectangleShapeDef;
+import org.kie.workbench.common.stunner.sw.client.resources.SWImageResources;
+import org.kie.workbench.common.stunner.sw.definition.End;
+import org.kie.workbench.common.stunner.sw.definition.InjectState;
+import org.kie.workbench.common.stunner.sw.definition.Start;
+import org.kie.workbench.common.stunner.sw.definition.StartTransition;
+import org.kie.workbench.common.stunner.sw.definition.State;
+import org.kie.workbench.common.stunner.sw.definition.Transition;
+
+import static org.kie.workbench.common.stunner.core.util.ClassUtils.getName;
 
 @ApplicationScoped
 public class SWShapeFactory
@@ -54,14 +65,90 @@ public class SWShapeFactory
     @Override
     @SuppressWarnings("all")
     public Shape newShape(final Object definition) {
-        return basicShapesFactory.newShape(definition, new StageShapeDef());
+
+        if ((definition instanceof Start) ||
+                (definition instanceof End)) {
+            return newEventShape(definition);
+        }
+
+        if (definition instanceof State) {
+            return newStateShape(definition);
+        }
+
+        if ((definition instanceof Transition) ||
+                (definition instanceof StartTransition)) {
+            return newConnectorShape(definition);
+        }
+
+        throw new UnsupportedOperationException("No shape declared in SW factory.");
     }
 
     @Override
     @SuppressWarnings("all")
     public Glyph getGlyph(final String definitionId) {
-        // TODO
-        return ImageDataUriGlyph.create(StunnerCommonImageResources.INSTANCE.gears().getSafeUri());
+
+        ImageResource imageResource = null;
+
+        if (getName(Start.class).equals(definitionId)) {
+            imageResource = SWImageResources.INSTANCE.start();
+        }
+
+        if (getName(End.class).equals(definitionId)) {
+            imageResource = SWImageResources.INSTANCE.end();
+        }
+
+        if (getName(InjectState.class).equals(definitionId)) {
+            imageResource = SWImageResources.INSTANCE.stateInject();
+        }
+
+        if (getName(Transition.class).equals(definitionId)) {
+            imageResource = SWImageResources.INSTANCE.transition();
+        }
+
+        if (getName(StartTransition.class).equals(definitionId)) {
+            imageResource = SWImageResources.INSTANCE.transitionStart();
+        }
+
+        if (null != imageResource) {
+            return ImageDataUriGlyph.create(imageResource.getSafeUri());
+        }
+
+        throw new UnsupportedOperationException("No glyph declared in SW factory.");
+    }
+
+    private Shape newConnectorShape(final Object bean) {
+        return basicShapesFactory.newShape(bean, new EdgeShapeDef());
+    }
+
+    private Shape newEventShape(final Object bean) {
+        return basicShapesFactory.newShape(bean, new EventShapeDef());
+    }
+
+    private Shape newStateShape(final Object state) {
+        return basicShapesFactory.newShape(state, new StageShapeDef());
+    }
+
+    private static class EdgeShapeDef implements ConnectorShapeDef {
+
+        @Override
+        public BiConsumer viewHandler() {
+            ViewAttributesHandler handler = new ViewAttributesHandlerBuilder("#000000", "#000000").build();
+            return (o, o2) -> handler.handle(o, (ShapeView) o2);
+        }
+    }
+
+    private static class EventShapeDef implements CircleShapeDef {
+
+        @Override
+        public Double getRadius(Object element) {
+            return 12.5d;
+        }
+
+        @Override
+        public BiConsumer viewHandler() {
+            ViewAttributesHandler handler = new ViewAttributesHandlerBuilder("#000000", "#FFFFFF").build();
+            return (o, o2) -> handler.handle(o, (ShapeView) o2);
+        }
     }
 
     private static class StageShapeDef implements RectangleShapeDef {
@@ -101,18 +188,18 @@ public class SWShapeFactory
         @Override
         @SuppressWarnings("all")
         public BiConsumer viewHandler() {
-            ViewAttributesHandler handler = new ViewAttributesHandlerBuilder().build();
+            ViewAttributesHandler handler = new ViewAttributesHandlerBuilder("#FF0000", "#FFFFFF").build();
             return (o, o2) -> handler.handle(o, (ShapeView) o2);
         }
+    }
 
-        private static class ViewAttributesHandlerBuilder<W extends Object, V extends ShapeView>
-                extends ViewAttributesHandler.Builder<W, V> {
+    private static class ViewAttributesHandlerBuilder<W extends Object, V extends ShapeView>
+            extends ViewAttributesHandler.Builder<W, V> {
 
-            public ViewAttributesHandlerBuilder() {
-                this.fillColor(bean -> "#FF0000")
-                        .strokeColor(bean -> "#FFFFFF")
-                        .strokeWidth(bean -> 1d);
-            }
+        public ViewAttributesHandlerBuilder(String fillColor, String strokeColor) {
+            this.fillColor(bean -> fillColor)
+                    .strokeColor(bean -> strokeColor)
+                    .strokeWidth(bean -> 1d);
         }
     }
 }

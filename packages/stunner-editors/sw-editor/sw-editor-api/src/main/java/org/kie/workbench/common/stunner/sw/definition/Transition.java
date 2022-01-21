@@ -26,24 +26,30 @@ import org.kie.workbench.common.stunner.core.definition.annotation.Definition;
 import org.kie.workbench.common.stunner.core.definition.annotation.Property;
 import org.kie.workbench.common.stunner.core.definition.annotation.definition.Category;
 import org.kie.workbench.common.stunner.core.definition.annotation.definition.Labels;
-import org.kie.workbench.common.stunner.core.definition.annotation.morph.MorphBase;
 import org.kie.workbench.common.stunner.core.definition.property.PropertyMetaTypes;
+import org.kie.workbench.common.stunner.core.factory.graph.EdgeFactory;
+import org.kie.workbench.common.stunner.core.rule.annotation.CanConnect;
+import org.kie.workbench.common.stunner.core.rule.annotation.EdgeOccurrences;
 
 @Portable
 @Bindable
-@Definition
-@MorphBase(defaultType = InjectState.class)
+@Definition(graphFactory = EdgeFactory.class)
+@CanConnect(startRole = State.LABEL_STATE, endRole = State.LABEL_STATE)
+@CanConnect(startRole = State.LABEL_STATE, endRole = End.LABEL_END)
+@EdgeOccurrences(role = State.LABEL_STATE, type = EdgeOccurrences.EdgeType.INCOMING, max = -1)
+@EdgeOccurrences(role = State.LABEL_STATE, type = EdgeOccurrences.EdgeType.OUTGOING, max = -1)
+@EdgeOccurrences(role = End.LABEL_END, type = EdgeOccurrences.EdgeType.OUTGOING, max = 0)
 @JsType
-public class State {
+public class Transition {
 
-    public static final String LABEL_STATE = "state";
+    public static final String LABEL_TRANSITION = "transition";
 
     @Category
-    public static final transient String category = SWCategories.STATES;
+    public static final transient String category = SWCategories.TRANSITIONS;
 
     @Labels
     private final Set<String> labels = new Sets.Builder<String>()
-            .add(LABEL_STATE)
+            .add(LABEL_TRANSITION)
             .build();
 
     @Property(meta = PropertyMetaTypes.ID)
@@ -52,7 +58,7 @@ public class State {
     @Property(meta = PropertyMetaTypes.NAME)
     public String name;
 
-    public State() {
+    public Transition() {
     }
 
     public void setName(String name) {

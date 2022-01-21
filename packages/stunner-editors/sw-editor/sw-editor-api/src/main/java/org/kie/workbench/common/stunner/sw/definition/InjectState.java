@@ -17,17 +17,27 @@
 package org.kie.workbench.common.stunner.sw.definition;
 
 import jsinterop.annotations.JsType;
-import org.kie.workbench.common.stunner.core.graph.content.view.View;
-import org.kie.workbench.common.stunner.core.graph.impl.NodeImpl;
+import org.jboss.errai.common.client.api.annotations.Portable;
+import org.jboss.errai.databinding.client.api.Bindable;
+import org.kie.workbench.common.stunner.core.definition.annotation.Definition;
+import org.kie.workbench.common.stunner.core.definition.annotation.Property;
+import org.kie.workbench.common.stunner.core.definition.annotation.morph.Morph;
 
+@Portable
+@Bindable
+@Definition
+@Morph(base = State.class)
 @JsType
-public class StateNode extends NodeImpl<View<State>> {
+public class InjectState extends State {
 
-    public StateNode(String uuid) {
-        super(uuid);
+    @Property
+    public String data;
+
+    public String getData() {
+        return data;
     }
 
-    public State getState() {
-        return getContent().getDefinition();
+    public void setData(String data) {
+        this.data = data;
     }
 }

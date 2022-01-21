@@ -16,9 +16,7 @@
 
 package org.kie.workbench.common.stunner.sw.client.services;
 
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -28,22 +26,13 @@ import org.kie.workbench.common.stunner.core.api.DefinitionManager;
 import org.kie.workbench.common.stunner.core.api.FactoryManager;
 import org.kie.workbench.common.stunner.core.client.api.ShapeManager;
 import org.kie.workbench.common.stunner.core.client.service.ServiceCallback;
-import org.kie.workbench.common.stunner.core.definition.adapter.DefinitionAdapter;
-import org.kie.workbench.common.stunner.core.definition.adapter.DefinitionId;
 import org.kie.workbench.common.stunner.core.definition.adapter.binding.BindableAdapterUtils;
 import org.kie.workbench.common.stunner.core.diagram.Diagram;
 import org.kie.workbench.common.stunner.core.diagram.Metadata;
 import org.kie.workbench.common.stunner.core.diagram.MetadataImpl;
 import org.kie.workbench.common.stunner.core.graph.Graph;
-import org.kie.workbench.common.stunner.core.graph.content.Bounds;
 import org.kie.workbench.common.stunner.core.graph.content.definition.DefinitionSet;
-import org.kie.workbench.common.stunner.core.graph.content.view.View;
-import org.kie.workbench.common.stunner.core.graph.content.view.ViewImpl;
-import org.kie.workbench.common.stunner.core.graph.impl.GraphImpl;
-import org.kie.workbench.common.stunner.core.util.DefinitionUtils;
 import org.kie.workbench.common.stunner.sw.SWDefinitions;
-import org.kie.workbench.common.stunner.sw.definition.State;
-import org.kie.workbench.common.stunner.sw.definition.StateNode;
 import org.kie.workbench.common.stunner.sw.factory.SWDiagramFactory;
 import org.uberfire.client.promise.Promises;
 
@@ -55,7 +44,7 @@ public class SWClientDiagramService {
     private final SWDiagramFactory diagramFactory;
     private final ShapeManager shapeManager;
     private final Promises promises;
-    private final DefinitionUtils definitionUtils;
+    private final SWGraphExamples graphExamples;
 
     //CDI proxy
     protected SWClientDiagramService() {
@@ -68,13 +57,13 @@ public class SWClientDiagramService {
                                   final SWDiagramFactory diagramFactory,
                                   final ShapeManager shapeManager,
                                   final Promises promises,
-                                  final DefinitionUtils definitionUtils) {
+                                  final SWGraphExamples graphExamples) {
         this.definitionManager = definitionManager;
         this.factoryManager = factoryManager;
         this.diagramFactory = diagramFactory;
         this.shapeManager = shapeManager;
         this.promises = promises;
-        this.definitionUtils = definitionUtils;
+        this.graphExamples = graphExamples;
     }
 
     public void transform(final String xml,
@@ -137,63 +126,10 @@ public class SWClientDiagramService {
         return diagram;
     }
 
-    private static void testNodeApi() {
-        StateNode state1 = new StateNode("state1");
-        State definition = state1.getContent().getDefinition();
-    }
-
-    @SuppressWarnings("all")
     private Graph unmarshall(final Metadata metadata,
                              final String raw) {
-
-        final State state1 = new State();
-        state1.setName("State1");
-        // final NodeImpl stage1Node = new NodeImpl<>("state1");
-        final StateNode stage1Node = new StateNode("state1");
-        final Bounds bounds = definitionUtils.buildBounds(state1,
-                                                          50d,
-                                                          50d);
-        final View<State> content = new ViewImpl<>(state1,
-                                                   bounds);
-        stage1Node.setContent(content);
-        appendLabels(stage1Node.getLabels(),
-                     state1);
-
-        final GraphImpl<Object> graph = GraphImpl.build("graph");
-        graph.addNode(stage1Node);
-
-        return graph;
-    }
-
-    @SuppressWarnings("all")
-    protected void appendLabels(final Set<String> target,
-                                final Object definition) {
-        final String[] labels = computeLabels(definitionUtils.getDefinitionManager()
-                                                      .adapters()
-                                                      .registry()
-                                                      .getDefinitionAdapter(definition.getClass()),
-                                              definition);
-        for (String label : labels) {
-            target.add(label);
-        }
-    }
-
-    @SuppressWarnings("all")
-    public static <T> String[] computeLabels(final DefinitionAdapter<T> adapter,
-                                             final T definition) {
-        final Set<String> target = new HashSet<>();
-        final DefinitionId id = adapter.getId(definition);
-        target.add(id.value());
-        if (id.isDynamic()) {
-            target.add(id.type());
-        }
-        String[] labels = adapter.getLabels(definition);
-        if (null != labels) {
-            for (String label : labels) {
-                target.add(label);
-            }
-        }
-        return target.toArray(new String[target.size()]);
+        // return SWGraphExamples.justASingleStateThere();
+        return graphExamples.basicInjectStates();
     }
 
     private Metadata createMetadata() {

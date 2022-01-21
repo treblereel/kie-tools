@@ -14,20 +14,24 @@
  * limitations under the License.
  */
 
-package org.kie.workbench.common.stunner.sw;
+package org.kie.workbench.common.stunner.sw.definition;
 
-import javax.annotation.PostConstruct;
+import java.util.List;
 
-import org.jboss.errai.ioc.client.api.EntryPoint;
-import org.jboss.errai.ui.shared.api.annotations.Bundle;
-import org.uberfire.client.views.pfly.sys.PatternFlyBootstrapper;
+import org.kie.workbench.common.stunner.core.graph.Edge;
 
-@EntryPoint
-@Bundle("resources/i18n/SWConstants.properties")
-public class SWEntryPoint {
+import static org.kie.workbench.common.stunner.core.util.ClassUtils.getName;
 
-    @PostConstruct
-    public void init() {
-        PatternFlyBootstrapper.ensureMonacoEditorLoaderIsAvailable();
+public class SWDefinitionUtils {
+
+    @SuppressWarnings("all")
+    public static <E extends Edge> E getEdge(List<Edge> edges, Class<? extends Edge> type) {
+        String typeName = getName(type);
+        for (Edge edge : edges) {
+            if (getName(edge.getClass()).equals(typeName)) {
+                return (E) edge;
+            }
+        }
+        return null;
     }
 }

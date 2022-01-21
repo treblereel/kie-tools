@@ -14,20 +14,10 @@
  * limitations under the License.
  */
 
-package org.kie.workbench.common.stunner.sw;
+package org.kie.workbench.common.stunner.sw.definition;
 
-import javax.annotation.PostConstruct;
+public class SWCategories {
 
-import org.jboss.errai.ioc.client.api.EntryPoint;
-import org.jboss.errai.ui.shared.api.annotations.Bundle;
-import org.uberfire.client.views.pfly.sys.PatternFlyBootstrapper;
-
-@EntryPoint
-@Bundle("resources/i18n/SWConstants.properties")
-public class SWEntryPoint {
-
-    @PostConstruct
-    public void init() {
-        PatternFlyBootstrapper.ensureMonacoEditorLoaderIsAvailable();
-    }
+    public static final transient String STATES = "SWStates";
+    public static final transient String TRANSITIONS = "SWTransitions";
 }

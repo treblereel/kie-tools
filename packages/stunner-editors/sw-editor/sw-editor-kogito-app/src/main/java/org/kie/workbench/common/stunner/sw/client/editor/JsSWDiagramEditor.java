@@ -28,18 +28,18 @@ import org.kie.workbench.common.stunner.core.command.CommandResult;
 import org.kie.workbench.common.stunner.core.command.impl.CompositeCommand;
 import org.kie.workbench.common.stunner.core.command.util.CommandUtils;
 import org.kie.workbench.common.stunner.core.graph.Node;
-import org.kie.workbench.common.stunner.core.graph.content.Bounds;
 import org.kie.workbench.common.stunner.core.graph.content.view.Point2D;
-import org.kie.workbench.common.stunner.core.graph.content.view.View;
-import org.kie.workbench.common.stunner.core.graph.content.view.ViewImpl;
+import org.kie.workbench.common.stunner.sw.client.services.SWGraphExamples;
+import org.kie.workbench.common.stunner.sw.definition.InjectState;
 import org.kie.workbench.common.stunner.sw.definition.State;
-import org.kie.workbench.common.stunner.sw.definition.StateNode;
 
 @JsType
 public class JsSWDiagramEditor {
 
     @JsIgnore
     ClientSession session;
+    @JsIgnore
+    SWGraphExamples graphExamples;
 
     public void logNodes() {
         Iterable<Node> nodes = session.getCanvasHandler().getDiagram().getGraph().nodes();
@@ -48,25 +48,26 @@ public class JsSWDiagramEditor {
         }
     }
 
-    public StateNode getState1Node() {
+    public Node getState1Node() {
         Iterable<Node> nodes = session.getCanvasHandler().getDiagram().getGraph().nodes();
         for (Node node : nodes) {
             if (node.getUUID().equals("state1")) {
-                return (StateNode) node;
+                return node;
             }
         }
         return null;
     }
 
-    public void addSomeNewNode() {
+    // sweditor.addState('SomeState1', 'someState1', 50, 300);
+    public Node addState(String uuid, String name, double x, double y) {
         AbstractCanvasHandler canvasHandler = (AbstractCanvasHandler) session.getCanvasHandler();
-        State someState = new State();
-        someState.setName("SomeState");
-        StateNode someStateNode = createStateNode("someState", someState, 0, 0, 100, 50);
+        State someState = new InjectState();
+        someState.setName(name);
+        Node someStateNode = graphExamples.createStateNode(uuid, someState, 0, 0);
         String shapeSetId = canvasHandler.getDiagram().getMetadata().getShapeSetId();
         final CompositeCommand.Builder commandBuilder = new CompositeCommand.Builder();
         commandBuilder.addCommand(new AddNodeCommand(someStateNode, shapeSetId));
-        commandBuilder.addCommand(new UpdateElementPositionCommand((Node) someStateNode, new Point2D(50, 300)));
+        commandBuilder.addCommand(new UpdateElementPositionCommand((Node) someStateNode, new Point2D(x, y)));
         CompositeCommand command = commandBuilder.build();
         CommandResult result = ((EditorSession) session).getCommandManager().execute(canvasHandler, command);
         if (CommandUtils.isError(result)) {
@@ -74,15 +75,6 @@ public class JsSWDiagramEditor {
         } else {
             DomGlobal.console.log("SUCCESSFULLY ADDED SOME STATE: ");
         }
-    }
-
-    @JsIgnore
-    private static StateNode createStateNode(String uuid, State state, double x, double y, double w, double h) {
-        final StateNode state1Node = new StateNode(uuid);
-        final Bounds bounds = Bounds.create(x, y, x + w, y + h);
-        final View<State> content = new ViewImpl<>(state, bounds);
-        state1Node.setContent(content);
-        state1Node.getLabels().add("all");
-        return state1Node;
+        return someStateNode;
     }
 }

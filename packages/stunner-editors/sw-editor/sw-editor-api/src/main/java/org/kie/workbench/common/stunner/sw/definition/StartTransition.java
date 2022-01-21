@@ -23,52 +23,33 @@ import org.jboss.errai.common.client.api.annotations.Portable;
 import org.jboss.errai.databinding.client.api.Bindable;
 import org.kie.soup.commons.util.Sets;
 import org.kie.workbench.common.stunner.core.definition.annotation.Definition;
-import org.kie.workbench.common.stunner.core.definition.annotation.Property;
 import org.kie.workbench.common.stunner.core.definition.annotation.definition.Category;
 import org.kie.workbench.common.stunner.core.definition.annotation.definition.Labels;
-import org.kie.workbench.common.stunner.core.definition.annotation.morph.MorphBase;
-import org.kie.workbench.common.stunner.core.definition.property.PropertyMetaTypes;
+import org.kie.workbench.common.stunner.core.factory.graph.EdgeFactory;
+import org.kie.workbench.common.stunner.core.rule.annotation.CanConnect;
+import org.kie.workbench.common.stunner.core.rule.annotation.EdgeOccurrences;
 
 @Portable
 @Bindable
-@Definition
-@MorphBase(defaultType = InjectState.class)
+@Definition(graphFactory = EdgeFactory.class)
+@CanConnect(startRole = Start.LABEL_START, endRole = State.LABEL_STATE)
+@EdgeOccurrences(role = Start.LABEL_START, type = EdgeOccurrences.EdgeType.INCOMING, max = 0)
+@EdgeOccurrences(role = Start.LABEL_START, type = EdgeOccurrences.EdgeType.OUTGOING, max = 1)
 @JsType
-public class State {
+public class StartTransition {
 
-    public static final String LABEL_STATE = "state";
+    public static final String LABEL_TRANSITION_START = "transition_start";
 
     @Category
-    public static final transient String category = SWCategories.STATES;
+    public static final transient String category = SWCategories.TRANSITIONS;
 
     @Labels
     private final Set<String> labels = new Sets.Builder<String>()
-            .add(LABEL_STATE)
+            .add(Transition.LABEL_TRANSITION)
+            .add(LABEL_TRANSITION_START)
             .build();
 
-    @Property(meta = PropertyMetaTypes.ID)
-    public String id;
-
-    @Property(meta = PropertyMetaTypes.NAME)
-    public String name;
-
-    public State() {
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getId() {
-        return id;
+    public StartTransition() {
     }
 
     public Set<String> getLabels() {

@@ -26,41 +26,28 @@ import org.kie.workbench.common.stunner.core.definition.annotation.Definition;
 import org.kie.workbench.common.stunner.core.definition.annotation.Property;
 import org.kie.workbench.common.stunner.core.definition.annotation.definition.Category;
 import org.kie.workbench.common.stunner.core.definition.annotation.definition.Labels;
-import org.kie.workbench.common.stunner.core.definition.annotation.morph.MorphBase;
 import org.kie.workbench.common.stunner.core.definition.property.PropertyMetaTypes;
 
 @Portable
 @Bindable
 @Definition
-@MorphBase(defaultType = InjectState.class)
 @JsType
-public class State {
+public class Start {
 
-    public static final String LABEL_STATE = "state";
+    public static final String LABEL_START = "start";
 
     @Category
     public static final transient String category = SWCategories.STATES;
 
     @Labels
     private final Set<String> labels = new Sets.Builder<String>()
-            .add(LABEL_STATE)
+            .add(LABEL_START)
             .build();
 
     @Property(meta = PropertyMetaTypes.ID)
     public String id;
 
-    @Property(meta = PropertyMetaTypes.NAME)
-    public String name;
-
-    public State() {
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
+    public Start() {
     }
 
     public void setId(String id) {
