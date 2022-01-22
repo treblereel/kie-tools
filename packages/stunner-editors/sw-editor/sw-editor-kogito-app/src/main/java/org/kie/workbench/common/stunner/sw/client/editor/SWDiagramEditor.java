@@ -32,6 +32,8 @@ import org.kie.workbench.common.stunner.core.client.session.ClientSession;
 import org.kie.workbench.common.stunner.core.client.util.WindowJSType;
 import org.kie.workbench.common.stunner.core.diagram.Diagram;
 import org.kie.workbench.common.stunner.core.diagram.Metadata;
+import org.kie.workbench.common.stunner.sw.client.js.JsSWCommands;
+import org.kie.workbench.common.stunner.sw.client.js.JsSWDiagramEditor;
 import org.kie.workbench.common.stunner.sw.client.services.SWClientDiagramService;
 import org.kie.workbench.common.stunner.sw.client.services.SWGraphExamples;
 import org.kie.workbench.common.stunner.sw.client.services.SWMarshallerTests;
@@ -140,9 +142,12 @@ public class SWDiagramEditor {
 
     private void initSWApiTest() {
         ClientSession session = stunnerEditor.getSession();
+        JsSWCommands commands = new JsSWCommands();
+        commands.session = session;
+        commands.graphExamples = graphExamples;
         JsSWDiagramEditor jsSWDiagramEditor = new JsSWDiagramEditor();
         jsSWDiagramEditor.session = session;
-        jsSWDiagramEditor.graphExamples = graphExamples;
+        jsSWDiagramEditor.commands = commands;
         setupSWApiTest(jsSWDiagramEditor);
     }
 

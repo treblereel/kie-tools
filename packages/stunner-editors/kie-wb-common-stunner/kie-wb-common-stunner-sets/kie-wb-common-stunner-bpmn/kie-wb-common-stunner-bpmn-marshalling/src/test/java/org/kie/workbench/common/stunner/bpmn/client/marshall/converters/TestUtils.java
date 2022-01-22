@@ -132,7 +132,7 @@ public class TestUtils {
 
     public static <T extends BPMNViewDefinition> Node<View<T>, ?> newNode(String UUID, T definition) {
         Node<View<T>, ?> node = new NodeImpl<>(UUID);
-        node.setContent(new ViewImpl<T>(definition, org.kie.workbench.common.stunner.core.graph.content.Bounds.create()));
+        node.setContent(new ViewImpl<T>(definition, org.kie.workbench.common.stunner.core.graph.content.Bounds.createEmpty()));
         return node;
     }
 

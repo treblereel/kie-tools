@@ -128,7 +128,7 @@ public class BasePropertyReader implements PropertyReader {
     @Override
     public Bounds getBounds() {
         if (shape == null) {
-            return Bounds.create();
+            return Bounds.createEmpty();
         }
         return computeBounds(shape.getBounds());
     }

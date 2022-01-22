@@ -33,6 +33,9 @@ public interface SWImageResources extends ClientBundleWithLookup {
     @Source("images/state_inject.png")
     ImageResource stateInject();
 
+    @Source("images/state_switch.png")
+    ImageResource stateSwitch();
+
     @Source("images/transition.png")
     ImageResource transition();
 

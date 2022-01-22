@@ -378,7 +378,7 @@ public class ProcessPostConverter {
                     nodeUl = new Bound(nodeUl.getX() + dockingNodeUL.getX(),
                                        nodeUl.getY() + dockingNodeUL.getY());
                     Bound nodeLr = new Bound(nodeUl.getX() + width, nodeUl.getY() + height);
-                    bounds = Bounds.create(nodeUl, nodeLr);
+                    bounds = Bounds.createFromBounds(nodeUl, nodeLr);
                 }
             }
             if (!(magnetConnection instanceof MagnetConnection && ((MagnetConnection) magnetConnection).isAuto())) {

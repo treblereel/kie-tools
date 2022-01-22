@@ -78,7 +78,7 @@ public class DefinitionsConverterTest {
                 new Executable(true),
                 new SLADueDate("")
         ));
-        x.setContent(new ViewImpl<>(diag, Bounds.create()));
+        x.setContent(new ViewImpl<>(diag, Bounds.createEmpty()));
         nodeStore.add(x);
         ConverterFactory f = new ConverterFactory(new DefinitionsBuildingContext(
                 new GraphImpl("x", nodeStore)),

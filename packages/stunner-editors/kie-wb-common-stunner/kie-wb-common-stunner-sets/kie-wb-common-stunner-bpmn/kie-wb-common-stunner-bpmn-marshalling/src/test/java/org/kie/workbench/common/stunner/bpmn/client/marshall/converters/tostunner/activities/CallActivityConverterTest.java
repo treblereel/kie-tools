@@ -70,7 +70,7 @@ public class CallActivityConverterTest {
     private static final String COMPLETION_CONDITION = "COMPLETION_CONDITION";
     private static final ScriptTypeListValue ON_ENTRY_ACTION = new ScriptTypeListValue();
     private static final ScriptTypeListValue ON_EXIT_ACTION = new ScriptTypeListValue();
-    private static final Bounds BOUNDS = Bounds.create();
+    private static final Bounds BOUNDS = Bounds.createEmpty();
     private static final SimulationSet SIMULATION_SET = new SimulationSet();
     private static final RectangleDimensionsSet RECTANGLE_DIMENSIONS_SET = new RectangleDimensionsSet();
     private static final FontSet FONT_SET = new FontSet();
@@ -102,7 +102,7 @@ public class CallActivityConverterTest {
                                                                      new RectangleDimensionsSet(),
                                                                      new SimulationSet(),
                                                                      new AdvancedData());
-        final View<ReusableSubprocess> view = new ViewImpl<>(definition, Bounds.create());
+        final View<ReusableSubprocess> view = new ViewImpl<>(definition, Bounds.createEmpty());
         Node<View<ReusableSubprocess>, Edge> node = new NodeImpl<>(UUID);
         node.setContent(view);
 

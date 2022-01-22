@@ -88,7 +88,7 @@ public class SubProcessConverterTest {
         NodeImpl<View<? extends BPMNViewDefinition>> n = new NodeImpl<>("n");
         EventSubprocess subProcessNode = new EventSubprocess();
         subProcessNode.getExecutionSet().setIsAsync(new IsAsync(true));
-        n.setContent(new ViewImpl<>(subProcessNode, Bounds.create()));
+        n.setContent(new ViewImpl<>(subProcessNode, Bounds.createEmpty()));
 
         Activity activity = c.convertSubProcess(n).value().getFlowElement();
         Boolean value = CustomElement.async.of(activity).get();
@@ -113,7 +113,7 @@ public class SubProcessConverterTest {
     public void testConvertAdHocSubprocessNode_autostart() {
         final AdHocSubprocess definition = new AdHocSubprocess();
         definition.getExecutionSet().setAdHocAutostart(new AdHocAutostart(true));
-        final View<BaseAdHocSubprocess> view = new ViewImpl<>(definition, Bounds.create());
+        final View<BaseAdHocSubprocess> view = new ViewImpl<>(definition, Bounds.createEmpty());
         final Node<View<BaseAdHocSubprocess>, ?> node = new NodeImpl<>(UUID.randomUUID().toString());
         node.setContent(view);
 
@@ -126,7 +126,7 @@ public class SubProcessConverterTest {
     public void testConvertAdHocSubprocessNode_notautostart() {
         final AdHocSubprocess definition = new AdHocSubprocess();
         definition.getExecutionSet().setAdHocAutostart(new AdHocAutostart(false));
-        final View<BaseAdHocSubprocess> view = new ViewImpl<>(definition, Bounds.create());
+        final View<BaseAdHocSubprocess> view = new ViewImpl<>(definition, Bounds.createEmpty());
         final Node<View<BaseAdHocSubprocess>, ?> node = new NodeImpl<>(UUID.randomUUID().toString());
         node.setContent(view);
 
@@ -212,7 +212,7 @@ public class SubProcessConverterTest {
     public void testConvertMultipleIntanceSubprocess() {
         final MultipleInstanceSubprocess definition = new MultipleInstanceSubprocess();
         setBaseSubprocessExecutionSetValues(definition.getExecutionSet());
-        final View<MultipleInstanceSubprocess> view = new ViewImpl<>(definition, Bounds.create());
+        final View<MultipleInstanceSubprocess> view = new ViewImpl<>(definition, Bounds.createEmpty());
         final Node<View<MultipleInstanceSubprocess>, ?> node = new NodeImpl<>(UUID.randomUUID().toString());
         node.setContent(view);
 
@@ -238,7 +238,7 @@ public class SubProcessConverterTest {
     public void testConvertEmbeddedSubprocess() {
         final EmbeddedSubprocess definition = new EmbeddedSubprocess();
         setBaseSubprocessExecutionSetValues(definition.getExecutionSet());
-        final View<EmbeddedSubprocess> view = new ViewImpl<>(definition, Bounds.create());
+        final View<EmbeddedSubprocess> view = new ViewImpl<>(definition, Bounds.createEmpty());
         final Node<View<EmbeddedSubprocess>, ?> node = new NodeImpl<>(UUID.randomUUID().toString());
         node.setContent(view);
 
@@ -250,7 +250,7 @@ public class SubProcessConverterTest {
     public void testConvertEventSubprocess() {
         final EventSubprocess definition = new EventSubprocess();
         setBaseSubprocessExecutionSetValues(definition.getExecutionSet());
-        final View<EventSubprocess> view = new ViewImpl<>(definition, Bounds.create());
+        final View<EventSubprocess> view = new ViewImpl<>(definition, Bounds.createEmpty());
         final Node<View<EventSubprocess>, ?> node = new NodeImpl<>(UUID.randomUUID().toString());
         node.setContent(view);
 

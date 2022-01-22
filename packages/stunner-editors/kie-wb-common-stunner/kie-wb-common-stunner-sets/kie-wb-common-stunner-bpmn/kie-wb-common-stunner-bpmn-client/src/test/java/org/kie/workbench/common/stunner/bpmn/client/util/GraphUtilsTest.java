@@ -50,7 +50,7 @@ public class GraphUtilsTest {
     @Test
     public void testNonReusableSubprocess() {
         Element<View<UserTask>> element = new NodeImpl<>("UUID");
-        View<UserTask> userTaskView = new ViewImpl<>(new UserTask(), Bounds.create());
+        View<UserTask> userTaskView = new ViewImpl<>(new UserTask(), Bounds.createEmpty());
         element.setContent(userTaskView);
         assertFalse(GraphUtils.isReusableSubProcess(element));
     }
@@ -58,7 +58,7 @@ public class GraphUtilsTest {
     @Test
     public void testReusableSubprocess() {
         Element<View<ReusableSubprocess>> element = new NodeImpl<>("UUID");
-        View<ReusableSubprocess> reusableSubprocessView = new ViewImpl<>(new ReusableSubprocess(), Bounds.create());
+        View<ReusableSubprocess> reusableSubprocessView = new ViewImpl<>(new ReusableSubprocess(), Bounds.createEmpty());
         element.setContent(reusableSubprocessView);
         assertTrue(GraphUtils.isReusableSubProcess(element));
     }

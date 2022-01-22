@@ -128,7 +128,7 @@ public class RootProcessConverterTest {
         NodeImpl<View<? extends BPMNViewDefinition>> n = new NodeImpl<>("n");
         EventSubprocess subProcessNode = new EventSubprocess();
         subProcessNode.getExecutionSet().setIsAsync(new IsAsync(true));
-        n.setContent(new ViewImpl<>(subProcessNode, Bounds.create()));
+        n.setContent(new ViewImpl<>(subProcessNode, Bounds.createEmpty()));
         final Result<PropertyWriter> propertyWriterResult = viewDefinitionConverter.toFlowElement(n);
         assertTrue(propertyWriterResult.isIgnored());
     }

@@ -86,17 +86,17 @@ public class ProcessConverterDelegateTest {
 
         NodeImpl<Object> root = new NodeImpl<>("root");
         BPMNDiagramImpl bpmnDiagram = new BPMNDiagramImpl();
-        root.setContent(new ViewImpl<>(bpmnDiagram, Bounds.create()));
+        root.setContent(new ViewImpl<>(bpmnDiagram, Bounds.createEmpty()));
         g.addNode(root);
 
         NodeImpl<Object> n = new NodeImpl<>("n");
         EmbeddedSubprocess subProcessNode = new EmbeddedSubprocess();
-        n.setContent(new ViewImpl<>(subProcessNode, Bounds.create()));
+        n.setContent(new ViewImpl<>(subProcessNode, Bounds.createEmpty()));
         g.addNode(n);
 
         NodeImpl<Object> e = new NodeImpl<>("e");
         IntermediateErrorEventCatching intermediateErrorEventCatching = new IntermediateErrorEventCatching();
-        e.setContent(new ViewImpl<>(intermediateErrorEventCatching, Bounds.create()));
+        e.setContent(new ViewImpl<>(intermediateErrorEventCatching, Bounds.createEmpty()));
         g.addNode(e);
 
         EdgeImpl<Object> edge = new EdgeImpl<>("edge");

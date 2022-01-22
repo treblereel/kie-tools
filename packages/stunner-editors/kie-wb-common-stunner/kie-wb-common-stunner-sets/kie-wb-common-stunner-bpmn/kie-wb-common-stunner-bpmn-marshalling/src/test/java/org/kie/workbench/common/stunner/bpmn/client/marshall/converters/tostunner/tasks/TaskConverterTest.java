@@ -76,7 +76,7 @@ public class TaskConverterTest extends BaseTaskConverterTest {
     private static final ScriptTypeListValue ON_EXIT_ACTION = new ScriptTypeListValue();
     private static final String CONTENT = "CONTENT";
     private static final String SLA_DUE_DATE = "SLA_DUE_DATE";
-    private static final Bounds BOUNDS = Bounds.create();
+    private static final Bounds BOUNDS = Bounds.createEmpty();
     private static final SimulationSet SIMULATION_SET = new SimulationSet();
     private static final RectangleDimensionsSet RECTANGLE_DIMENSIONS_SET = new RectangleDimensionsSet();
     private static final FontSet FONT_SET = new FontSet();

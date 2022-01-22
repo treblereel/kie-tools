@@ -38,10 +38,12 @@ import org.kie.workbench.common.stunner.shapes.def.ConnectorShapeDef;
 import org.kie.workbench.common.stunner.shapes.def.RectangleShapeDef;
 import org.kie.workbench.common.stunner.sw.client.resources.SWImageResources;
 import org.kie.workbench.common.stunner.sw.definition.End;
+import org.kie.workbench.common.stunner.sw.definition.ErrorTransition;
 import org.kie.workbench.common.stunner.sw.definition.InjectState;
 import org.kie.workbench.common.stunner.sw.definition.Start;
 import org.kie.workbench.common.stunner.sw.definition.StartTransition;
 import org.kie.workbench.common.stunner.sw.definition.State;
+import org.kie.workbench.common.stunner.sw.definition.SwitchState;
 import org.kie.workbench.common.stunner.sw.definition.Transition;
 
 import static org.kie.workbench.common.stunner.core.util.ClassUtils.getName;
@@ -71,13 +73,28 @@ public class SWShapeFactory
             return newEventShape(definition);
         }
 
-        if (definition instanceof State) {
-            return newStateShape(definition);
+        if (definition instanceof InjectState) {
+            return newStateShape(definition, "#FF0000");
         }
 
-        if ((definition instanceof Transition) ||
-                (definition instanceof StartTransition)) {
-            return newConnectorShape(definition);
+        if (definition instanceof SwitchState) {
+            return newStateShape(definition, "#00FF00");
+        }
+
+        if (definition instanceof State) {
+            return newStateShape(definition, "#FFFFFF");
+        }
+
+        if (definition instanceof Transition) {
+            return newConnectorShape(definition, "#000000");
+        }
+
+        if (definition instanceof StartTransition) {
+            return newConnectorShape(definition, "#0000FF");
+        }
+
+        if (definition instanceof ErrorTransition) {
+            return newConnectorShape(definition, "#FF0000");
         }
 
         throw new UnsupportedOperationException("No shape declared in SW factory.");
@@ -101,12 +118,20 @@ public class SWShapeFactory
             imageResource = SWImageResources.INSTANCE.stateInject();
         }
 
+        if (getName(SwitchState.class).equals(definitionId)) {
+            imageResource = SWImageResources.INSTANCE.stateSwitch();
+        }
+
         if (getName(Transition.class).equals(definitionId)) {
             imageResource = SWImageResources.INSTANCE.transition();
         }
 
         if (getName(StartTransition.class).equals(definitionId)) {
             imageResource = SWImageResources.INSTANCE.transitionStart();
+        }
+
+        if (getName(ErrorTransition.class).equals(definitionId)) {
+            imageResource = SWImageResources.INSTANCE.transitionError();
         }
 
         if (null != imageResource) {
@@ -116,23 +141,29 @@ public class SWShapeFactory
         throw new UnsupportedOperationException("No glyph declared in SW factory.");
     }
 
-    private Shape newConnectorShape(final Object bean) {
-        return basicShapesFactory.newShape(bean, new EdgeShapeDef());
+    private Shape newConnectorShape(final Object bean, String color) {
+        return basicShapesFactory.newShape(bean, new EdgeShapeDef(color));
     }
 
     private Shape newEventShape(final Object bean) {
         return basicShapesFactory.newShape(bean, new EventShapeDef());
     }
 
-    private Shape newStateShape(final Object state) {
-        return basicShapesFactory.newShape(state, new StageShapeDef());
+    private Shape newStateShape(final Object state, String color) {
+        return basicShapesFactory.newShape(state, new StageShapeDef(color));
     }
 
     private static class EdgeShapeDef implements ConnectorShapeDef {
 
+        private final String color;
+
+        private EdgeShapeDef(String color) {
+            this.color = color;
+        }
+
         @Override
         public BiConsumer viewHandler() {
-            ViewAttributesHandler handler = new ViewAttributesHandlerBuilder("#000000", "#000000").build();
+            ViewAttributesHandler handler = new ViewAttributesHandlerBuilder(color, color).build();
             return (o, o2) -> handler.handle(o, (ShapeView) o2);
         }
     }
@@ -152,6 +183,12 @@ public class SWShapeFactory
     }
 
     private static class StageShapeDef implements RectangleShapeDef {
+
+        private final String color;
+
+        private StageShapeDef(String color) {
+            this.color = color;
+        }
 
         @Override
         public Double getWidth(Object element) {
@@ -188,7 +225,7 @@ public class SWShapeFactory
         @Override
         @SuppressWarnings("all")
         public BiConsumer viewHandler() {
-            ViewAttributesHandler handler = new ViewAttributesHandlerBuilder("#FF0000", "#FFFFFF").build();
+            ViewAttributesHandler handler = new ViewAttributesHandlerBuilder(color, "#FFFFFF").build();
             return (o, o2) -> handler.handle(o, (ShapeView) o2);
         }
     }

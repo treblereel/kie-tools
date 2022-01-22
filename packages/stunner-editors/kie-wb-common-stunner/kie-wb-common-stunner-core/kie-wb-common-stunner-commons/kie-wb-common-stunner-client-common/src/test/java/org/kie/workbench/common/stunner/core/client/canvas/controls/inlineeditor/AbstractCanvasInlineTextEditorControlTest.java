@@ -146,7 +146,7 @@ public abstract class AbstractCanvasInlineTextEditorControlTest<C extends Abstra
     @Mock
     protected RequiresCommandManager.CommandManagerProvider<AbstractCanvasHandler> commandManagerProvider;
 
-    protected Bounds shapeViewBounds = Bounds.create();
+    protected Bounds shapeViewBounds = Bounds.createEmpty();
 
     @Captor
     protected ArgumentCaptor<KeyboardControl.KeyShortcutCallback> keyShortcutCallbackCaptor;

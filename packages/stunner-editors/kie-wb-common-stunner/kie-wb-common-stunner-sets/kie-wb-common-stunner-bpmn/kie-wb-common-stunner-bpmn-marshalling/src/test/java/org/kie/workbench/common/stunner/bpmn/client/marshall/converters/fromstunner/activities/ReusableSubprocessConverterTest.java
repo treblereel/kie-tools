@@ -93,7 +93,7 @@ public class ReusableSubprocessConverterTest {
     private static final String COMPLETION_CONDITION = "COMPLETION_CONDITION";
     private static final OnEntryAction ON_ENTRY_ACTION = new OnEntryAction();
     private static final OnExitAction ON_EXIT_ACTION = new OnExitAction();
-    private static final Bounds BOUNDS = Bounds.create();
+    private static final Bounds BOUNDS = Bounds.createEmpty();
     private static final SimulationSet SIMULATION_SET = new SimulationSet();
     private static final AssignmentsInfo ASSIGNMENTS_INFO = new AssignmentsInfo();
     private static final String SLA_DUE_DATE = "12/25/1983";
@@ -192,7 +192,7 @@ public class ReusableSubprocessConverterTest {
     public void testToFlowElement_case() {
         final BaseReusableSubprocess definition = new ReusableSubprocess();
         definition.getExecutionSet().setIsCase(new IsCase(true));
-        final View<BaseReusableSubprocess> view = new ViewImpl<>(definition, Bounds.create());
+        final View<BaseReusableSubprocess> view = new ViewImpl<>(definition, Bounds.createEmpty());
         final Node<View<BaseReusableSubprocess>, ?> node = new NodeImpl<>(java.util.UUID.randomUUID().toString());
         node.setContent(view);
 
@@ -204,7 +204,7 @@ public class ReusableSubprocessConverterTest {
     @Test
     public void testToFlowElement_process() {
         final BaseReusableSubprocess definition = new ReusableSubprocess();
-        final View<BaseReusableSubprocess> view = new ViewImpl<>(definition, Bounds.create());
+        final View<BaseReusableSubprocess> view = new ViewImpl<>(definition, Bounds.createEmpty());
         final Node<View<BaseReusableSubprocess>, ?> node = new NodeImpl<>(java.util.UUID.randomUUID().toString());
         node.setContent(view);
 
@@ -217,7 +217,7 @@ public class ReusableSubprocessConverterTest {
     public void testToFlowElement_autostart() {
         final ReusableSubprocess definition = new ReusableSubprocess();
         definition.getExecutionSet().setAdHocAutostart(new AdHocAutostart(true));
-        final View<BaseReusableSubprocess> view = new ViewImpl<>(definition, Bounds.create());
+        final View<BaseReusableSubprocess> view = new ViewImpl<>(definition, Bounds.createEmpty());
         final Node<View<BaseReusableSubprocess>, ?> node = new NodeImpl<>(java.util.UUID.randomUUID().toString());
         node.setContent(view);
 
@@ -230,7 +230,7 @@ public class ReusableSubprocessConverterTest {
     public void testToFlowElement_notautostart() {
         final ReusableSubprocess definition = new ReusableSubprocess();
         definition.getExecutionSet().setAdHocAutostart(new AdHocAutostart(false));
-        final View<BaseReusableSubprocess> view = new ViewImpl<>(definition, Bounds.create());
+        final View<BaseReusableSubprocess> view = new ViewImpl<>(definition, Bounds.createEmpty());
         final Node<View<BaseReusableSubprocess>, ?> node = new NodeImpl<>(java.util.UUID.randomUUID().toString());
         node.setContent(view);
 
@@ -263,7 +263,7 @@ public class ReusableSubprocessConverterTest {
         final ReusableSubprocess definition = new ReusableSubprocess();
         definition.getExecutionSet().setIndependent(new Independent(independent));
         // TODO: Kogito - definition.getExecutionSet().setAbortParent(new AbortParent(abortParent));
-        final View<BaseReusableSubprocess> view = new ViewImpl<>(definition, Bounds.create());
+        final View<BaseReusableSubprocess> view = new ViewImpl<>(definition, Bounds.createEmpty());
         final Node<View<BaseReusableSubprocess>, ?> node = new NodeImpl<>(java.util.UUID.randomUUID().toString());
         node.setContent(view);
 
@@ -277,7 +277,7 @@ public class ReusableSubprocessConverterTest {
         definition.getExecutionSet().setSlaDueDate(new SLADueDate(SLA_DUE_DATE));
         definition.getExecutionSet().setIsAsync(new IsAsync(Boolean.TRUE));
 
-        final View<BaseReusableSubprocess> view = new ViewImpl<>(definition, Bounds.create());
+        final View<BaseReusableSubprocess> view = new ViewImpl<>(definition, Bounds.createEmpty());
         final Node<View<BaseReusableSubprocess>, ?> node = new NodeImpl<>(java.util.UUID.randomUUID().toString());
         node.setContent(view);
 

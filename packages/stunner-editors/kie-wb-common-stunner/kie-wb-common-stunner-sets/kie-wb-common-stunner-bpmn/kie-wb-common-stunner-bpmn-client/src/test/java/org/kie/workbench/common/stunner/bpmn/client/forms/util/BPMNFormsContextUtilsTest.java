@@ -52,7 +52,7 @@ public class BPMNFormsContextUtilsTest {
     private static Node createNode(final Object def) {
         NodeImpl<Object> node = new NodeImpl<>("id1");
         node.setContent(new ViewImpl<>(def,
-                                       Bounds.create()));
+                                       Bounds.createEmpty()));
         return node;
     }
 }

@@ -581,7 +581,7 @@ public class AssignmentsEditorWidgetTest extends AssignmentBaseTest {
 
         BPMNDiagramImpl bpmnDiagram = new BPMNDiagramImpl();
         Node parentNode = new NodeImpl("PARENT_UUID");
-        View parentNodeView = new ViewImpl(bpmnDiagram, Bounds.create());
+        View parentNodeView = new ViewImpl(bpmnDiagram, Bounds.createEmpty());
         parentNode.setContent(parentNodeView);
 
         bpmnDiagram.getProcessData().getProcessVariables().setValue("processVar1:Object:,processVar2:Object:,processVar3:Object:,processVar4:Object:");

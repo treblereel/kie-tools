@@ -24,9 +24,11 @@ import org.kie.workbench.common.stunner.core.definition.builder.Builder;
 import org.kie.workbench.common.stunner.core.factory.graph.GraphFactory;
 import org.kie.workbench.common.stunner.core.rule.annotation.Occurrences;
 import org.kie.workbench.common.stunner.sw.definition.End;
+import org.kie.workbench.common.stunner.sw.definition.ErrorTransition;
 import org.kie.workbench.common.stunner.sw.definition.InjectState;
 import org.kie.workbench.common.stunner.sw.definition.Start;
 import org.kie.workbench.common.stunner.sw.definition.StartTransition;
+import org.kie.workbench.common.stunner.sw.definition.SwitchState;
 import org.kie.workbench.common.stunner.sw.definition.Transition;
 
 @ApplicationScoped
@@ -38,7 +40,9 @@ import org.kie.workbench.common.stunner.sw.definition.Transition;
                 Start.class,
                 End.class,
                 InjectState.class,
+                SwitchState.class,
                 StartTransition.class,
+                ErrorTransition.class,
                 Transition.class
         },
         builder = SWDefinitions.SWDefinitionsBuilder.class

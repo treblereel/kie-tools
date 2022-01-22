@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.workbench.common.stunner.sw.client.editor;
+package org.kie.workbench.common.stunner.sw.client.js;
 
 import elemental2.dom.DomGlobal;
 import jsinterop.annotations.JsIgnore;
@@ -32,38 +32,32 @@ import org.kie.workbench.common.stunner.core.graph.content.view.Point2D;
 import org.kie.workbench.common.stunner.sw.client.services.SWGraphExamples;
 import org.kie.workbench.common.stunner.sw.definition.InjectState;
 import org.kie.workbench.common.stunner.sw.definition.State;
+import org.kie.workbench.common.stunner.sw.definition.SwitchState;
 
 @JsType
-public class JsSWDiagramEditor {
+public class JsSWCommands {
 
     @JsIgnore
-    ClientSession session;
+    public ClientSession session;
+
     @JsIgnore
-    SWGraphExamples graphExamples;
+    public SWGraphExamples graphExamples;
 
-    public void logNodes() {
-        Iterable<Node> nodes = session.getCanvasHandler().getDiagram().getGraph().nodes();
-        for (Node node : nodes) {
-            DomGlobal.console.log(node.getUUID());
-        }
+    public Node addStateInjectAt(String uuid, String name, double x, double y) {
+        State state = new InjectState();
+        state.setName(name);
+        return addStateAt(uuid, state, x, y);
     }
 
-    public Node getState1Node() {
-        Iterable<Node> nodes = session.getCanvasHandler().getDiagram().getGraph().nodes();
-        for (Node node : nodes) {
-            if (node.getUUID().equals("state1")) {
-                return node;
-            }
-        }
-        return null;
+    public Node addSwitchInjectAt(String uuid, String name, double x, double y) {
+        State state = new SwitchState();
+        state.setName(name);
+        return addStateAt(uuid, state, x, y);
     }
 
-    // sweditor.addState('SomeState1', 'someState1', 50, 300);
-    public Node addState(String uuid, String name, double x, double y) {
+    public Node addStateAt(String uuid, Object bean, double x, double y) {
         AbstractCanvasHandler canvasHandler = (AbstractCanvasHandler) session.getCanvasHandler();
-        State someState = new InjectState();
-        someState.setName(name);
-        Node someStateNode = graphExamples.createStateNode(uuid, someState, 0, 0);
+        Node someStateNode = graphExamples.createStateNode(uuid, bean, 0, 0);
         String shapeSetId = canvasHandler.getDiagram().getMetadata().getShapeSetId();
         final CompositeCommand.Builder commandBuilder = new CompositeCommand.Builder();
         commandBuilder.addCommand(new AddNodeCommand(someStateNode, shapeSetId));

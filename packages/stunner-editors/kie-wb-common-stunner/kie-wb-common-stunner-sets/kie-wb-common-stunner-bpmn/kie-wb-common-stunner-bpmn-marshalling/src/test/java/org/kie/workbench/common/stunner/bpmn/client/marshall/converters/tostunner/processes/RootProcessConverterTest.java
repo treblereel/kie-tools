@@ -78,7 +78,7 @@ public class RootProcessConverterTest {
         definitionResolver = new DefinitionResolver(definitions, Collections.emptyList());
 
         Node node = new NodeImpl("");
-        View<BPMNDiagramImpl> content = new ViewImpl<>(new BPMNDiagramImpl(), Bounds.create());
+        View<BPMNDiagramImpl> content = new ViewImpl<>(new BPMNDiagramImpl(), Bounds.createEmpty());
         node.setContent(content);
 
         FactoryManager factoryManager = mock(FactoryManager.class);
