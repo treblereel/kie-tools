@@ -155,18 +155,6 @@ public class SWGraphExamples {
     }
 
     @SuppressWarnings("all")
-    public static Node createNodeOLD(String uuid, String label, Object bean, double x, double y, double w, double h) {
-        // TODO: Rely on beans for having the right bounds & labels (use of DefinitionUtils...)
-        final Node state1Node = new NodeImpl(uuid);
-        final Bounds bounds = Bounds.create(x, y, x + w, y + h);
-        final View content = new ViewImpl<>(bean, bounds);
-        state1Node.setContent(content);
-        state1Node.getLabels().add("all");
-        state1Node.getLabels().add(label);
-        return state1Node;
-    }
-
-    @SuppressWarnings("all")
     public Node createNode(String uuid, Object bean, double x, double y) {
         final Node node = new NodeImpl(uuid);
         final Bounds bounds = definitionUtils.buildBounds(bean, x, y);

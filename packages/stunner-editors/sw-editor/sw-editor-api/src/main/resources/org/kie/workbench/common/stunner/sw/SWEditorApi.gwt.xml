@@ -25,6 +25,7 @@
   <inherits name="org.kie.workbench.common.stunner.shapes.StunnerShapesApi"/>
   <inherits name="org.kie.soup.commons.KIESoupCommons"/>
 
+  <source path="command"/>
   <source path="definition"/>
   <source path="factory"/>
   <source path="" includes="SWEditor.java"/>

@@ -32,11 +32,8 @@ import org.kie.workbench.common.stunner.core.client.session.ClientSession;
 import org.kie.workbench.common.stunner.core.client.util.WindowJSType;
 import org.kie.workbench.common.stunner.core.diagram.Diagram;
 import org.kie.workbench.common.stunner.core.diagram.Metadata;
-import org.kie.workbench.common.stunner.sw.client.js.JsSWCommands;
 import org.kie.workbench.common.stunner.sw.client.js.JsSWDiagramEditor;
 import org.kie.workbench.common.stunner.sw.client.services.SWClientDiagramService;
-import org.kie.workbench.common.stunner.sw.client.services.SWGraphExamples;
-import org.kie.workbench.common.stunner.sw.client.services.SWMarshallerTests;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.backend.vfs.PathFactory;
 import org.uberfire.client.promise.Promises;
@@ -85,7 +82,6 @@ public class SWDiagramEditor {
     }
 
     public Promise<String> getPreview() {
-        SWMarshallerTests.test();
         return promises.resolve("");
     }
 
@@ -137,17 +133,10 @@ public class SWDiagramEditor {
         initSWApiTest();
     }
 
-    @Inject
-    private SWGraphExamples graphExamples;
-
     private void initSWApiTest() {
         ClientSession session = stunnerEditor.getSession();
-        JsSWCommands commands = new JsSWCommands();
-        commands.session = session;
-        commands.graphExamples = graphExamples;
         JsSWDiagramEditor jsSWDiagramEditor = new JsSWDiagramEditor();
         jsSWDiagramEditor.session = session;
-        jsSWDiagramEditor.commands = commands;
         setupSWApiTest(jsSWDiagramEditor);
     }
 

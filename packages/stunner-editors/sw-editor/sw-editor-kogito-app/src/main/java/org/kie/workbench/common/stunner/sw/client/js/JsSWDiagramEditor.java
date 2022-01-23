@@ -28,8 +28,6 @@ public class JsSWDiagramEditor {
     @JsIgnore
     public ClientSession session;
 
-    public JsSWCommands commands;
-
     public void logNodes() {
         Iterable<Node> nodes = session.getCanvasHandler().getDiagram().getGraph().nodes();
         for (Node node : nodes) {

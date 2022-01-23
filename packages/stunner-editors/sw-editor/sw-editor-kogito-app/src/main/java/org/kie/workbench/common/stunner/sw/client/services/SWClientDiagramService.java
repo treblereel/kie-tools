@@ -44,7 +44,7 @@ public class SWClientDiagramService {
     private final SWDiagramFactory diagramFactory;
     private final ShapeManager shapeManager;
     private final Promises promises;
-    private final SWGraphExamples graphExamples;
+    private final SWClientDiagramMarshaller marshaller;
 
     //CDI proxy
     protected SWClientDiagramService() {
@@ -57,13 +57,13 @@ public class SWClientDiagramService {
                                   final SWDiagramFactory diagramFactory,
                                   final ShapeManager shapeManager,
                                   final Promises promises,
-                                  final SWGraphExamples graphExamples) {
+                                  final SWClientDiagramMarshaller marshaller) {
         this.definitionManager = definitionManager;
         this.factoryManager = factoryManager;
         this.diagramFactory = diagramFactory;
         this.shapeManager = shapeManager;
         this.promises = promises;
-        this.graphExamples = graphExamples;
+        this.marshaller = marshaller;
     }
 
     public void transform(final String xml,
@@ -97,6 +97,10 @@ public class SWClientDiagramService {
         return promises.resolve("{}");
     }
 
+    public SWClientDiagramMarshaller getMarshaller() {
+        return marshaller;
+    }
+
     private Diagram createNewDiagram(String fileName) {
         final String title = "default";
         final String defSetId = getDefinitionSetId();
@@ -128,8 +132,7 @@ public class SWClientDiagramService {
 
     private Graph unmarshall(final Metadata metadata,
                              final String raw) {
-        // return SWGraphExamples.justASingleStateThere();
-        return graphExamples.basicInjectStates();
+        return marshaller.unmarshall(metadata, raw);
     }
 
     private Metadata createMetadata() {
