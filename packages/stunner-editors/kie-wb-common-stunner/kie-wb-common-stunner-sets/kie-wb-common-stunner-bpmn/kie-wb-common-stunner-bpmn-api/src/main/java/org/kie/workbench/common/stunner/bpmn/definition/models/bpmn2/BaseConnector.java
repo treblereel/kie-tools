@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
 import org.jboss.errai.common.client.api.annotations.MapsTo;
@@ -38,6 +39,12 @@ public abstract class BaseConnector extends FlowElement implements BPMNViewDefin
 
     @Category
     public static final transient String category = BPMNCategories.CONNECTING_OBJECTS;
+
+    @XmlAttribute
+    private String sourceRef;
+
+    @XmlAttribute
+    private String targetRef;
 
     @Labels
     protected final Set<String> labels = new Sets.Builder<String>()
@@ -100,10 +107,28 @@ public abstract class BaseConnector extends FlowElement implements BPMNViewDefin
         this.extensionElements = extensionElements;
     }
 
+    public String getSourceRef() {
+        return sourceRef;
+    }
+
+    public void setSourceRef(String sourceRef) {
+        this.sourceRef = sourceRef;
+    }
+
+    public String getTargetRef() {
+        return targetRef;
+    }
+
+    public void setTargetRef(String targetRef) {
+        this.targetRef = targetRef;
+    }
+
     @Override
     public int hashCode() {
         return HashUtil.combineHashCodes(Objects.hashCode(getClass()),
                                          super.hashCode(),
+                                         Objects.hashCode(sourceRef),
+                                         Objects.hashCode(targetRef),
                                          Objects.hashCode(labels));
     }
 
@@ -112,6 +137,8 @@ public abstract class BaseConnector extends FlowElement implements BPMNViewDefin
         if (o instanceof BaseConnector) {
             BaseConnector other = (BaseConnector) o;
             return super.equals(other)
+                    && Objects.equals(sourceRef, other.sourceRef)
+                    && Objects.equals(targetRef, other.targetRef)
                     && Objects.equals(labels, other.labels);
         }
         return false;

@@ -89,9 +89,6 @@ public class SequenceFlow extends BaseConnector {
     @XmlTransient
     protected SequenceFlowExecutionSet executionSet;
 
-    @XmlAttribute
-    private String id;
-
     // Marshalled in Extensions metadata
     @XmlTransient
     private boolean isAutoConnectionSource = false;
@@ -104,12 +101,6 @@ public class SequenceFlow extends BaseConnector {
     // get and set methods leads to executionSet.priority
     @XmlAttribute(namespace = "http://www.jboss.org/drools")
     private String priority;
-
-    @XmlAttribute
-    private String sourceRef;
-
-    @XmlAttribute
-    private String targetRef;
 
     private ConditionExpression conditionExpression;
 
@@ -135,37 +126,12 @@ public class SequenceFlow extends BaseConnector {
         this.executionSet = executionSet;
     }
 
-    @Override
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getPriority() {
         return executionSet.getPriority();
     }
 
     public void setPriority(String priority) {
         executionSet.setPriority(priority);
-    }
-
-    public String getSourceRef() {
-        return sourceRef;
-    }
-
-    public void setSourceRef(String sourceRef) {
-        this.sourceRef = sourceRef;
-    }
-
-    public String getTargetRef() {
-        return targetRef;
-    }
-
-    public void setTargetRef(String targetRef) {
-        this.targetRef = targetRef;
     }
 
     public ConditionExpression getConditionExpression() {
@@ -244,8 +210,6 @@ public class SequenceFlow extends BaseConnector {
     @Override
     public int hashCode() {
         return HashUtil.combineHashCodes(super.hashCode(),
-                                         Objects.hashCode(sourceRef),
-                                         Objects.hashCode(targetRef),
                                          Objects.hashCode(isAutoConnectionSource),
                                          Objects.hashCode(isAutoConnectionTarget),
                                          Objects.hashCode(executionSet));
@@ -256,8 +220,6 @@ public class SequenceFlow extends BaseConnector {
         if (o instanceof SequenceFlow) {
             SequenceFlow other = (SequenceFlow) o;
             return super.equals(other)
-                    && Objects.equals(sourceRef, other.sourceRef)
-                    && Objects.equals(targetRef, other.targetRef)
                     && Objects.equals(isAutoConnectionSource, other.isAutoConnectionSource)
                     && Objects.equals(isAutoConnectionTarget, other.isAutoConnectionTarget)
                     && Objects.equals(executionSet, other.executionSet);

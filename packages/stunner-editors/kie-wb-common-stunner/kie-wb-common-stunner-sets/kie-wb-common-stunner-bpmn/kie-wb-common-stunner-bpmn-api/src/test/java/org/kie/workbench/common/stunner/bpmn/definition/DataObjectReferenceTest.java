@@ -17,6 +17,7 @@
 package org.kie.workbench.common.stunner.bpmn.definition;
 
 import org.junit.Test;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.DataObjectReference;
 import org.kie.workbench.common.stunner.bpmn.definition.property.artifacts.DataObjectType;
 import org.kie.workbench.common.stunner.bpmn.definition.property.artifacts.DataObjectTypeValue;
 import org.kie.workbench.common.stunner.bpmn.definition.property.background.BackgroundSet;
@@ -28,9 +29,9 @@ import org.kie.workbench.common.stunner.bpmn.definition.property.general.Name;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-public class DataObjectTest {
+public class DataObjectReferenceTest {
 
-    private DataObject dataObject = new DataObject();
+    private DataObjectReference dataObject = new DataObjectReference();
 
     @Test
     public void getLabels() {
@@ -55,19 +56,19 @@ public class DataObjectTest {
 
     @Test
     public void testHashCode() {
-        assertEquals(new DataObject().hashCode(), dataObject.hashCode());
+        assertEquals(new DataObjectReference().hashCode(), dataObject.hashCode());
     }
 
     @Test
     public void testEquals() {
-        assertEquals(new DataObject(), dataObject);
-        assertNotEquals(new DataObject(), new Object());
+        assertEquals(new DataObjectReference(), dataObject);
+        assertNotEquals(new DataObjectReference(), new Object());
     }
 
     @Test
     public void testNotEquals() {
-        DataObject dataObject1 = new DataObject();
-        DataObject dataObject2 = new DataObject();
+        DataObjectReference dataObject1 = new DataObjectReference();
+        DataObjectReference dataObject2 = new DataObjectReference();
         dataObject1.setDataObjectName(new Name("dataObject1"));
         dataObject2.setDataObjectName(new Name("dataObject2"));
         // Test Name

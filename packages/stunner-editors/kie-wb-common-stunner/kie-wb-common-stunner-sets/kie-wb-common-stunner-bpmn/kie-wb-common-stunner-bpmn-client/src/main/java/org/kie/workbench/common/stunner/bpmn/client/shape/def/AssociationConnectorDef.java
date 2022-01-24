@@ -19,8 +19,8 @@ package org.kie.workbench.common.stunner.bpmn.client.shape.def;
 import java.util.Optional;
 
 import org.kie.workbench.common.stunner.bpmn.client.resources.BPMNGlyphFactory;
-import org.kie.workbench.common.stunner.bpmn.definition.Association;
-import org.kie.workbench.common.stunner.bpmn.definition.NonDirectionalAssociation;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Association;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.NonDirectionalAssociation;
 import org.kie.workbench.common.stunner.core.client.shape.common.DashArray;
 import org.kie.workbench.common.stunner.core.client.shape.view.ShapeView;
 import org.kie.workbench.common.stunner.core.client.shape.view.handler.FontHandler;

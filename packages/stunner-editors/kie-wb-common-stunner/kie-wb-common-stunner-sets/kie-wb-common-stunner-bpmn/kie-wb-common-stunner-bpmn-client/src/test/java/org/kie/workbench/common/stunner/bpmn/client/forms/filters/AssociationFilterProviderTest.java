@@ -22,7 +22,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kie.workbench.common.forms.adf.engine.shared.FormElementFilter;
-import org.kie.workbench.common.stunner.bpmn.definition.DirectionalAssociation;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.DirectionalAssociation;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.junit.Assert.assertEquals;

@@ -19,8 +19,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import org.kie.workbench.common.stunner.bpmn.definition.DataObject;
 import org.kie.workbench.common.stunner.bpmn.definition.FlowElement;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.DataObjectReference;
 import org.kie.workbench.common.stunner.core.client.session.ClientSession;
 import org.kie.workbench.common.stunner.core.graph.Edge;
 import org.kie.workbench.common.stunner.core.graph.Element;
@@ -35,7 +35,7 @@ public class DataObjectUtils {
                 ((View) node.getContent()).getDefinition() instanceof FlowElement;
     }
 
-    public static Set<DataObject> findDataObjects(ClientSession session, GraphUtils graphUtils, Node selectedElement, Set<String> parentIds) {
+    public static Set<DataObjectReference> findDataObjects(ClientSession session, GraphUtils graphUtils, Node selectedElement, Set<String> parentIds) {
         Iterable<Node> nodes = session
                 .getCanvasHandler()
                 .getDiagram()
@@ -46,7 +46,7 @@ public class DataObjectUtils {
                 .filter(DataObjectUtils::isBPMNDefinition)
                 .map(elm -> (Node<View<FlowElement>, Edge>) elm)
                 .filter(elm -> {
-                    if (elm.getContent().getDefinition() instanceof DataObject) {
+                    if (elm.getContent().getDefinition() instanceof DataObjectReference) {
                         final Element parent = graphUtils.getParent(elm);
                         if (parent == null) { // test
                             return true;
@@ -56,7 +56,7 @@ public class DataObjectUtils {
                     }
                     return false;
                 })
-                .map(elm -> ((DataObject) elm.getContent().getDefinition()))
+                .map(elm -> ((DataObjectReference) elm.getContent().getDefinition()))
                 .collect(Collectors.toSet());
     }
 }

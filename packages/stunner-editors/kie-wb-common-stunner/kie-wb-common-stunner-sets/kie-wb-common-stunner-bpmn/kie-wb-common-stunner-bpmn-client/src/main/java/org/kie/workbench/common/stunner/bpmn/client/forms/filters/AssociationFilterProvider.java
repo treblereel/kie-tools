@@ -20,7 +20,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 import org.kie.workbench.common.forms.adf.engine.shared.FormElementFilter;
-import org.kie.workbench.common.stunner.bpmn.definition.DirectionalAssociation;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.DirectionalAssociation;
 import org.kie.workbench.common.stunner.forms.client.formFilters.StunnerFormElementFilterProvider;
 
 public class AssociationFilterProvider implements StunnerFormElementFilterProvider {

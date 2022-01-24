@@ -40,8 +40,6 @@ import org.kie.workbench.common.stunner.bpmn.client.shape.def.TextAnnotationShap
 import org.kie.workbench.common.stunner.bpmn.client.shape.def.ThrowingIntermediateEventShapeDef;
 import org.kie.workbench.common.stunner.bpmn.client.shape.view.handler.BPMNShapeViewHandlers;
 import org.kie.workbench.common.stunner.bpmn.definition.BPMNViewDefinition;
-import org.kie.workbench.common.stunner.bpmn.definition.DataObject;
-import org.kie.workbench.common.stunner.bpmn.definition.DirectionalAssociation;
 import org.kie.workbench.common.stunner.bpmn.definition.FlowElementInterface;
 import org.kie.workbench.common.stunner.bpmn.definition.IntermediateCompensationEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.IntermediateCompensationEventThrowing;
@@ -56,10 +54,10 @@ import org.kie.workbench.common.stunner.bpmn.definition.IntermediateMessageEvent
 import org.kie.workbench.common.stunner.bpmn.definition.IntermediateSignalEventCatching;
 import org.kie.workbench.common.stunner.bpmn.definition.IntermediateSignalEventThrowing;
 import org.kie.workbench.common.stunner.bpmn.definition.IntermediateTimerEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.NonDirectionalAssociation;
-import org.kie.workbench.common.stunner.bpmn.definition.TextAnnotation;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.AdHocSubprocess;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BusinessRuleTask;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.DataObjectReference;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.DirectionalAssociation;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EmbeddedSubprocess;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndCompensationEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndErrorEvent;
@@ -75,6 +73,7 @@ import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.GenericServ
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.InclusiveGateway;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Lane;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.MultipleInstanceSubprocess;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.NonDirectionalAssociation;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.NoneTask;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.ParallelGateway;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Process;
@@ -89,6 +88,7 @@ import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.StartMessag
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.StartNoneEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.StartSignalEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.StartTimerEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.TextAnnotation;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.UserTask;
 import org.kie.workbench.common.stunner.bpmn.workitem.CustomTask;
 import org.kie.workbench.common.stunner.bpmn.workitem.WorkItemDefinitionRegistry;
@@ -307,7 +307,7 @@ public class BPMNShapeFactory
                 .delegate(TextAnnotation.class,
                           new TextAnnotationShapeDef(),
                           () -> svgShapeFactory)
-                .delegate(DataObject.class,
+                .delegate(DataObjectReference.class,
                           new DataObjectShapeDef(),
                           () -> svgShapeFactory);
     }

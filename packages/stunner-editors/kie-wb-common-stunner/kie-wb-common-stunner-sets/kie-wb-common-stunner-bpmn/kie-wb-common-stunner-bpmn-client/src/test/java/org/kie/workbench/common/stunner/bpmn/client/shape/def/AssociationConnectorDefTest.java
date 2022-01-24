@@ -18,9 +18,9 @@ package org.kie.workbench.common.stunner.bpmn.client.shape.def;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.kie.workbench.common.stunner.bpmn.definition.Association;
-import org.kie.workbench.common.stunner.bpmn.definition.DirectionalAssociation;
-import org.kie.workbench.common.stunner.bpmn.definition.NonDirectionalAssociation;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Association;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.DirectionalAssociation;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.NonDirectionalAssociation;
 import org.kie.workbench.common.stunner.shapes.def.ConnectorShapeDef;
 
 import static org.junit.Assert.assertEquals;

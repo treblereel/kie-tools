@@ -19,6 +19,7 @@ package org.kie.workbench.common.stunner.bpmn.definition;
 import org.junit.Test;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.AdHocSubprocess;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BusinessRuleTask;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.DirectionalAssociation;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EmbeddedSubprocess;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndCompensationEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndEscalationEvent;

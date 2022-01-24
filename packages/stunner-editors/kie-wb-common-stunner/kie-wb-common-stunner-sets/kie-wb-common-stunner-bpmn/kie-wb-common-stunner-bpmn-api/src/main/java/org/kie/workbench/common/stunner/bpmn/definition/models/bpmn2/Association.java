@@ -14,17 +14,32 @@
  * limitations under the License.
  */
 
-package org.kie.workbench.common.stunner.bpmn.definition;
+package org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2;
+
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.jboss.errai.common.client.api.annotations.MapsTo;
-import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BaseConnector;
 
-public abstract class Association extends BaseConnector {
+@XmlRootElement(name = "association", namespace = "http://www.omg.org/spec/BPMN/20100524/MODEL")
+public class Association extends BaseConnector {
+
+    public Association() {
+        this("", "");
+    }
 
     public Association(final @MapsTo("name") String name,
                        final @MapsTo("documentation") String documentation) {
         super(name,
               documentation);
+    }
+
+    /*
+        Current marshaller and BPMN 2 spec doesn't support Association name.
+        BPMN 2 spec doesn't support documentation either but current marshallers does,
+        do don't removing documentation from the Association.
+     */
+    public String getName() {
+        return null;
     }
 
     @Override

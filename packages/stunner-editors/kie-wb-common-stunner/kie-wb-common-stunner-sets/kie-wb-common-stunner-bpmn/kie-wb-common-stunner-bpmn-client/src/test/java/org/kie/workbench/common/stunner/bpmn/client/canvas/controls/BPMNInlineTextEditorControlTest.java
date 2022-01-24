@@ -18,12 +18,12 @@ package org.kie.workbench.common.stunner.bpmn.client.canvas.controls;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kie.workbench.common.stunner.bpmn.definition.BaseCatchingIntermediateEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.DataObject;
-import org.kie.workbench.common.stunner.bpmn.definition.TextAnnotation;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.DataObjectReference;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EmbeddedSubprocess;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndCompensationEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EventGateway;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.StartCompensationEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.TextAnnotation;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.UserTask;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -57,7 +57,7 @@ public class BPMNInlineTextEditorControlTest {
     private EmbeddedSubprocess embeddedSubprocess;
 
     @Mock
-    private DataObject dataObject;
+    private DataObjectReference dataObject;
 
     @Mock
     private TextAnnotation textAnnotation;

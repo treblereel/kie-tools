@@ -28,8 +28,10 @@ import javax.xml.stream.XMLStreamException;
 import org.kie.workbench.common.stunner.bpmn.BPMNDefinitionSet;
 import org.kie.workbench.common.stunner.bpmn.definition.BPMNViewDefinition;
 import org.kie.workbench.common.stunner.bpmn.definition.FlowElement;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Association;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BaseGateway;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BaseTask;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.DataObjectReference;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Definitions;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Definitions_XMLMapperImpl;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndEvent;
@@ -41,6 +43,7 @@ import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.InclusiveGa
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Incoming;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.ItemDefinition;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Lane;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.NonDirectionalAssociation;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Outgoing;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.ParallelGateway;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Process;
@@ -51,6 +54,7 @@ import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.SequenceFlo
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.StartEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.StartMessageEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.StartSignalEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.TextAnnotation;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.UserTask;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmndi.BpmnDiagram;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmndi.BpmnEdge;
@@ -175,6 +179,27 @@ public class BPMNClientMarshalling {
                 simulationElements.add(endEvent.getElementParameters());
             }
 
+            if (definition instanceof TextAnnotation) {
+                TextAnnotation annotation = (TextAnnotation) definition;
+                process.getTextAnnotations().add(annotation);
+
+                node.getInEdges().forEach(edge -> {
+                    if (edge.getContent() instanceof ViewConnectorImpl) {
+                        ViewConnectorImpl connector = (ViewConnectorImpl) edge.getContent();
+                        Association association = (NonDirectionalAssociation) connector.getDefinition();
+                        association.setSourceRef(edge.getSourceNode().getUUID());
+                        association.setTargetRef(edge.getTargetNode().getUUID());
+                        association.setId(IdGenerator.getNextIdFor(association, edge.getUUID()));
+
+                        BpmnEdge edgeNode = new BpmnEdge();
+                        edgeNode.setBpmnElement(association.getId());
+                        edgeNode.getWaypoint().addAll(createWaypoints(connector));
+                        plane.getBpmnEdges().add(edgeNode);
+                        process.getAssociations().add(association);
+                    }
+                });
+            }
+
             if (definition instanceof BaseTask) {
                 BaseTask task = (BaseTask) definition;
                 if (definition instanceof ScriptTask) {
@@ -227,6 +252,13 @@ public class BPMNClientMarshalling {
                 process.getLanes().add(lane);
             }
 
+            if (definition instanceof DataObjectReference) {
+                DataObjectReference dataObject = (DataObjectReference) definition;
+                definitions.getItemDefinitions().add(dataObject.getItemDefinition());
+                process.getDataObjects().add(dataObject.getDataObject());
+                process.getDataObjectsReference().add(dataObject);
+            }
+
             // Adding Shape to Diagram
             plane.getBpmnShapes().add(
                     createShapeForBounds(node.getContent().getBounds(), definition.getId())
@@ -238,6 +270,18 @@ public class BPMNClientMarshalling {
             BPMNViewDefinition definition = node.getContent().getDefinition();
             if (definition instanceof Lane) {
                 addChildrenToLane(graph, node);
+            }
+        }
+
+        // Update associations IDs when all IDs are ready.
+        for (Association association : process.getAssociations()) {
+            association.setTargetRef(IdGenerator.getIdBUuid(association.getTargetRef()));
+            association.setSourceRef(IdGenerator.getIdBUuid(association.getSourceRef()));
+            for (BpmnEdge edge : plane.getBpmnEdges()) {
+                if (Objects.equals(edge.getBpmnElement(), association.getId())) {
+                    edge.setId("edge_shape_" + association.getSourceRef() + "_to_shape_" + association.getTargetRef());
+                    break;
+                }
             }
         }
 

@@ -17,6 +17,7 @@
 package org.kie.workbench.common.stunner.bpmn.definition;
 
 import org.junit.Test;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.TextAnnotation;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;

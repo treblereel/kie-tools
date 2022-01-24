@@ -22,7 +22,6 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.kie.workbench.common.stunner.bpmn.definition.DataObject;
 import org.kie.workbench.common.stunner.bpmn.definition.IntermediateErrorEventCatching;
 import org.kie.workbench.common.stunner.bpmn.definition.IntermediateEscalationEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.IntermediateEscalationEventThrowing;
@@ -34,6 +33,7 @@ import org.kie.workbench.common.stunner.bpmn.definition.IntermediateSignalEventC
 import org.kie.workbench.common.stunner.bpmn.definition.IntermediateSignalEventThrowing;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.AdHocSubprocess;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BusinessRuleTask;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.DataObjectReference;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EmbeddedSubprocess;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndErrorEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndEscalationEvent;
@@ -497,8 +497,8 @@ public class AbstractDataTypeCacheTest {
 
     @Test
     public void testExtractDataObject() {
-        DataObject object = new DataObject();
-        DataObject object2 = new DataObject();
+        DataObjectReference object = new DataObjectReference();
+        DataObjectReference object2 = new DataObjectReference();
 
         when(firstView.getDefinition()).thenReturn(object);
         when(lastView.getDefinition()).thenReturn(object2);

@@ -247,6 +247,12 @@ public class Process implements BPMNDiagram<DiagramSet, ProcessData, RootProcess
     @XmlElement(name = "laneSet")
     private List<Lane> lanes = new ArrayList<>();
 
+    @XmlElement(name = "textAnnotation")
+    private List<TextAnnotation> textAnnotations = new ArrayList<>();
+
+    @XmlElement(name = "association")
+    private List<Association> associations = new ArrayList<>();
+
     @XmlElement(name = "endEvent")
     @XmlUnwrappedCollection
     @XmlElements({
@@ -296,6 +302,14 @@ public class Process implements BPMNDiagram<DiagramSet, ProcessData, RootProcess
     @XmlElement(name = "parallelGateway")
     @XmlUnwrappedCollection
     private List<ParallelGateway> parallelGateways = new ArrayList<>();
+
+    @XmlElement(name = "dataObject")
+    @XmlUnwrappedCollection
+    private List<DataObject> dataObjects = new ArrayList<>();
+
+    @XmlElement(name = "dataObjectReference")
+    @XmlUnwrappedCollection
+    private List<DataObjectReference> dataObjectsReference = new ArrayList<>();
 
     @XmlElement(name = "property")
     @XmlUnwrappedCollection
@@ -658,6 +672,38 @@ public class Process implements BPMNDiagram<DiagramSet, ProcessData, RootProcess
         this.parallelGateways = parallelGateways;
     }
 
+    public List<TextAnnotation> getTextAnnotations() {
+        return textAnnotations;
+    }
+
+    public void setTextAnnotations(List<TextAnnotation> textAnnotations) {
+        this.textAnnotations = textAnnotations;
+    }
+
+    public List<Association> getAssociations() {
+        return associations;
+    }
+
+    public void setAssociations(List<Association> associations) {
+        this.associations = associations;
+    }
+
+    public List<DataObject> getDataObjects() {
+        return dataObjects;
+    }
+
+    public void setDataObjects(List<DataObject> dataObjects) {
+        this.dataObjects = dataObjects;
+    }
+
+    public List<DataObjectReference> getDataObjectsReference() {
+        return dataObjectsReference;
+    }
+
+    public void setDataObjectsReference(List<DataObjectReference> dataObjectsReference) {
+        this.dataObjectsReference = dataObjectsReference;
+    }
+
     @Override
     public int hashCode() {
         return HashUtil.combineHashCodes(Objects.hashCode(processData),
@@ -672,6 +718,8 @@ public class Process implements BPMNDiagram<DiagramSet, ProcessData, RootProcess
                                          Objects.hashCode(scriptTasks),
                                          Objects.hashCode(sequenceFlows),
                                          Objects.hashCode(lanes),
+                                         Objects.hashCode(textAnnotations),
+                                         Objects.hashCode(associations),
                                          Objects.hashCode(properties));
     }
 
@@ -691,6 +739,8 @@ public class Process implements BPMNDiagram<DiagramSet, ProcessData, RootProcess
                     && Objects.equals(scriptTasks, other.scriptTasks)
                     && Objects.equals(sequenceFlows, other.sequenceFlows)
                     && Objects.equals(lanes, other.lanes)
+                    && Objects.equals(textAnnotations, other.textAnnotations)
+                    && Objects.equals(associations, other.associations)
                     && Objects.equals(properties, other.properties);
         }
         return false;

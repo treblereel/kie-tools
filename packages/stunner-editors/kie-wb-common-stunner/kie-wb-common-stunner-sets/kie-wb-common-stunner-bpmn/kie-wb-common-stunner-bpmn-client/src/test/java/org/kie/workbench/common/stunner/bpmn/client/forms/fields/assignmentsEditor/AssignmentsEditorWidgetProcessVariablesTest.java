@@ -23,9 +23,9 @@ import com.google.gwtmockito.GwtMockito;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.kie.workbench.common.stunner.bpmn.definition.DataObject;
 import org.kie.workbench.common.stunner.bpmn.definition.FlowElement;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.AdHocSubprocess;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.DataObjectReference;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EmbeddedSubprocess;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EventSubprocess;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.MultipleInstanceSubprocess;
@@ -123,9 +123,9 @@ public class AssignmentsEditorWidgetProcessVariablesTest {
     @Mock
     private EmbeddedSubprocess embeddedSubprocess;
     @Mock
-    private View<DataObject> dataObjectView;
+    private View<DataObjectReference> dataObjectView;
     @Mock
-    private Node<View<DataObject>, ?> dataObjectNode;
+    private Node<View<DataObjectReference>, ?> dataObjectNode;
 
     @Before
     public void setup() {
@@ -217,9 +217,9 @@ public class AssignmentsEditorWidgetProcessVariablesTest {
 
     @Test
     public void testViewAndContent() {
-        Node<View<DataObject>, ?> dataObjectNode;
+        Node<View<DataObjectReference>, ?> dataObjectNode;
 
-        DataObject dataObject = new DataObject();
+        DataObjectReference dataObject = new DataObjectReference();
         dataObject.setDocumentation("doc");
         dataObject.setDataObjectName(new Name("name"));
         dataObject.setType(new DataObjectType(new DataObjectTypeValue("name")));
@@ -286,7 +286,7 @@ public class AssignmentsEditorWidgetProcessVariablesTest {
     @Test
     public void testGetProcessVariableFromDataObjects() {
 
-        DataObject dataObject = new DataObject();
+        DataObjectReference dataObject = new DataObjectReference();
         dataObject.setDocumentation("doc");
         dataObject.setDataObjectName(new Name("name"));
         dataObject.setType(new DataObjectType(new DataObjectTypeValue("com.myType.dataObject")));

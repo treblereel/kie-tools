@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.kie.workbench.common.stunner.bpmn.definition.BPMNDiagram;
-import org.kie.workbench.common.stunner.bpmn.definition.DataObject;
 import org.kie.workbench.common.stunner.bpmn.definition.IntermediateErrorEventCatching;
 import org.kie.workbench.common.stunner.bpmn.definition.IntermediateEscalationEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.IntermediateEscalationEventThrowing;
@@ -33,6 +32,7 @@ import org.kie.workbench.common.stunner.bpmn.definition.IntermediateSignalEventC
 import org.kie.workbench.common.stunner.bpmn.definition.IntermediateSignalEventThrowing;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.AdHocSubprocess;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BusinessRuleTask;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.DataObjectReference;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EmbeddedSubprocess;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndErrorEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndEscalationEvent;
@@ -69,8 +69,8 @@ public abstract class AbstractDataTypeCache {
 
     public void extractFromItem(View view) {
         Object definition = view.getDefinition();
-        if (definition instanceof DataObject) {
-            DataObject dataObject = (DataObject) definition;
+        if (definition instanceof DataObjectReference) {
+            DataObjectReference dataObject = (DataObjectReference) definition;
             allDataTypes.add(dataObject.getType().getValue().getType());
         } else if (definition instanceof AdHocSubprocess) {
             AdHocSubprocess adhoc = (AdHocSubprocess) definition;

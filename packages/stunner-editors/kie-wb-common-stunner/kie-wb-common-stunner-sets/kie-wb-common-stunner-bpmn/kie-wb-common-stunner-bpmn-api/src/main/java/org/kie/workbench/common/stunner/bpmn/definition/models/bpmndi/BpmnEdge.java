@@ -15,6 +15,7 @@
  */
 package org.kie.workbench.common.stunner.bpmn.definition.models.bpmndi;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -34,7 +35,7 @@ public class BpmnEdge {
 
     @XmlElement
     @XmlUnwrappedCollection
-    private List<Waypoint> waypoint;
+    private List<Waypoint> waypoint = new ArrayList<>();
 
     @XmlElement(name = "BPMNLabel")
     private BpmnLabel bpmnLabel;

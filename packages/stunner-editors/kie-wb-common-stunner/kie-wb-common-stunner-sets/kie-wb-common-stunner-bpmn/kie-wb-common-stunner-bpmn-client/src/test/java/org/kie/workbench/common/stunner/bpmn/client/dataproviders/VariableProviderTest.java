@@ -24,7 +24,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.kie.workbench.common.forms.dynamic.model.config.SelectorData;
 import org.kie.workbench.common.forms.dynamic.model.config.SelectorDataProvider;
-import org.kie.workbench.common.stunner.bpmn.definition.DataObject;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.DataObjectReference;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Process;
 import org.kie.workbench.common.stunner.bpmn.definition.property.artifacts.DataObjectType;
 import org.kie.workbench.common.stunner.bpmn.definition.property.artifacts.DataObjectTypeValue;
@@ -69,7 +69,7 @@ public class VariableProviderTest
     }
 
     @Mock
-    private View<DataObject> dataObjectView;
+    private View<DataObjectReference> dataObjectView;
 
     @Mock
     private View<Object> otherView;
@@ -78,9 +78,9 @@ public class VariableProviderTest
     protected List<Element> mockModes() {
         List<Element> nodes = new ArrayList<>();
         nodes.add(mockRootNode(PROCESS_VARIABLES, CASE_FILE_VARIABLES));
-        Node<View<DataObject>, ?> dataObjectNode;
+        Node<View<DataObjectReference>, ?> dataObjectNode;
 
-        DataObject dataObject = new DataObject();
+        DataObjectReference dataObject = new DataObjectReference();
         dataObject.setDocumentation("doc");
         dataObject.setDataObjectName(new Name("name"));
         dataObject.setType(new DataObjectType(new DataObjectTypeValue("name")));
@@ -95,9 +95,9 @@ public class VariableProviderTest
 
     @Test
     public void testViewAndContent() {
-        Node<View<DataObject>, ?> dataObjectNode;
+        Node<View<DataObjectReference>, ?> dataObjectNode;
 
-        DataObject dataObject = new DataObject();
+        DataObjectReference dataObject = new DataObjectReference();
         dataObject.setDocumentation("doc");
         dataObject.setDataObjectName(new Name("name"));
         dataObject.setType(new DataObjectType(new DataObjectTypeValue("name")));

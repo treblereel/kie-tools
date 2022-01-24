@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 import org.kie.workbench.common.stunner.bpmn.BPMNDefinitionSet;
-import org.kie.workbench.common.stunner.bpmn.definition.DataObject;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.DataObjectReference;
 import org.kie.workbench.common.stunner.core.definition.adapter.binding.BindableAdapterUtils;
 import org.kie.workbench.common.stunner.core.diagram.Diagram;
 import org.kie.workbench.common.stunner.core.graph.Element;
@@ -50,8 +50,8 @@ public abstract class BPMNDataObjectValidator implements DomainValidator {
         List<DomainViolation> violations = new ArrayList<>();
         while (it.hasNext()) {
             Element element = it.next();
-            if (element.getContent() instanceof View && ((View) element.getContent()).getDefinition() instanceof DataObject) {
-                DataObject dataObject = (DataObject) ((View) element.getContent()).getDefinition();
+            if (element.getContent() instanceof View && ((View) element.getContent()).getDefinition() instanceof DataObjectReference) {
+                DataObjectReference dataObject = (DataObjectReference) ((View) element.getContent()).getDefinition();
 
                 String name = dataObject.getDataObjectName().getValue();
                 String type = dataObject.getType().getValue().getType();

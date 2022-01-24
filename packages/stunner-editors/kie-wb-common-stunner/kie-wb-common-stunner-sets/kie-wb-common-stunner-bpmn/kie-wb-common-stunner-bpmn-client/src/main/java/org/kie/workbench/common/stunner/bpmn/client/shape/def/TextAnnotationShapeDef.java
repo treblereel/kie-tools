@@ -20,7 +20,7 @@ import java.util.Optional;
 
 import org.kie.workbench.common.stunner.bpmn.client.resources.BPMNGlyphFactory;
 import org.kie.workbench.common.stunner.bpmn.client.resources.BPMNSVGViewFactory;
-import org.kie.workbench.common.stunner.bpmn.definition.TextAnnotation;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.TextAnnotation;
 import org.kie.workbench.common.stunner.core.client.shape.view.HasTitle;
 import org.kie.workbench.common.stunner.core.client.shape.view.handler.FontHandler;
 import org.kie.workbench.common.stunner.core.client.shape.view.handler.SizeHandler;

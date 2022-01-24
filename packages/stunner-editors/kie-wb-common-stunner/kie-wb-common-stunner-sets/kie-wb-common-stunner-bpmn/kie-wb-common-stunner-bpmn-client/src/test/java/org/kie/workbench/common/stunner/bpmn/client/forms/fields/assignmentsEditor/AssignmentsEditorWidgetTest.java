@@ -35,9 +35,9 @@ import org.kie.workbench.common.stunner.bpmn.client.forms.fields.model.Assignmen
 import org.kie.workbench.common.stunner.bpmn.client.forms.fields.model.AssignmentParser;
 import org.kie.workbench.common.stunner.bpmn.client.forms.fields.model.Variable;
 import org.kie.workbench.common.stunner.bpmn.client.forms.util.StringUtils;
-import org.kie.workbench.common.stunner.bpmn.definition.DataObject;
 import org.kie.workbench.common.stunner.bpmn.definition.FlowElement;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BusinessRuleTask;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.DataObjectReference;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndNoneEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndTerminateEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Process;
@@ -446,7 +446,7 @@ public class AssignmentsEditorWidgetTest extends AssignmentBaseTest {
 
     @Test
     public void testDataObjectsNewLine() {
-        DataObject dataObject = new DataObject();
+        DataObjectReference dataObject = new DataObjectReference();
         dataObject.getDataObjectName().setValue("Data\nObject");
         String doNameFilter = widget.dataObjectToProcessVariableFormat(dataObject);
         assertEquals(doNameFilter, "DataObject:Object");

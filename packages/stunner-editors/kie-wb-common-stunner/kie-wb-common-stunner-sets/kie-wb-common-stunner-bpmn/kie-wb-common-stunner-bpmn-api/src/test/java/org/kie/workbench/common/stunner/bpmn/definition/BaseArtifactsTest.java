@@ -17,6 +17,9 @@
 package org.kie.workbench.common.stunner.bpmn.definition;
 
 import org.junit.Test;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BaseArtifacts;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.DataObjectReference;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.TextAnnotation;
 import org.kie.workbench.common.stunner.bpmn.definition.property.background.BackgroundSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.dimensions.Height;
 import org.kie.workbench.common.stunner.bpmn.definition.property.dimensions.RectangleDimensionsSet;
@@ -80,15 +83,15 @@ public class BaseArtifactsTest {
 
     @Test
     public void testHashCode() {
-        assertNotEquals(new DataObject().hashCode(), tested.hashCode());
+        assertNotEquals(new DataObjectReference().hashCode(), tested.hashCode());
         assertNotEquals(new TextAnnotation().hashCode(), tested.hashCode());
     }
 
     @Test
     public void testEquals() {
-        assertTrue(tested.equals(new DataObject()));
+        assertTrue(tested.equals(new DataObjectReference()));
         assertFalse(tested.equals(""));
-        final DataObject dataObject = new DataObject();
+        final DataObjectReference dataObject = new DataObjectReference();
         dataObject.getBackgroundSet().setBgColor("Black");
         assertFalse(tested.equals(dataObject));
         tested.getBackgroundSet().setBgColor("Black");

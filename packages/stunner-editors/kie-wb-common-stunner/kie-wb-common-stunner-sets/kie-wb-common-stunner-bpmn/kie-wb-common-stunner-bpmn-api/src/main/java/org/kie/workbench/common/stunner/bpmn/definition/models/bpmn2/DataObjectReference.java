@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
-package org.kie.workbench.common.stunner.bpmn.definition;
+package org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2;
 
 import java.util.Objects;
 import java.util.Set;
 
 import javax.validation.Valid;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.jboss.errai.common.client.api.annotations.MapsTo;
 import org.jboss.errai.common.client.api.annotations.Portable;
@@ -51,27 +54,43 @@ import static org.kie.workbench.common.forms.adf.engine.shared.formGeneration.pr
         startElement = "name",
         defaultFieldSettings = {@FieldParam(name = FIELD_CONTAINER_PARAM, value = COLLAPSIBLE_CONTAINER)}
 )
-public class DataObject extends BaseArtifacts {
+@XmlRootElement(name = "dataObjectReference", namespace = "http://www.omg.org/spec/BPMN/20100524/MODEL")
+public class DataObjectReference extends BaseArtifacts {
 
     @Labels
+    @XmlTransient
     private static final Set<String> labels = new Sets.Builder<String>()
             .add("all")
             .add("lane_child")
             .build();
 
+    @XmlAttribute
     protected String name;
+
+    @XmlAttribute
+    private String id;
+
+    @XmlTransient
     protected String documentation;
+
+    @XmlTransient
+    private String itemSubjectRef;
+
+    @XmlAttribute
+    private String dataObjectRef;
 
     @Property
     @Valid
     @FormField
+    @XmlTransient
     private Name dataObjectName;
 
     @Property
     @FormField
+    @XmlTransient
     private DataObjectType type;
 
-    public DataObject() {
+    public DataObjectReference() {
         this(new Name("DataObject"),
              new DataObjectType(),
              "",
@@ -82,14 +101,14 @@ public class DataObject extends BaseArtifacts {
              new AdvancedData());
     }
 
-    public DataObject(final @MapsTo("dataObjectName") Name dataObjectName,
-                      final @MapsTo("type") DataObjectType type,
-                      final @MapsTo("name") String name,
-                      final @MapsTo("documentation") String documentation,
-                      final @MapsTo("backgroundSet") BackgroundSet backgroundSet,
-                      final @MapsTo("fontSet") FontSet fontSet,
-                      final @MapsTo("dimensionsSet") RectangleDimensionsSet dimensionsSet,
-                      final @MapsTo("advancedData") AdvancedData advancedData) {
+    public DataObjectReference(final @MapsTo("dataObjectName") Name dataObjectName,
+                               final @MapsTo("type") DataObjectType type,
+                               final @MapsTo("name") String name,
+                               final @MapsTo("documentation") String documentation,
+                               final @MapsTo("backgroundSet") BackgroundSet backgroundSet,
+                               final @MapsTo("fontSet") FontSet fontSet,
+                               final @MapsTo("dimensionsSet") RectangleDimensionsSet dimensionsSet,
+                               final @MapsTo("advancedData") AdvancedData advancedData) {
 
         super(name, documentation, backgroundSet, fontSet, dimensionsSet, advancedData);
         this.dataObjectName = dataObjectName;
@@ -111,7 +130,7 @@ public class DataObject extends BaseArtifacts {
 
     @Override
     public String getName() {
-        return name;
+        return null;
     }
 
     public void setName(String name) {
@@ -127,6 +146,16 @@ public class DataObject extends BaseArtifacts {
         this.documentation = documentation;
     }
 
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public DataObjectType getType() {
         return type;
     }
@@ -135,23 +164,58 @@ public class DataObject extends BaseArtifacts {
         this.type = type;
     }
 
+    public String getDataObjectRef() {
+        return dataObjectName.getValue();
+    }
+
+    public void setDataObjectRef(String dataObjectRef) {
+        this.dataObjectName.setValue(dataObjectRef);
+    }
+
+    public String getItemSubjectRef() {
+        return itemSubjectRef;
+    }
+
+    public void setItemSubjectRef(String itemSubjectRef) {
+        this.itemSubjectRef = itemSubjectRef;
+    }
+
+    public ItemDefinition getItemDefinition() {
+        return new ItemDefinition(getDataObjectName().getValue() + "_ItemRef", type.getValue().getType());
+    }
+
+    public DataObject getDataObject() {
+        DataObject result = new DataObject();
+        result.setId(getDataObjectName().getValue());
+        result.setName(getDataObjectName().getValue());
+        result.setItemSubjectRef(generateItemRefId());
+
+        return result;
+    }
+
+    private String generateItemRefId() {
+        return getDataObjectName().getValue() + "_ItemRef";
+    }
+
     @Override
     public int hashCode() {
         return HashUtil.combineHashCodes(super.hashCode(),
                                          Objects.hashCode(dataObjectName),
                                          Objects.hashCode(type),
-                                         Objects.hashCode(name));
+                                         Objects.hashCode(id),
+                                         Objects.hashCode(dataObjectRef));
     }
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof DataObject) {
-            DataObject other = (DataObject) o;
-            return super.equals(other) &&
-                    Objects.equals(dataObjectName, other.dataObjectName) &&
-                    Objects.equals(type, other.type) &&
-                    Objects.equals(name, other.name) &&
-                    Objects.equals(documentation, other.documentation);
+        if (o instanceof DataObjectReference) {
+            DataObjectReference other = (DataObjectReference) o;
+            return super.equals(other)
+                    && Objects.equals(dataObjectName, other.dataObjectName)
+                    && Objects.equals(type, other.type)
+                    && Objects.equals(id, other.id)
+                    && Objects.equals(dataObjectRef, other.dataObjectRef)
+                    && Objects.equals(documentation, other.documentation);
         }
         return false;
     }

@@ -35,7 +35,6 @@ import org.kie.workbench.common.stunner.bpmn.client.shape.def.StartEventShapeDef
 import org.kie.workbench.common.stunner.bpmn.client.shape.def.SubprocessShapeDef;
 import org.kie.workbench.common.stunner.bpmn.client.shape.def.TaskShapeDef;
 import org.kie.workbench.common.stunner.bpmn.client.shape.def.ThrowingIntermediateEventShapeDef;
-import org.kie.workbench.common.stunner.bpmn.definition.DirectionalAssociation;
 import org.kie.workbench.common.stunner.bpmn.definition.FlowElement;
 import org.kie.workbench.common.stunner.bpmn.definition.FlowElementInterface;
 import org.kie.workbench.common.stunner.bpmn.definition.IntermediateCompensationEvent;
@@ -53,6 +52,7 @@ import org.kie.workbench.common.stunner.bpmn.definition.IntermediateSignalEventT
 import org.kie.workbench.common.stunner.bpmn.definition.IntermediateTimerEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.AdHocSubprocess;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BusinessRuleTask;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.DirectionalAssociation;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EmbeddedSubprocess;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndCompensationEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndErrorEvent;

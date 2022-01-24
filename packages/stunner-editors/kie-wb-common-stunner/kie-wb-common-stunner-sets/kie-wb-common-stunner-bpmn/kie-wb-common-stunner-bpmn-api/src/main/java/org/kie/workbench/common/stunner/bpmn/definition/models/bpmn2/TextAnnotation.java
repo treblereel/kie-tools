@@ -14,9 +14,13 @@
  * limitations under the License.
  */
 
-package org.kie.workbench.common.stunner.bpmn.definition;
+package org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2;
 
 import java.util.Set;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.jboss.errai.common.client.api.annotations.MapsTo;
 import org.jboss.errai.common.client.api.annotations.Portable;
@@ -43,14 +47,25 @@ import static org.kie.workbench.common.forms.adf.engine.shared.formGeneration.pr
         startElement = "general",
         defaultFieldSettings = {@FieldParam(name = FIELD_CONTAINER_PARAM, value = COLLAPSIBLE_CONTAINER)}
 )
+@XmlRootElement(name = "textAnnotation", namespace = "http://www.omg.org/spec/BPMN/20100524/MODEL")
 public class TextAnnotation extends BaseArtifacts {
 
     @Labels
+    @XmlTransient
     private final static Set<String> labels = new Sets.Builder<String>()
             .add("text_annotation")
             .add("lane_child")
             .add("all")
             .build();
+
+    /*
+        Used only for marshalling/unmarshalling purposes. Shouldn't be handled in Equals/HashCode.
+        This variable will be always null and getter/setter will return data from other Execution sets.
+        Execution sets not removed due to how forms works now, should be refactored during the migration
+        to the new forms.
+     */
+    @XmlElement(name = "text")
+    public String text;
 
     public TextAnnotation() {
         this("Text Annotation",
@@ -68,6 +83,14 @@ public class TextAnnotation extends BaseArtifacts {
                           final @MapsTo("dimensionsSet") RectangleDimensionsSet dimensionsSet,
                           final @MapsTo("advancedData") AdvancedData advancedData) {
         super(name, documentation, backgroundSet, fontSet, dimensionsSet, advancedData);
+    }
+
+    public String getText() {
+        return getName();
+    }
+
+    public void setText(String text) {
+        setName(text);
     }
 
     public Set<String> getLabels() {

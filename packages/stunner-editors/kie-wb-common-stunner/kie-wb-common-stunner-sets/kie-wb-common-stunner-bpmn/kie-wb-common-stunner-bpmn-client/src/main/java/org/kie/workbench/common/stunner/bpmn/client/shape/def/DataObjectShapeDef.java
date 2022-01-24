@@ -20,7 +20,7 @@ import java.util.Optional;
 
 import org.kie.workbench.common.stunner.bpmn.client.resources.BPMNGlyphFactory;
 import org.kie.workbench.common.stunner.bpmn.client.resources.BPMNSVGViewFactory;
-import org.kie.workbench.common.stunner.bpmn.definition.DataObject;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.DataObjectReference;
 import org.kie.workbench.common.stunner.core.client.shape.view.HasTitle;
 import org.kie.workbench.common.stunner.core.client.shape.view.handler.FontHandler;
 import org.kie.workbench.common.stunner.core.client.shape.view.handler.SizeHandler;
@@ -29,14 +29,14 @@ import org.kie.workbench.common.stunner.svg.client.shape.factory.SVGShapeViewRes
 import org.kie.workbench.common.stunner.svg.client.shape.view.SVGShapeView;
 
 public class DataObjectShapeDef extends BaseDimensionedShapeDef
-        implements BPMNSvgShapeDef<DataObject> {
+        implements BPMNSvgShapeDef<DataObjectReference> {
 
-    public static final SVGShapeViewResources<DataObject, BPMNSVGViewFactory> VIEW_RESOURCES =
-            new SVGShapeViewResources<DataObject, BPMNSVGViewFactory>()
-                    .put(DataObject.class, BPMNSVGViewFactory::dataObject);
+    public static final SVGShapeViewResources<DataObjectReference, BPMNSVGViewFactory> VIEW_RESOURCES =
+            new SVGShapeViewResources<DataObjectReference, BPMNSVGViewFactory>()
+                    .put(DataObjectReference.class, BPMNSVGViewFactory::dataObject);
 
     @Override
-    public FontHandler<DataObject, SVGShapeView> newFontHandler() {
+    public FontHandler<DataObjectReference, SVGShapeView> newFontHandler() {
         return newFontHandlerBuilder()
                 .verticalAlignment(bean -> HasTitle.VerticalAlignment.BOTTOM)
                 .horizontalAlignment(bean -> HasTitle.HorizontalAlignment.CENTER)
@@ -47,7 +47,7 @@ public class DataObjectShapeDef extends BaseDimensionedShapeDef
     }
 
     @Override
-    public SizeHandler<DataObject, SVGShapeView> newSizeHandler() {
+    public SizeHandler<DataObjectReference, SVGShapeView> newSizeHandler() {
         return newSizeHandlerBuilder()
                 .width(task -> task.getDimensionsSet().getWidth().getValue())
                 .height(task -> task.getDimensionsSet().getHeight().getValue())
@@ -60,7 +60,7 @@ public class DataObjectShapeDef extends BaseDimensionedShapeDef
 
     @Override
     public SVGShapeView<?> newViewInstance(final BPMNSVGViewFactory factory,
-                                           final DataObject task) {
+                                           final DataObjectReference task) {
 
         return newViewInstance(Optional.ofNullable(task.getDimensionsSet().getWidth()),
                                Optional.ofNullable(task.getDimensionsSet().getHeight()),
@@ -68,7 +68,7 @@ public class DataObjectShapeDef extends BaseDimensionedShapeDef
     }
 
     @Override
-    public Glyph getGlyph(Class<? extends DataObject> type, String defId) {
+    public Glyph getGlyph(Class<? extends DataObjectReference> type, String defId) {
         return BPMNGlyphFactory.DATA_OBJECT;
     }
 }

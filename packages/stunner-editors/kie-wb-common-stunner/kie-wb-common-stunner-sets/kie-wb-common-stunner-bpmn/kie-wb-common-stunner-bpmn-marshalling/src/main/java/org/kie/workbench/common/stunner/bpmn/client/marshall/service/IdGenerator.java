@@ -19,14 +19,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.kie.workbench.common.stunner.bpmn.definition.BPMNViewDefinition;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Association;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BaseGateway;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BaseTask;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.DataObjectReference;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Lane;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.ScriptTask;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.StartEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.StartMessageEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.StartSignalEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.TextAnnotation;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.UserTask;
 
 public class IdGenerator {
@@ -49,6 +52,12 @@ public class IdGenerator {
 
     private static int gatewayCounter = 1;
 
+    private static int textAnnotationCounter = 1;
+
+    private static int associationCounter = 1;
+
+    private static int dataObjectCounter = 1;
+
     // key is old ID and value is new ID
     private static Map<String, String> oldNewId = new HashMap<>();
 
@@ -62,6 +71,9 @@ public class IdGenerator {
         signalCounter = 1;
         laneCounter = 1;
         gatewayCounter = 1;
+        textAnnotationCounter = 1;
+        associationCounter = 1;
+        dataObjectCounter = 1;
         oldNewId = new HashMap<>();
     }
 
@@ -103,6 +115,18 @@ public class IdGenerator {
         if (flowElement instanceof BaseGateway) {
             return "Gateway_" + gatewayCounter++;
         }
+
+        if (flowElement instanceof TextAnnotation) {
+            return "TextAnnotation_" + textAnnotationCounter++;
+        }
+
+        if (flowElement instanceof Association) {
+            return "Association_" + associationCounter++;
+        }
+
+        if (flowElement instanceof DataObjectReference) {
+            return "DataObject_" + dataObjectCounter++;
+        }
         return null;
     }
 
@@ -116,5 +140,18 @@ public class IdGenerator {
         }
 
         return "";
+    }
+
+    public static String getUuidById(String id) {
+        for (Map.Entry<String, String> entry : oldNewId.entrySet()) {
+            if (entry.getKey().equals(id)) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+
+    public static String getIdBUuid(String uuid) {
+        return oldNewId.get(uuid);
     }
 }
