@@ -16,6 +16,7 @@
 
 package org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -44,6 +45,7 @@ import org.treblereel.gwt.xml.mapper.api.annotation.XmlUnwrappedCollection;
 
 import static org.kie.workbench.common.forms.adf.engine.shared.formGeneration.processing.fields.fieldInitializers.nestedForms.SubFormFieldInitializer.COLLAPSIBLE_CONTAINER;
 import static org.kie.workbench.common.forms.adf.engine.shared.formGeneration.processing.fields.fieldInitializers.nestedForms.SubFormFieldInitializer.FIELD_CONTAINER_PARAM;
+import static org.kie.workbench.common.stunner.core.util.StringUtils.isEmpty;
 
 @Portable
 @Bindable
@@ -193,8 +195,16 @@ public class StartSignalEvent extends StartEvent {
     }
 
     public Signal getSignal() {
+        if (isEmpty(executionSet.getSignalRef().getValue())) {
+            return null;
+        }
+
         return new Signal(getSignalId(),
                           executionSet.getSignalRef().getValue());
+    }
+
+    public List<ItemDefinition> getItemDefinition() {
+        return AssignmentParser.getOutputItemDefinitions(getId(), dataIOSet.getAssignmentsinfo().getValue());
     }
 
     public SignalEventDefinition getSignalEventDefinition() {

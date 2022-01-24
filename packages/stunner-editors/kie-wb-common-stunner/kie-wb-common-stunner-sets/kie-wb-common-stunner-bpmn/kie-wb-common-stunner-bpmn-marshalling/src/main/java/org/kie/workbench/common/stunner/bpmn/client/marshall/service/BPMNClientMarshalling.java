@@ -51,6 +51,7 @@ import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Property;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Relationship;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.ScriptTask;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.SequenceFlow;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Signal;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.StartEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.StartMessageEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.StartSignalEvent;
@@ -160,7 +161,11 @@ public class BPMNClientMarshalling {
                 if (startEvent instanceof StartSignalEvent) {
                     StartSignalEvent startSignal = (StartSignalEvent) startEvent;
                     startSignal.setSignalId(IdGenerator.getTypeId(startSignal));
-                    definitions.getSignals().add(startSignal.getSignal());
+                    Signal signal = startSignal.getSignal();
+                    if (signal != null) {
+                        definitions.getSignals().add(signal);
+                    }
+                    definitions.getItemDefinitions().addAll(startSignal.getItemDefinition());
                 }
 
                 // Adding simulation properties

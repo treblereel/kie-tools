@@ -24,6 +24,7 @@ import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.DataOutput;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.DataOutputAssociation;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.DataOutputRefs;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.From;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.ItemDefinition;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.OutputSet;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.SourceRef;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.TargetRef;
@@ -98,6 +99,33 @@ public class AssignmentParser {
         }
 
         return associations;
+    }
+
+    public static List<ItemDefinition> getInputItemDefinitions(String id, String wholeAssignments) {
+        List<ItemDefinition> itemDefinitions = new ArrayList<>();
+        String inputVariables = AssignmentParser.getInputAssignmentVariables(wholeAssignments);
+        String[] inVars = inputVariables.split(",");
+        for (String inVar : inVars) {
+            String[] var = inVar.split(":");
+            String name = var[0];
+            String type = (var.length > 1 && var[1] != null && !var[1].isEmpty()) ? var[1] : "Object";
+            itemDefinitions.add(new ItemDefinition("_" + id + "_" + name + "InputXItem", type));
+        }
+
+        return itemDefinitions;
+    }
+
+    public static List<ItemDefinition> getOutputItemDefinitions(String id, String wholeAssignments) {
+        List<ItemDefinition> itemDefinitions = new ArrayList<>();
+        String outputVariables = AssignmentParser.getOutputAssignmentVariables(wholeAssignments);
+        String[] outVars = outputVariables.split(",");
+        for (String outVar : outVars) {
+            String[] var = outVar.split(":");
+            String name = var[0];
+            String type = (var.length > 1 && var[1] != null && !var[1].isEmpty()) ? var[1] : "Object";
+            itemDefinitions.add(new ItemDefinition("_" + id + "_" + name + "OutputXItem", type));
+        }
+        return itemDefinitions;
     }
 
     public static List<DataInput> parseDataInputs(String assignments, String nodeId) {
