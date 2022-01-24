@@ -35,6 +35,7 @@ import org.kie.workbench.common.stunner.core.command.Command;
 import org.kie.workbench.common.stunner.core.command.impl.CompositeCommand;
 import org.kie.workbench.common.stunner.core.command.impl.DeferredCommand;
 import org.kie.workbench.common.stunner.core.command.impl.DeferredCompositeCommand;
+import org.kie.workbench.common.stunner.sw.client.editor.SWTextEditorIntegration;
 
 @Singleton
 public class SWPatchRegistry {
@@ -65,9 +66,14 @@ public class SWPatchRegistry {
         return patchUpdates;
     }
 
+    @Inject
+    private SWPatchBuilder patchBuilder;
+
     private void applyPathForCommand(Command<AbstractCanvasHandler, CanvasViolation> command) {
         DomGlobal.console.log("+- " + command.toString());
-        patchUpdates.add(command.toString());
+        String patch = patchBuilder.build(command);
+        DomGlobal.console.log("-> " + patch);
+        SWTextEditorIntegration.fireOnJsonChanged(patch);
     }
 
     private void onCommandExecuted(Command<AbstractCanvasHandler, CanvasViolation> command) {
@@ -75,7 +81,7 @@ public class SWPatchRegistry {
             onCommandsExecuted(((CompositeCommand<AbstractCanvasHandler, CanvasViolation>) command).getCommands());
         } else if (command instanceof DeferredCompositeCommand) {
             onCommandsExecuted(((DeferredCompositeCommand<AbstractCanvasHandler, CanvasViolation>) command).getCommands());
-        } else if (command instanceof DeferredCommand){
+        } else if (command instanceof DeferredCommand) {
             onCommandExecuted(((DeferredCommand<AbstractCanvasHandler, CanvasViolation>) command).getCommand());
         } else {
             applyPathForCommand(command);

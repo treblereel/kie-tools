@@ -330,8 +330,13 @@
         document.getElementById("jsonRawContent").value = object;
       }
       function loadText() {
-        loadDiagram(document.getElementById("jsonRawContent").value);
+        loadDiagram(getText());
       }
+      function getText() {
+        return document.getElementById("jsonRawContent").value;
+      }
+
+      // var swBasicExample = "{  \"id\": \"helloworld\",  \"version\": \"1.0\",  \"specVersion\": \"0.8\",  \"name\": \"Hello World Workflow\",  \"description\": \"Inject Hello World\",  \"start\": \"Hello State\",  \"states\": [    {      \"name\": \"Hello State\",      \"type\": \"inject\",      \"data\": {        \"result\": \"Hello World!\"      },      \"end\": true    }  ]}";
       var swBasicExample =
         "{\n" +
         '  "id": "helloworld",\n' +
@@ -352,6 +357,14 @@
         "  ]\n" +
         "}";
       setText(swBasicExample);
+
+      window.frames.editorFrame.contentWindow.jsonpatch = jsonpatch;
+
+      window.frames.editorFrame.contentWindow.onJsonChanged = function (raw) {
+        var parsed = JSON.parse(getText());
+        var patched = jsonpatch.apply_patch(parsed, raw);
+        applyText(patched);
+      };
     </script>
   </body>
 </html>

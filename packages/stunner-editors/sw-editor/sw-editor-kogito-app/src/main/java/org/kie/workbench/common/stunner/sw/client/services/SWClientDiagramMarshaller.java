@@ -16,8 +16,10 @@
 
 package org.kie.workbench.common.stunner.sw.client.services;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -26,6 +28,7 @@ import javax.inject.Inject;
 
 import elemental2.core.Global;
 import elemental2.core.JsArray;
+import elemental2.dom.DomGlobal;
 import jsinterop.base.Js;
 import jsinterop.base.JsPropertyMap;
 import org.kie.workbench.common.stunner.core.api.FactoryManager;
@@ -81,6 +84,7 @@ public class SWClientDiagramMarshaller {
     private final FactoryManager factoryManager;
     private final GraphIndexBuilder indexBuilder;
     private final GraphCommands commands;
+    private final List<String> jsonStateIndexes = new ArrayList<>();
 
     @Inject
     public SWClientDiagramMarshaller(DefinitionUtils definitionUtils,
@@ -92,8 +96,86 @@ public class SWClientDiagramMarshaller {
         this.commands = new GraphCommands();
     }
 
+    // *************************** MARSHALLING ***************************************************
+
+    public int getStateIndex(String uuid) {
+        return jsonStateIndexes.indexOf(uuid);
+    }
+
+    public int getStatesCount() {
+        return jsonStateIndexes.size();
+    }
+
+    public void addStateIndex(String uuid) {
+        jsonStateIndexes.add(uuid);
+    }
+
+    public String marshall(Graph graph) {
+        String result = "";
+        Iterable<Node> nodes = graph.nodes();
+        for (Node node : nodes) {
+            Object bean = ((View<?>) node.getContent()).getDefinition();
+            if (bean instanceof State) {
+                JsPropertyMap<Object> nodeMap = marshall(node);
+                String raw = stringify(nodeMap);
+                result += raw;
+            }
+        }
+        return result;
+    }
+
+    public JsPropertyMap<Object> marshall(Node stateNode) {
+        State state = (State) ((View<?>) stateNode.getContent()).getDefinition();
+        JsPropertyMap<Object> jsonStateMap = newJsonObject();
+        jsonStateMap.set(ID, stateNode.getUUID());
+        String name = state.getName();
+        jsonStateMap.set(NAME, null == name || name.isEmpty() ? "" : name);
+        String type = null;
+        if (state instanceof InjectState) {
+            type = TYPE_INJECT;
+        } else if (state instanceof SwitchState) {
+            type = TYPE_SWITCH;
+        }
+        if (null != type) {
+            jsonStateMap.set(TYPE, type);
+        }
+
+        List<Edge> outEdges = stateNode.getOutEdges();
+        for (Edge edge : outEdges) {
+            Object edgeBean = ((View<?>) edge.getContent()).getDefinition();
+            if (edgeBean instanceof Transition) {
+                Node targetNode = edge.getTargetNode();
+                if (null != targetNode) {
+                    if (targetNode.getUUID().equals(STATE_END)) {
+                        jsonStateMap.set(END, true);
+                    } else {
+                        // TODO: Obtain bean's name via DefinitionAdapter
+                        Object targetBean = ((View<?>) targetNode.getContent()).getDefinition();
+                        if (targetBean instanceof State) {
+                            String targetName = ((State) targetBean).getName();
+                            jsonStateMap.set(TRANSITION, targetName);
+                        }
+                    }
+                }
+            }
+        }
+
+        return jsonStateMap;
+    }
+
+    private static JsPropertyMap<Object> newJsonObject() {
+        return Js.uncheckedCast(Global.JSON.parse("{}"));
+    }
+
+    public static String stringify(Object jsonObj) {
+        return Global.JSON.stringify(jsonObj);
+    }
+
+    // *************************** UNMARSHALLING ***************************************************
+
     public Graph unmarshall(final Metadata metadata,
                             final String raw) {
+        jsonStateIndexes.clear();
         return unmarshall(raw);
     }
 
@@ -134,14 +216,19 @@ public class SWClientDiagramMarshaller {
             Point2D nodeLocation = layoutBuilder.getNextLocation();
             Node stateNode = parseState(stateRaw, nodeLocation, endNode, builder);
             stateNodes.put(stateNode.getUUID(), stateNode);
+            jsonStateIndexes.add(stateNode.getUUID());
         }
 
         // Start Transition.
         if (null != startNode) {
-            final StartTransition tstart = new StartTransition();
-            Edge tstartEdge = createEdge("tstart", tstart, startNode, builder);
             Node target = stateNodes.get(start);
-            connect(tstartEdge, startNode, target, builder);
+            if (null != target) {
+                final StartTransition tstart = new StartTransition();
+                Edge tstartEdge = createEdge("tstart", tstart, startNode, builder);
+                connect(tstartEdge, startNode, target, builder);
+            } else {
+                logError("No start state found for [" + start + "]");
+            }
         }
 
         // State Transitions.
@@ -164,6 +251,10 @@ public class SWClientDiagramMarshaller {
         return graph;
     }
 
+    private static void logError(String s) {
+        DomGlobal.console.error(s);
+    }
+
     private Edge parseTransition(Object raw,
                                  Map<String, Node> stateNodes,
                                  CompositeCommand.Builder builder) {
@@ -173,13 +264,21 @@ public class SWClientDiagramMarshaller {
         if (null != transition && !transition.isEmpty()) {
             String tid = id + "_to_" + transition;
             Node source = stateNodes.get(id);
-            Node target = stateNodes.get(transition);
-            final Transition t = new Transition();
-            t.setId(tid);
-            t.setName(tid);
-            Edge edge = createEdge(tid, t, source, builder);
-            connect(edge, source, target, builder);
-            return edge;
+            if (null != source) {
+                Node target = stateNodes.get(transition);
+                if (null != target) {
+                    final Transition t = new Transition();
+                    t.setId(tid);
+                    t.setName(tid);
+                    Edge edge = createEdge(tid, t, source, builder);
+                    connect(edge, source, target, builder);
+                    return edge;
+                } else {
+                    logError("No state found for [" + transition + "]");
+                }
+            } else {
+                logError("No state found for [" + id + "]");
+            }
         }
         return null;
     }

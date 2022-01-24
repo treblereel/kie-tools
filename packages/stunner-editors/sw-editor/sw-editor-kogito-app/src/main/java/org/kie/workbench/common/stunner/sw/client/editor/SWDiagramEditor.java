@@ -21,6 +21,7 @@ import javax.inject.Inject;
 import com.ait.lienzo.client.core.types.JsCanvas;
 import com.ait.lienzo.client.widget.panel.LienzoBoundsPanel;
 import com.google.gwt.user.client.ui.IsWidget;
+import elemental2.dom.DomGlobal;
 import elemental2.promise.Promise;
 import org.kie.workbench.common.stunner.client.lienzo.canvas.LienzoCanvas;
 import org.kie.workbench.common.stunner.client.lienzo.canvas.LienzoPanel;
@@ -32,6 +33,7 @@ import org.kie.workbench.common.stunner.core.client.session.ClientSession;
 import org.kie.workbench.common.stunner.core.client.util.WindowJSType;
 import org.kie.workbench.common.stunner.core.diagram.Diagram;
 import org.kie.workbench.common.stunner.core.diagram.Metadata;
+import org.kie.workbench.common.stunner.core.graph.Graph;
 import org.kie.workbench.common.stunner.sw.client.js.JsSWDiagramEditor;
 import org.kie.workbench.common.stunner.sw.client.services.SWClientDiagramService;
 import org.uberfire.backend.vfs.Path;
@@ -82,6 +84,10 @@ public class SWDiagramEditor {
     }
 
     public Promise<String> getPreview() {
+        Graph graph = stunnerEditor.getCanvasHandler().getDiagram().getGraph();
+        String raw = diagramService.getMarshaller().marshall(graph);
+        DomGlobal.console.log(raw);
+        // SWTextEditorIntegration.fireTest();
         return promises.resolve("");
     }
 
