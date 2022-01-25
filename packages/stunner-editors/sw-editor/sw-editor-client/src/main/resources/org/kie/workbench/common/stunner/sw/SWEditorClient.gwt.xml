@@ -22,7 +22,7 @@
   <inherits name='com.google.gwt.user.User'/>
   <inherits name="org.uberfire.UberfireClientAPI"/>
   <inherits name="org.uberfire.ext.editor.commons.UberfireCommonsEditorClient"/>
-  <inherits name="org.kie.workbench.common.stunner.shapes.StunnerShapesClient"/>
+  <inherits name="org.kie.workbench.common.stunner.svg.StunnerSvgClient"/>
   <inherits name="org.kie.workbench.common.stunner.client.StunnerWidgets"/>
   <inherits name="org.kie.soup.commons.KIESoupCommons"/>
   <inherits name="org.uberfire.UberfireAPI"/>

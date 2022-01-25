@@ -1,0 +1,112 @@
+/*
+ * Copyright 2019 Red Hat, Inc. and/or its affiliates.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
+    ******************
+    States.
+    ******************
+ */
+.state_border {
+  stroke: black;
+  stroke-width: 1.5px;
+}
+
+.state_background {
+  fill: white;
+  stroke: none;
+}
+
+.state_group_inject {
+  opacity: 0;
+}
+
+.state_inject_icon {
+  fill: #393f44;
+}
+
+.state_group_switch {
+  opacity: 0;
+}
+
+.state_switch_icon {
+  fill: #393f44;
+}
+
+.state_group_operation {
+  opacity: 0;
+}
+
+.state_operation_icon {
+  fill: #393f44;
+}
+
+#injectState .state_group_inject {
+  opacity: 1;
+}
+
+#switchState .state_group_switch {
+  opacity: 1;
+}
+
+#operationState .state_group_operation {
+  opacity: 1;
+}
+
+/*
+    ******************
+    Start.
+    ******************
+ */
+.start_background {
+  opacity: 1;
+  fill: #e8fae6;
+}
+
+.start {
+  opacity: 1;
+  fill: #4aa241;
+}
+
+/*
+    ******************
+    End.
+    ******************
+ */
+.end_background {
+  opacity: 1;
+  fill: #fce7e7;
+}
+.end {
+  opacity: 1;
+  fill: #a30000;
+}
+
+/*
+    ******************
+    Font styling.
+    ******************
+ */
+#text {
+  opacity: 1;
+  font-family: Open Sans;
+  font-weight: normal;
+  font-size: 12px;
+  fill: #000000;
+  stroke: #393f44;
+  stroke-width: 0px;
+  text-align: left;
+  align: left;
+}

@@ -130,25 +130,13 @@
     </dependency>
     <dependency>
       <groupId>org.kie.kogito.stunner.editors</groupId>
-      <artifactId>kie-wb-common-stunner-shapes-api</artifactId>
+      <artifactId>kie-wb-common-stunner-svg-client</artifactId>
       <scope>provided</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>org.kie.kogito.stunner.editors</groupId>
-          <artifactId>uberfire-all</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.kie.kogito.stunner.editors</groupId>
-      <artifactId>kie-wb-common-stunner-shapes-client</artifactId>
+      <artifactId>kie-wb-common-stunner-svg-gen</artifactId>
       <scope>provided</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>org.kie.kogito.stunner.editors</groupId>
-          <artifactId>uberfire-all</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.kie.kogito.stunner.editors</groupId>
@@ -473,8 +461,7 @@
             <compileSourcesArtifact>org.kie.kogito.stunner.editors:kie-wb-common-stunner-core-common</compileSourcesArtifact>
             <compileSourcesArtifact>org.kie.kogito.stunner.editors:kie-wb-common-stunner-client-common</compileSourcesArtifact>
             <compileSourcesArtifact>org.kie.kogito.stunner.editors:kie-wb-common-stunner-lienzo</compileSourcesArtifact>
-            <compileSourcesArtifact>org.kie.kogito.stunner.editors:kie-wb-common-stunner-shapes-api</compileSourcesArtifact>
-            <compileSourcesArtifact>org.kie.kogito.stunner.editors:kie-wb-common-stunner-shapes-client</compileSourcesArtifact>
+            <compileSourcesArtifact>org.kie.kogito.stunner.editors:kie-wb-common-stunner-svg-client</compileSourcesArtifact>
             <compileSourcesArtifact>org.kie.kogito.stunner.editors:kie-wb-common-stunner-lienzo-extensions</compileSourcesArtifact>
             <compileSourcesArtifact>org.kie.kogito.stunner.editors:kie-wb-common-stunner-widgets</compileSourcesArtifact>
             <compileSourcesArtifact>org.kie.kogito.stunner.editors:sw-editor-api</compileSourcesArtifact>

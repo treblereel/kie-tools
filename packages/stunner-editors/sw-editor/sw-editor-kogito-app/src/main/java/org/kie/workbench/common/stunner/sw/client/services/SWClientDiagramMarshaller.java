@@ -436,7 +436,7 @@ public class SWClientDiagramMarshaller {
     private static class VerticalLayoutBuilder {
 
         private static double X = 200;
-        private static double YDELTA = 75;
+        private static double YDELTA = 100;
         private double y = 0;
 
         private Point2D getNextLocation() {
@@ -445,7 +445,23 @@ public class SWClientDiagramMarshaller {
         }
 
         private Point2D getEndLocation(int statesCount) {
-            return new Point2D(X, (statesCount + 3) * YDELTA);
+            return new Point2D(X, (statesCount + 2) * YDELTA);
+        }
+    }
+
+    private static class HorizontalLayoutBuilder {
+
+        private static double Y = 100;
+        private static double XDELTA = 100;
+        private double x = 0;
+
+        private Point2D getNextLocation() {
+            x = x + XDELTA;
+            return new Point2D(x, Y);
+        }
+
+        private Point2D getEndLocation(int statesCount) {
+            return new Point2D((statesCount + 3) * XDELTA, Y);
         }
     }
 }

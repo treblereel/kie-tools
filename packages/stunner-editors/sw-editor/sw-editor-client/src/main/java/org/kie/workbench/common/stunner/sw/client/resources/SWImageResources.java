@@ -24,24 +24,27 @@ public interface SWImageResources extends ClientBundleWithLookup {
 
     SWImageResources INSTANCE = GWT.create(SWImageResources.class);
 
-    @Source("images/start.png")
+    @Source("images/icons/start.png")
     ImageResource start();
 
-    @Source("images/end.png")
+    @Source("images/icons/end.png")
     ImageResource end();
 
-    @Source("images/state_inject.png")
+    @Source("images/icons/state-inject.png")
     ImageResource stateInject();
 
-    @Source("images/state_switch.png")
+    @Source("images/icons/state-switch.png")
     ImageResource stateSwitch();
 
-    @Source("images/transition.png")
+    @Source("images/icons/state-operation.png")
+    ImageResource stateOperation();
+
+    @Source("images/icons/transition.png")
     ImageResource transition();
 
-    @Source("images/transition_start.png")
+    @Source("images/icons/transition-start.png")
     ImageResource transitionStart();
 
-    @Source("images/transition_error.png")
+    @Source("images/icons/transition-error.png")
     ImageResource transitionError();
 }

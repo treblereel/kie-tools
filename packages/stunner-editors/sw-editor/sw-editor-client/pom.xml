@@ -72,12 +72,13 @@
 
     <dependency>
       <groupId>org.kie.kogito.stunner.editors</groupId>
-      <artifactId>kie-wb-common-stunner-shapes-api</artifactId>
+      <artifactId>kie-wb-common-stunner-svg-client</artifactId>
     </dependency>
 
     <dependency>
       <groupId>org.kie.kogito.stunner.editors</groupId>
-      <artifactId>kie-wb-common-stunner-shapes-client</artifactId>
+      <artifactId>kie-wb-common-stunner-svg-gen</artifactId>
+      <scope>provided</scope>
     </dependency>
 
     <!-- GWT and GWT Extensions -->
