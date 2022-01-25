@@ -21,9 +21,9 @@ import javax.inject.Singleton;
 
 import org.kie.workbench.common.stunner.bpmn.client.resources.BPMNImageResources;
 import org.kie.workbench.common.stunner.bpmn.definition.BPMNCategories;
-import org.kie.workbench.common.stunner.bpmn.definition.IntermediateTimerEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.DataObjectReference;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndNoneEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.IntermediateTimerEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Lane;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.NoneTask;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.ParallelGateway;

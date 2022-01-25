@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.workbench.common.stunner.bpmn.definition;
+package org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -23,6 +23,8 @@ import java.util.Set;
 import javax.validation.Valid;
 
 import org.kie.workbench.common.forms.adf.definitions.annotations.FormField;
+import org.kie.workbench.common.stunner.bpmn.definition.BPMNViewDefinition;
+import org.kie.workbench.common.stunner.bpmn.definition.FlowElement;
 import org.kie.workbench.common.stunner.bpmn.definition.property.background.BackgroundSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.dataio.DataIOModel;
 import org.kie.workbench.common.stunner.bpmn.definition.property.dataio.DataIOSet;

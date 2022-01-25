@@ -24,6 +24,7 @@ import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BaseGateway
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BaseTask;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.DataObjectReference;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndSignalEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Lane;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.ScriptTask;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.StartEvent;
@@ -130,12 +131,13 @@ public class IdGenerator {
         return null;
     }
 
-    public static String getTypeId(StartEvent event) {
+    public static String getTypeId(BPMNViewDefinition event) {
         if (event instanceof StartMessageEvent) {
             return "Message_" + messageCounter++;
         }
 
-        if (event instanceof StartSignalEvent) {
+        if (event instanceof StartSignalEvent
+                || event instanceof EndSignalEvent) {
             return "Signal_" + signalCounter++;
         }
 

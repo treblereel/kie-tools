@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package org.kie.workbench.common.stunner.bpmn.definition;
+package org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.kie.workbench.common.stunner.bpmn.definition.property.background.BackgroundSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.dataio.DataIOSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.dimensions.CircleDimensionSet;
-import org.kie.workbench.common.stunner.bpmn.definition.property.event.signal.CancellingSignalEventExecutionSet;
+import org.kie.workbench.common.stunner.bpmn.definition.property.event.signal.ScopedSignalEventExecutionSet;
+import org.kie.workbench.common.stunner.bpmn.definition.property.event.signal.SignalRef;
 import org.kie.workbench.common.stunner.bpmn.definition.property.font.FontSet;
-import org.kie.workbench.common.stunner.bpmn.definition.property.general.SLADueDate;
 import org.kie.workbench.common.stunner.bpmn.definition.property.variables.AdvancedData;
 
 import static org.junit.Assert.assertEquals;
@@ -31,16 +31,16 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
-public class IntermediateSignalEventCatchingTest {
+public class IntermediateSignalEventThrowingTest {
 
     private BackgroundSet backgroundSet;
     private FontSet fontSet;
     private CircleDimensionSet dimensionSet;
     private DataIOSet dataIOSet;
     private AdvancedData advancedData;
-    private CancellingSignalEventExecutionSet cancellingSignalEventExecutionSet;
+    private ScopedSignalEventExecutionSet scopedSignalEventExecutionSet;
 
-    private IntermediateSignalEventCatching tested;
+    private IntermediateSignalEventThrowing tested;
 
     @Before
     public void setUp() {
@@ -48,55 +48,48 @@ public class IntermediateSignalEventCatchingTest {
         fontSet = mock(FontSet.class);
         dimensionSet = mock(CircleDimensionSet.class);
         dataIOSet = mock(DataIOSet.class);
-        advancedData = mock(AdvancedData.class);
-        cancellingSignalEventExecutionSet = mock(CancellingSignalEventExecutionSet.class);
+        scopedSignalEventExecutionSet = mock(ScopedSignalEventExecutionSet.class);
 
-        tested = new IntermediateSignalEventCatching("",
+        tested = new IntermediateSignalEventThrowing("",
                                                      "",
                                                      backgroundSet,
                                                      fontSet,
                                                      dimensionSet,
                                                      dataIOSet,
                                                      advancedData,
-                                                     cancellingSignalEventExecutionSet);
-    }
-
-    @Test
-    public void initLabels() {
-        tested.initLabels();
-        assertTrue(tested.labels.contains("FromEventbasedGateway"));
+                                                     scopedSignalEventExecutionSet);
     }
 
     @Test
     public void getExecutionSet() {
-        assertEquals(cancellingSignalEventExecutionSet, tested.getExecutionSet());
+        assertEquals(scopedSignalEventExecutionSet, tested.getExecutionSet());
     }
 
     @Test
     public void setExecutionSet() {
-        CancellingSignalEventExecutionSet executionSet = mock(CancellingSignalEventExecutionSet.class);
+        ScopedSignalEventExecutionSet executionSet = mock(ScopedSignalEventExecutionSet.class);
         tested.setExecutionSet(executionSet);
         assertEquals(executionSet, tested.executionSet);
     }
 
     @Test
     public void testHashCode() {
-        IntermediateSignalEventCatching compare =
-                new IntermediateSignalEventCatching("",
+        IntermediateSignalEventThrowing compare =
+                new IntermediateSignalEventThrowing("",
                                                     "",
                                                     backgroundSet,
                                                     fontSet,
                                                     dimensionSet,
                                                     dataIOSet,
                                                     advancedData,
-                                                    cancellingSignalEventExecutionSet);
+                                                    scopedSignalEventExecutionSet);
         assertEquals(compare.hashCode(), tested.hashCode());
     }
 
     @Test
     public void testEquals() {
-        IntermediateSignalEventThrowing compare1 = new IntermediateSignalEventThrowing();
-        IntermediateSignalEventCatching compare2 = new IntermediateSignalEventCatching("",
+        IntermediateSignalEventCatching compare1 = new IntermediateSignalEventCatching();
+        IntermediateSignalEventThrowing compare2 = new IntermediateSignalEventThrowing("",
                                                                                        "",
                                                                                        backgroundSet,
                                                                                        fontSet,
@@ -104,10 +97,10 @@ public class IntermediateSignalEventCatchingTest {
                                                                                        dataIOSet,
                                                                                        advancedData,
                                                                                        null);
-        CancellingSignalEventExecutionSet executionSet = new CancellingSignalEventExecutionSet();
-        executionSet.setSlaDueDate(new SLADueDate("12/25/1983"));
-        IntermediateSignalEventCatching compare3 =
-                new IntermediateSignalEventCatching("",
+        ScopedSignalEventExecutionSet executionSet = new ScopedSignalEventExecutionSet();
+        executionSet.setSignalRef(new SignalRef("SignalRef"));
+        IntermediateSignalEventThrowing compare3 =
+                new IntermediateSignalEventThrowing("",
                                                     "",
                                                     backgroundSet,
                                                     fontSet,
@@ -115,15 +108,15 @@ public class IntermediateSignalEventCatchingTest {
                                                     dataIOSet,
                                                     advancedData,
                                                     executionSet);
-        IntermediateSignalEventCatching compare4 =
-                new IntermediateSignalEventCatching("",
+        IntermediateSignalEventThrowing compare4 =
+                new IntermediateSignalEventThrowing("",
                                                     "",
                                                     backgroundSet,
                                                     fontSet,
                                                     dimensionSet,
                                                     dataIOSet,
                                                     advancedData,
-                                                    cancellingSignalEventExecutionSet);
+                                                    scopedSignalEventExecutionSet);
 
         assertFalse(tested.equals(compare1));
         assertFalse(tested.equals(compare2));

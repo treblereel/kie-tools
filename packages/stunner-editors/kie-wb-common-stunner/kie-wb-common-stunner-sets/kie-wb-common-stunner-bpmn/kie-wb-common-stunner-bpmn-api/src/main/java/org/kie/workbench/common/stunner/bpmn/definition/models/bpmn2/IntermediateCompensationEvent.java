@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package org.kie.workbench.common.stunner.bpmn.definition;
+package org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2;
 
 import java.util.Objects;
 
 import javax.validation.Valid;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.jboss.errai.common.client.api.annotations.MapsTo;
 import org.jboss.errai.common.client.api.annotations.Portable;
@@ -30,7 +31,7 @@ import org.kie.workbench.common.forms.adf.definitions.settings.FieldPolicy;
 import org.kie.workbench.common.stunner.bpmn.definition.property.background.BackgroundSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.dataio.DataIOSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.dimensions.CircleDimensionSet;
-import org.kie.workbench.common.stunner.bpmn.definition.property.event.conditional.CancellingConditionalEventExecutionSet;
+import org.kie.workbench.common.stunner.bpmn.definition.property.event.BaseCancellingEventExecutionSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.font.FontSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.variables.AdvancedData;
 import org.kie.workbench.common.stunner.core.definition.annotation.Definition;
@@ -50,14 +51,15 @@ import static org.kie.workbench.common.forms.adf.engine.shared.formGeneration.pr
         policy = FieldPolicy.ONLY_MARKED,
         defaultFieldSettings = {@FieldParam(name = FIELD_CONTAINER_PARAM, value = COLLAPSIBLE_CONTAINER)}
 )
-public class IntermediateConditionalEvent extends BaseCatchingIntermediateEvent {
+@XmlRootElement(name = "intermediateCatchEvent", namespace = "http://www.omg.org/spec/BPMN/20100524/MODEL")
+public class IntermediateCompensationEvent extends BaseCatchingIntermediateEvent {
 
     @Property
     @FormField(afterElement = "documentation")
     @Valid
-    protected CancellingConditionalEventExecutionSet executionSet;
+    protected BaseCancellingEventExecutionSet executionSet;
 
-    public IntermediateConditionalEvent() {
+    public IntermediateCompensationEvent() {
         this("",
              "",
              new BackgroundSet(),
@@ -65,17 +67,17 @@ public class IntermediateConditionalEvent extends BaseCatchingIntermediateEvent 
              new CircleDimensionSet(),
              new DataIOSet(),
              new AdvancedData(),
-             new CancellingConditionalEventExecutionSet());
+             new BaseCancellingEventExecutionSet());
     }
 
-    public IntermediateConditionalEvent(final @MapsTo("name") String name,
-                                        final @MapsTo("documentation") String documentation,
-                                        final @MapsTo("backgroundSet") BackgroundSet backgroundSet,
-                                        final @MapsTo("fontSet") FontSet fontSet,
-                                        final @MapsTo("dimensionsSet") CircleDimensionSet dimensionsSet,
-                                        final @MapsTo("dataIOSet") DataIOSet dataIOSet,
-                                        final @MapsTo("advancedData") AdvancedData advancedData,
-                                        final @MapsTo("executionSet") CancellingConditionalEventExecutionSet executionSet) {
+    public IntermediateCompensationEvent(final @MapsTo("name") String name,
+                                         final @MapsTo("documentation") String documentation,
+                                         final @MapsTo("backgroundSet") BackgroundSet backgroundSet,
+                                         final @MapsTo("fontSet") FontSet fontSet,
+                                         final @MapsTo("dimensionsSet") CircleDimensionSet dimensionsSet,
+                                         final @MapsTo("dataIOSet") DataIOSet dataIOSet,
+                                         final @MapsTo("advancedData") AdvancedData advancedData,
+                                         final @MapsTo("executionSet") BaseCancellingEventExecutionSet executionSet) {
         super(name,
               documentation,
               backgroundSet,
@@ -89,30 +91,33 @@ public class IntermediateConditionalEvent extends BaseCatchingIntermediateEvent 
     @Override
     protected void initLabels() {
         super.initLabels();
-        labels.add("FromEventbasedGateway");
+        labels.add("IntermediateCompensationEvent");
+        labels.remove("sequence_start");
     }
 
-    public CancellingConditionalEventExecutionSet getExecutionSet() {
+    public BaseCancellingEventExecutionSet getExecutionSet() {
         return executionSet;
     }
 
-    public void setExecutionSet(CancellingConditionalEventExecutionSet executionSet) {
+    public void setExecutionSet(BaseCancellingEventExecutionSet executionSet) {
         this.executionSet = executionSet;
     }
 
     @Override
     public int hashCode() {
         return HashUtil.combineHashCodes(super.hashCode(),
-                                         executionSet.hashCode());
+                                         Objects.hashCode(executionSet));
     }
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof IntermediateConditionalEvent) {
-            IntermediateConditionalEvent other = (IntermediateConditionalEvent) o;
+        if (this == o) {
+            return true;
+        }
+        if (o instanceof IntermediateCompensationEvent) {
+            IntermediateCompensationEvent other = (IntermediateCompensationEvent) o;
             return super.equals(other) &&
-                    Objects.equals(executionSet,
-                                   other.executionSet);
+                    Objects.equals(executionSet, other.executionSet);
         }
         return false;
     }

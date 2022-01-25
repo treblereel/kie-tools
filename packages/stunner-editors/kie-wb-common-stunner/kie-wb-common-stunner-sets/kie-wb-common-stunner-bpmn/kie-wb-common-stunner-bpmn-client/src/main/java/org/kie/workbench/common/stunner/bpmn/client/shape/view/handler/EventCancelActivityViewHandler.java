@@ -16,12 +16,12 @@
 
 package org.kie.workbench.common.stunner.bpmn.client.shape.view.handler;
 
-import org.kie.workbench.common.stunner.bpmn.definition.BaseCatchingIntermediateEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.IntermediateConditionalEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.IntermediateEscalationEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.IntermediateMessageEventCatching;
-import org.kie.workbench.common.stunner.bpmn.definition.IntermediateSignalEventCatching;
-import org.kie.workbench.common.stunner.bpmn.definition.IntermediateTimerEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BaseCatchingIntermediateEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.IntermediateConditionalEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.IntermediateEscalationEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.IntermediateMessageEventCatching;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.IntermediateSignalEventCatching;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.IntermediateTimerEvent;
 import org.kie.workbench.common.stunner.core.client.shape.view.ShapeViewHandler;
 import org.kie.workbench.common.stunner.svg.client.shape.view.SVGShapeView;
 import org.kie.workbench.common.stunner.svg.client.shape.view.SVGViewUtils;

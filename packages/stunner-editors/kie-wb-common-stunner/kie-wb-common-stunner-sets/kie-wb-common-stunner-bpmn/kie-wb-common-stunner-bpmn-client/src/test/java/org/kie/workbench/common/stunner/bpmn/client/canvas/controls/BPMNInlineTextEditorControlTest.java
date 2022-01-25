@@ -17,7 +17,7 @@ package org.kie.workbench.common.stunner.bpmn.client.canvas.controls;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.kie.workbench.common.stunner.bpmn.definition.BaseCatchingIntermediateEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BaseCatchingIntermediateEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.DataObjectReference;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EmbeddedSubprocess;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndCompensationEvent;

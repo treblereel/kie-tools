@@ -17,13 +17,13 @@
 package org.kie.workbench.common.stunner.bpmn.profile;
 
 import org.junit.Test;
-import org.kie.workbench.common.stunner.bpmn.definition.IntermediateCompensationEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.IntermediateTimerEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BusinessRuleTask;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EmbeddedSubprocess;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndNoneEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndTerminateEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.ExclusiveGateway;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.IntermediateCompensationEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.IntermediateTimerEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Lane;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.NoneTask;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.ParallelGateway;

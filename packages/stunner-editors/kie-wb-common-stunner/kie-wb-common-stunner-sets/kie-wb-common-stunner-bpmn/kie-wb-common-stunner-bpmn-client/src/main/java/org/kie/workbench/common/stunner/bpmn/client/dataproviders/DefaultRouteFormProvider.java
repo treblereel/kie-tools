@@ -25,12 +25,12 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.kie.workbench.common.stunner.bpmn.definition.BaseCatchingIntermediateEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.BaseThrowingIntermediateEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.FlowElement;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BaseCatchingIntermediateEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BaseGateway;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BaseSubprocess;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BaseTask;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BaseThrowingIntermediateEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.StartEvent;
 import org.kie.workbench.common.stunner.core.api.DefinitionManager;

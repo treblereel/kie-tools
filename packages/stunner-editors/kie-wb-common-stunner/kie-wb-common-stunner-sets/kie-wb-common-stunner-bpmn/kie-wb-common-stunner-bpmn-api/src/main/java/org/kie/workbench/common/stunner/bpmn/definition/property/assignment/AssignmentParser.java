@@ -20,10 +20,12 @@ import java.util.List;
 
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.DataInput;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.DataInputAssociation;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.DataInputRefs;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.DataOutput;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.DataOutputAssociation;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.DataOutputRefs;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.From;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.InputSet;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.ItemDefinition;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.OutputSet;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.SourceRef;
@@ -128,7 +130,7 @@ public class AssignmentParser {
         return itemDefinitions;
     }
 
-    public static List<DataInput> parseDataInputs(String assignments, String nodeId) {
+    public static List<DataInput> parseDataInputs(String nodeId, String assignments) {
         List<DataInput> dataInput = new ArrayList<>();
         String inputVariables = getInputAssignmentVariables(assignments);
         String[] inVars = inputVariables.split(",");
@@ -142,7 +144,7 @@ public class AssignmentParser {
         return dataInput;
     }
 
-    public static List<DataOutput> parseDataOutputs(String assignments, String nodeId) {
+    public static List<DataOutput> parseDataOutputs(String nodeId, String assignments) {
         List<DataOutput> dataOutput = new ArrayList<>();
         String outputVariables = getOutputAssignmentVariables(assignments);
         String[] outVars = outputVariables.split(",");
@@ -156,15 +158,26 @@ public class AssignmentParser {
         return dataOutput;
     }
 
-    public static List<OutputSet> getOutputSet(String dataIO, String nodeId) {
+    public static List<OutputSet> getOutputSet(String nodeId, String dataIO) {
         List<OutputSet> outputSets = new ArrayList<>();
-        List<DataOutput> outputs = AssignmentParser.parseDataOutputs(dataIO, nodeId);
+        List<DataOutput> outputs = AssignmentParser.parseDataOutputs(nodeId, dataIO);
         if (!outputs.isEmpty()) {
             OutputSet os = new OutputSet();
             os.getDataOutputRefs().add(new DataOutputRefs(outputs.get(0).getId()));
             outputSets.add(os);
         }
         return outputSets;
+    }
+
+    public static List<InputSet> getInputSet(String nodeId, String dataIO) {
+        List<InputSet> inputSets = new ArrayList<>();
+        List<DataInput> dataInputs = AssignmentParser.parseDataInputs(nodeId, dataIO);
+        for (DataInput dataInput : dataInputs) {
+            InputSet is = new InputSet();
+            is.getDataInputRefs().add(new DataInputRefs(dataInput.getId()));
+            inputSets.add(is);
+        }
+        return inputSets;
     }
 
     private static DataInput createDataInput(String name, String type, String nodeId) {

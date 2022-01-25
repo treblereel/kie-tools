@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2018 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,9 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kie.workbench.common.stunner.bpmn.definition;
+
+package org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2;
+
+import java.util.Objects;
 
 import javax.validation.Valid;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.jboss.errai.common.client.api.annotations.MapsTo;
 import org.jboss.errai.common.client.api.annotations.Portable;
@@ -27,7 +31,7 @@ import org.kie.workbench.common.forms.adf.definitions.settings.FieldPolicy;
 import org.kie.workbench.common.stunner.bpmn.definition.property.background.BackgroundSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.dataio.DataIOSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.dimensions.CircleDimensionSet;
-import org.kie.workbench.common.stunner.bpmn.definition.property.event.link.LinkEventExecutionSet;
+import org.kie.workbench.common.stunner.bpmn.definition.property.event.conditional.CancellingConditionalEventExecutionSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.font.FontSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.variables.AdvancedData;
 import org.kie.workbench.common.stunner.core.definition.annotation.Definition;
@@ -47,14 +51,15 @@ import static org.kie.workbench.common.forms.adf.engine.shared.formGeneration.pr
         policy = FieldPolicy.ONLY_MARKED,
         defaultFieldSettings = {@FieldParam(name = FIELD_CONTAINER_PARAM, value = COLLAPSIBLE_CONTAINER)}
 )
-public class IntermediateLinkEventCatching extends BaseCatchingIntermediateEvent {
+@XmlRootElement(name = "intermediateCatchEvent", namespace = "http://www.omg.org/spec/BPMN/20100524/MODEL")
+public class IntermediateConditionalEvent extends BaseCatchingIntermediateEvent {
 
     @Property
     @FormField(afterElement = "documentation")
     @Valid
-    protected LinkEventExecutionSet executionSet;
+    protected CancellingConditionalEventExecutionSet executionSet;
 
-    public IntermediateLinkEventCatching() {
+    public IntermediateConditionalEvent() {
         this("",
              "",
              new BackgroundSet(),
@@ -62,17 +67,17 @@ public class IntermediateLinkEventCatching extends BaseCatchingIntermediateEvent
              new CircleDimensionSet(),
              new DataIOSet(),
              new AdvancedData(),
-             new LinkEventExecutionSet());
+             new CancellingConditionalEventExecutionSet());
     }
 
-    public IntermediateLinkEventCatching(final @MapsTo("name") String name,
-                                         final @MapsTo("documentation") String documentation,
-                                         final @MapsTo("backgroundSet") BackgroundSet backgroundSet,
-                                         final @MapsTo("fontSet") FontSet fontSet,
-                                         final @MapsTo("dimensionsSet") CircleDimensionSet dimensionsSet,
-                                         final @MapsTo("dataIOSet") DataIOSet dataIOSet,
-                                         final @MapsTo("advancedData") AdvancedData advancedData,
-                                         final @MapsTo("executionSet") LinkEventExecutionSet executionSet) {
+    public IntermediateConditionalEvent(final @MapsTo("name") String name,
+                                        final @MapsTo("documentation") String documentation,
+                                        final @MapsTo("backgroundSet") BackgroundSet backgroundSet,
+                                        final @MapsTo("fontSet") FontSet fontSet,
+                                        final @MapsTo("dimensionsSet") CircleDimensionSet dimensionsSet,
+                                        final @MapsTo("dataIOSet") DataIOSet dataIOSet,
+                                        final @MapsTo("advancedData") AdvancedData advancedData,
+                                        final @MapsTo("executionSet") CancellingConditionalEventExecutionSet executionSet) {
         super(name,
               documentation,
               backgroundSet,
@@ -86,19 +91,14 @@ public class IntermediateLinkEventCatching extends BaseCatchingIntermediateEvent
     @Override
     protected void initLabels() {
         super.initLabels();
-        // Link Events can't be boundary events
-        labels.remove("IntermediateEventOnSubprocessBoundary");
-        labels.remove("IntermediateEventOnActivityBoundary");
-        labels.remove("EventOnChoreographyActivityBoundary");
-        // Link Catch Event can't have incoming connection
-        labels.add("Startevents_all");
+        labels.add("FromEventbasedGateway");
     }
 
-    public LinkEventExecutionSet getExecutionSet() {
+    public CancellingConditionalEventExecutionSet getExecutionSet() {
         return executionSet;
     }
 
-    public void setExecutionSet(LinkEventExecutionSet executionSet) {
+    public void setExecutionSet(CancellingConditionalEventExecutionSet executionSet) {
         this.executionSet = executionSet;
     }
 
@@ -110,10 +110,11 @@ public class IntermediateLinkEventCatching extends BaseCatchingIntermediateEvent
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof IntermediateLinkEventCatching) {
-            IntermediateLinkEventCatching other = (IntermediateLinkEventCatching) o;
-            return super.equals(other)
-                    && executionSet.equals(other.executionSet);
+        if (o instanceof IntermediateConditionalEvent) {
+            IntermediateConditionalEvent other = (IntermediateConditionalEvent) o;
+            return super.equals(other) &&
+                    Objects.equals(executionSet,
+                                   other.executionSet);
         }
         return false;
     }

@@ -16,7 +16,6 @@
 
 package org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -130,7 +129,7 @@ public class StartSignalEvent extends StartEvent {
     }
 
     public List<DataOutput> getDataOutputs() {
-        return AssignmentParser.parseDataOutputs(dataIOSet.getAssignmentsinfo().getValue(), getId());
+        return AssignmentParser.parseDataOutputs(getId(), dataIOSet.getAssignmentsinfo().getValue());
     }
 
     public void setDataOutputs(List<DataOutput> dataOutputs) {
@@ -146,7 +145,7 @@ public class StartSignalEvent extends StartEvent {
     }
 
     public List<OutputSet> getOutputSet() {
-        return AssignmentParser.getOutputSet(dataIOSet.getAssignmentsinfo().getValue(), getId());
+        return AssignmentParser.getOutputSet(getId(), dataIOSet.getAssignmentsinfo().getValue());
     }
 
     public void setOutputSet(List<OutputSet> outputSet) {

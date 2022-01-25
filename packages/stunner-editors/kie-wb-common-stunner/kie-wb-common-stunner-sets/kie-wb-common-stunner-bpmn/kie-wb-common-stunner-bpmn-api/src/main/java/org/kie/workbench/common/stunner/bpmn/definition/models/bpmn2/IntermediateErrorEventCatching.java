@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package org.kie.workbench.common.stunner.bpmn.definition;
-
-import java.util.Objects;
+package org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2;
 
 import javax.validation.Valid;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.jboss.errai.common.client.api.annotations.MapsTo;
 import org.jboss.errai.common.client.api.annotations.Portable;
@@ -30,7 +29,7 @@ import org.kie.workbench.common.forms.adf.definitions.settings.FieldPolicy;
 import org.kie.workbench.common.stunner.bpmn.definition.property.background.BackgroundSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.dataio.DataIOSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.dimensions.CircleDimensionSet;
-import org.kie.workbench.common.stunner.bpmn.definition.property.event.message.MessageEventExecutionSet;
+import org.kie.workbench.common.stunner.bpmn.definition.property.event.error.CancellingErrorEventExecutionSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.font.FontSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.variables.AdvancedData;
 import org.kie.workbench.common.stunner.core.definition.annotation.Definition;
@@ -44,20 +43,21 @@ import static org.kie.workbench.common.forms.adf.engine.shared.formGeneration.pr
 @Portable
 @Bindable
 @Definition
-@Morph(base = BaseThrowingIntermediateEvent.class)
+@Morph(base = BaseCatchingIntermediateEvent.class)
 @FormDefinition(
         startElement = "name",
         policy = FieldPolicy.ONLY_MARKED,
         defaultFieldSettings = {@FieldParam(name = FIELD_CONTAINER_PARAM, value = COLLAPSIBLE_CONTAINER)}
 )
-public class IntermediateMessageEventThrowing extends BaseThrowingIntermediateEvent {
+@XmlRootElement(name = "intermediateCatchEvent", namespace = "http://www.omg.org/spec/BPMN/20100524/MODEL")
+public class IntermediateErrorEventCatching extends BaseCatchingIntermediateEvent {
 
     @Property
     @FormField(afterElement = "documentation")
     @Valid
-    private MessageEventExecutionSet executionSet;
+    protected CancellingErrorEventExecutionSet executionSet;
 
-    public IntermediateMessageEventThrowing() {
+    public IntermediateErrorEventCatching() {
         this("",
              "",
              new BackgroundSet(),
@@ -65,17 +65,17 @@ public class IntermediateMessageEventThrowing extends BaseThrowingIntermediateEv
              new CircleDimensionSet(),
              new DataIOSet(),
              new AdvancedData(),
-             new MessageEventExecutionSet());
+             new CancellingErrorEventExecutionSet());
     }
 
-    public IntermediateMessageEventThrowing(final @MapsTo("name") String name,
-                                            final @MapsTo("documentation") String documentation,
-                                            final @MapsTo("backgroundSet") BackgroundSet backgroundSet,
-                                            final @MapsTo("fontSet") FontSet fontSet,
-                                            final @MapsTo("dimensionsSet") CircleDimensionSet dimensionsSet,
-                                            final @MapsTo("dataIOSet") DataIOSet dataIOSet,
-                                            final @MapsTo("advancedData") AdvancedData advancedData,
-                                            final @MapsTo("executionSet") MessageEventExecutionSet executionSet) {
+    public IntermediateErrorEventCatching(final @MapsTo("name") String name,
+                                          final @MapsTo("documentation") String documentation,
+                                          final @MapsTo("backgroundSet") BackgroundSet backgroundSet,
+                                          final @MapsTo("fontSet") FontSet fontSet,
+                                          final @MapsTo("dimensionsSet") CircleDimensionSet dimensionsSet,
+                                          final @MapsTo("dataIOSet") DataIOSet dataIOSet,
+                                          final @MapsTo("advancedData") AdvancedData advancedData,
+                                          final @MapsTo("executionSet") CancellingErrorEventExecutionSet executionSet) {
         super(name,
               documentation,
               backgroundSet,
@@ -89,34 +89,29 @@ public class IntermediateMessageEventThrowing extends BaseThrowingIntermediateEv
     @Override
     protected void initLabels() {
         super.initLabels();
-        labels.add("messageflow_start");
+        labels.remove("sequence_end");
     }
 
-    public MessageEventExecutionSet getExecutionSet() {
+    public CancellingErrorEventExecutionSet getExecutionSet() {
         return executionSet;
     }
 
-    public void setExecutionSet(MessageEventExecutionSet executionSet) {
+    public void setExecutionSet(CancellingErrorEventExecutionSet executionSet) {
         this.executionSet = executionSet;
     }
 
     @Override
     public int hashCode() {
         return HashUtil.combineHashCodes(super.hashCode(),
-                                         Objects.hashCode(executionSet),
-                                         Objects.hashCode(labels));
+                                         executionSet.hashCode());
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o instanceof IntermediateMessageEventThrowing) {
-            IntermediateMessageEventThrowing other = (IntermediateMessageEventThrowing) o;
+        if (o instanceof IntermediateErrorEventCatching) {
+            IntermediateErrorEventCatching other = (IntermediateErrorEventCatching) o;
             return super.equals(other) &&
-                    Objects.equals(executionSet, other.executionSet) &&
-                    Objects.equals(labels, other.labels);
+                    executionSet.equals(other.executionSet);
         }
         return false;
     }

@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 
-package org.kie.workbench.common.stunner.bpmn.definition;
+package org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2;
+
+import java.util.Objects;
 
 import javax.validation.Valid;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.jboss.errai.common.client.api.annotations.MapsTo;
 import org.jboss.errai.common.client.api.annotations.Portable;
@@ -28,7 +31,7 @@ import org.kie.workbench.common.forms.adf.definitions.settings.FieldPolicy;
 import org.kie.workbench.common.stunner.bpmn.definition.property.background.BackgroundSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.dataio.DataIOSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.dimensions.CircleDimensionSet;
-import org.kie.workbench.common.stunner.bpmn.definition.property.event.timer.CancellingTimerEventExecutionSet;
+import org.kie.workbench.common.stunner.bpmn.definition.property.event.message.MessageEventExecutionSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.font.FontSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.variables.AdvancedData;
 import org.kie.workbench.common.stunner.core.definition.annotation.Definition;
@@ -42,20 +45,21 @@ import static org.kie.workbench.common.forms.adf.engine.shared.formGeneration.pr
 @Portable
 @Bindable
 @Definition
-@Morph(base = BaseCatchingIntermediateEvent.class)
+@Morph(base = BaseThrowingIntermediateEvent.class)
 @FormDefinition(
         startElement = "name",
         policy = FieldPolicy.ONLY_MARKED,
         defaultFieldSettings = {@FieldParam(name = FIELD_CONTAINER_PARAM, value = COLLAPSIBLE_CONTAINER)}
 )
-public class IntermediateTimerEvent extends BaseCatchingIntermediateEvent {
+@XmlRootElement(name = "intermediateThrowEvent", namespace = "http://www.omg.org/spec/BPMN/20100524/MODEL")
+public class IntermediateMessageEventThrowing extends BaseThrowingIntermediateEvent {
 
     @Property
     @FormField(afterElement = "documentation")
     @Valid
-    protected CancellingTimerEventExecutionSet executionSet;
+    private MessageEventExecutionSet executionSet;
 
-    public IntermediateTimerEvent() {
+    public IntermediateMessageEventThrowing() {
         this("",
              "",
              new BackgroundSet(),
@@ -63,17 +67,17 @@ public class IntermediateTimerEvent extends BaseCatchingIntermediateEvent {
              new CircleDimensionSet(),
              new DataIOSet(),
              new AdvancedData(),
-             new CancellingTimerEventExecutionSet());
+             new MessageEventExecutionSet());
     }
 
-    public IntermediateTimerEvent(final @MapsTo("name") String name,
-                                  final @MapsTo("documentation") String documentation,
-                                  final @MapsTo("backgroundSet") BackgroundSet backgroundSet,
-                                  final @MapsTo("fontSet") FontSet fontSet,
-                                  final @MapsTo("dimensionsSet") CircleDimensionSet dimensionsSet,
-                                  final @MapsTo("dataIOSet") DataIOSet dataIOSet,
-                                  final @MapsTo("advancedData") AdvancedData advancedData,
-                                  final @MapsTo("executionSet") CancellingTimerEventExecutionSet executionSet) {
+    public IntermediateMessageEventThrowing(final @MapsTo("name") String name,
+                                            final @MapsTo("documentation") String documentation,
+                                            final @MapsTo("backgroundSet") BackgroundSet backgroundSet,
+                                            final @MapsTo("fontSet") FontSet fontSet,
+                                            final @MapsTo("dimensionsSet") CircleDimensionSet dimensionsSet,
+                                            final @MapsTo("dataIOSet") DataIOSet dataIOSet,
+                                            final @MapsTo("advancedData") AdvancedData advancedData,
+                                            final @MapsTo("executionSet") MessageEventExecutionSet executionSet) {
         super(name,
               documentation,
               backgroundSet,
@@ -87,29 +91,34 @@ public class IntermediateTimerEvent extends BaseCatchingIntermediateEvent {
     @Override
     protected void initLabels() {
         super.initLabels();
-        labels.add("FromEventbasedGateway");
+        labels.add("messageflow_start");
     }
 
-    public CancellingTimerEventExecutionSet getExecutionSet() {
+    public MessageEventExecutionSet getExecutionSet() {
         return executionSet;
     }
 
-    public void setExecutionSet(CancellingTimerEventExecutionSet executionSet) {
+    public void setExecutionSet(MessageEventExecutionSet executionSet) {
         this.executionSet = executionSet;
     }
 
     @Override
     public int hashCode() {
         return HashUtil.combineHashCodes(super.hashCode(),
-                                         executionSet.hashCode());
+                                         Objects.hashCode(executionSet),
+                                         Objects.hashCode(labels));
     }
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof IntermediateTimerEvent) {
-            IntermediateTimerEvent other = (IntermediateTimerEvent) o;
+        if (this == o) {
+            return true;
+        }
+        if (o instanceof IntermediateMessageEventThrowing) {
+            IntermediateMessageEventThrowing other = (IntermediateMessageEventThrowing) o;
             return super.equals(other) &&
-                    executionSet.equals(other.executionSet);
+                    Objects.equals(executionSet, other.executionSet) &&
+                    Objects.equals(labels, other.labels);
         }
         return false;
     }

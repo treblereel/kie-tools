@@ -35,6 +35,7 @@ import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.DataObjectR
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Definitions;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Definitions_XMLMapperImpl;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndSignalEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EventGateway;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.ExclusiveGateway;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.ExtensionElements;
@@ -179,6 +180,17 @@ public class BPMNClientMarshalling {
                 // Sequence Flows
                 List<Incoming> incoming = checkIncomingFlows(node.getInEdges(), endEvent.getId(), sequenceFlows, plane);
                 endEvent.setIncoming(incoming);
+
+                // Type ID
+                if (endEvent instanceof EndSignalEvent) {
+                    EndSignalEvent endSignal = (EndSignalEvent) endEvent;
+                    endSignal.setSignalId(IdGenerator.getTypeId(endEvent));
+                    Signal signal = endSignal.getSignal();
+                    if (signal != null) {
+                        definitions.getSignals().add(signal);
+                    }
+                    definitions.getItemDefinitions().addAll(endSignal.getItemDefinition());
+                }
 
                 // Adding simulation properties
                 simulationElements.add(endEvent.getElementParameters());

@@ -33,13 +33,6 @@ import java.util.stream.StreamSupport;
 
 import org.kie.workbench.common.stunner.bpmn.definition.BPMNDiagram;
 import org.kie.workbench.common.stunner.bpmn.definition.FlowElement;
-import org.kie.workbench.common.stunner.bpmn.definition.IntermediateErrorEventCatching;
-import org.kie.workbench.common.stunner.bpmn.definition.IntermediateEscalationEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.IntermediateEscalationEventThrowing;
-import org.kie.workbench.common.stunner.bpmn.definition.IntermediateMessageEventCatching;
-import org.kie.workbench.common.stunner.bpmn.definition.IntermediateMessageEventThrowing;
-import org.kie.workbench.common.stunner.bpmn.definition.IntermediateSignalEventCatching;
-import org.kie.workbench.common.stunner.bpmn.definition.IntermediateSignalEventThrowing;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BaseAdHocSubprocess;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BaseReusableSubprocess;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BaseUserTask;
@@ -50,6 +43,13 @@ import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndEscalati
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndMessageEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndSignalEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EventSubprocess;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.IntermediateErrorEventCatching;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.IntermediateEscalationEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.IntermediateEscalationEventThrowing;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.IntermediateMessageEventCatching;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.IntermediateMessageEventThrowing;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.IntermediateSignalEventCatching;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.IntermediateSignalEventThrowing;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.MultipleInstanceSubprocess;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.StartErrorEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.StartEscalationEvent;

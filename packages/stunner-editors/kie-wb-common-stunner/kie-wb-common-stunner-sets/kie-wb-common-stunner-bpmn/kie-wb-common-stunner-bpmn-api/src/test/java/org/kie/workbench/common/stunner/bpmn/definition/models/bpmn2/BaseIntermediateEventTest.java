@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package org.kie.workbench.common.stunner.bpmn.definition;
+package org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.kie.workbench.common.stunner.bpmn.definition.property.background.BackgroundSet;
@@ -23,7 +24,6 @@ import org.kie.workbench.common.stunner.bpmn.definition.property.dataio.DataIOSe
 import org.kie.workbench.common.stunner.bpmn.definition.property.dimensions.CircleDimensionSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.font.FontSet;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -59,58 +59,58 @@ public class BaseIntermediateEventTest {
     @Test
     public void getBackgroundSet() {
         tested.backgroundSet = backgroundSet;
-        assertEquals(backgroundSet, tested.getBackgroundSet());
+        Assert.assertEquals(backgroundSet, tested.getBackgroundSet());
     }
 
     @Test
     public void setBackgroundSet() {
         tested.backgroundSet = null;
         tested.setBackgroundSet(backgroundSet);
-        assertEquals(backgroundSet, tested.backgroundSet);
+        Assert.assertEquals(backgroundSet, tested.backgroundSet);
     }
 
     @Test
     public void getFontSet() {
         tested.fontSet = fontSet;
-        assertEquals(fontSet, tested.getFontSet());
+        Assert.assertEquals(fontSet, tested.getFontSet());
     }
 
     @Test
     public void setFontSet() {
         tested.fontSet = null;
         tested.setFontSet(fontSet);
-        assertEquals(fontSet, tested.fontSet);
+        Assert.assertEquals(fontSet, tested.fontSet);
     }
 
     @Test
     public void getDimensionsSet() {
         tested.dimensionsSet = dimensionsSet;
-        assertEquals(dimensionsSet, tested.getDimensionsSet());
+        Assert.assertEquals(dimensionsSet, tested.getDimensionsSet());
     }
 
     @Test
     public void setDimensionsSet() {
         tested.dimensionsSet = null;
         tested.setDimensionsSet(dimensionsSet);
-        assertEquals(dimensionsSet, tested.dimensionsSet);
+        Assert.assertEquals(dimensionsSet, tested.dimensionsSet);
     }
 
     @Test
     public void getDataIOSet() {
         tested.dataIOSet = dataIOSet;
-        assertEquals(dataIOSet, tested.getDataIOSet());
+        Assert.assertEquals(dataIOSet, tested.getDataIOSet());
     }
 
     @Test
     public void setDataIOSet() {
         tested.dataIOSet = null;
         tested.setDataIOSet(dataIOSet);
-        assertEquals(dataIOSet, tested.dataIOSet);
+        Assert.assertEquals(dataIOSet, tested.dataIOSet);
     }
 
     @Test
     public void getLabels() {
-        assertEquals(tested.labels, tested.getLabels());
+        Assert.assertEquals(tested.labels, tested.getLabels());
     }
 
     @Test

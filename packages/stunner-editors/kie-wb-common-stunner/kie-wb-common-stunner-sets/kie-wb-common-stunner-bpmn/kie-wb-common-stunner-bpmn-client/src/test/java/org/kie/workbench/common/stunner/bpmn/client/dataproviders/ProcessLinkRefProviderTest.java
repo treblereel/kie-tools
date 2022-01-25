@@ -22,8 +22,8 @@ import java.util.Map;
 
 import org.junit.runner.RunWith;
 import org.kie.workbench.common.forms.dynamic.model.config.SelectorDataProvider;
-import org.kie.workbench.common.stunner.bpmn.definition.IntermediateLinkEventCatching;
-import org.kie.workbench.common.stunner.bpmn.definition.IntermediateLinkEventThrowing;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.IntermediateLinkEventCatching;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.IntermediateLinkEventThrowing;
 import org.kie.workbench.common.stunner.bpmn.definition.property.event.link.LinkEventExecutionSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.event.link.LinkRef;
 import org.kie.workbench.common.stunner.core.graph.Element;

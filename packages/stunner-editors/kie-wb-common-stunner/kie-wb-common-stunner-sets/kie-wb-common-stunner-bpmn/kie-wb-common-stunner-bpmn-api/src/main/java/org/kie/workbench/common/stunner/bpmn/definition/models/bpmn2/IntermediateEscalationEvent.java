@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2018 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 
-package org.kie.workbench.common.stunner.bpmn.definition;
+package org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2;
+
+import java.util.Objects;
 
 import javax.validation.Valid;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.jboss.errai.common.client.api.annotations.MapsTo;
 import org.jboss.errai.common.client.api.annotations.Portable;
@@ -28,7 +31,7 @@ import org.kie.workbench.common.forms.adf.definitions.settings.FieldPolicy;
 import org.kie.workbench.common.stunner.bpmn.definition.property.background.BackgroundSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.dataio.DataIOSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.dimensions.CircleDimensionSet;
-import org.kie.workbench.common.stunner.bpmn.definition.property.event.signal.CancellingSignalEventExecutionSet;
+import org.kie.workbench.common.stunner.bpmn.definition.property.event.escalation.CancellingEscalationEventExecutionSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.font.FontSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.variables.AdvancedData;
 import org.kie.workbench.common.stunner.core.definition.annotation.Definition;
@@ -36,8 +39,8 @@ import org.kie.workbench.common.stunner.core.definition.annotation.Property;
 import org.kie.workbench.common.stunner.core.definition.annotation.morph.Morph;
 import org.kie.workbench.common.stunner.core.util.HashUtil;
 
-import static org.kie.workbench.common.forms.adf.engine.shared.formGeneration.processing.fields.fieldInitializers.nestedForms.SubFormFieldInitializer.COLLAPSIBLE_CONTAINER;
-import static org.kie.workbench.common.forms.adf.engine.shared.formGeneration.processing.fields.fieldInitializers.nestedForms.SubFormFieldInitializer.FIELD_CONTAINER_PARAM;
+import static org.kie.workbench.common.forms.adf.engine.shared.formGeneration.processing.fields.fieldInitializers.nestedForms.AbstractEmbeddedFormsInitializer.COLLAPSIBLE_CONTAINER;
+import static org.kie.workbench.common.forms.adf.engine.shared.formGeneration.processing.fields.fieldInitializers.nestedForms.AbstractEmbeddedFormsInitializer.FIELD_CONTAINER_PARAM;
 
 @Portable
 @Bindable
@@ -48,14 +51,15 @@ import static org.kie.workbench.common.forms.adf.engine.shared.formGeneration.pr
         policy = FieldPolicy.ONLY_MARKED,
         defaultFieldSettings = {@FieldParam(name = FIELD_CONTAINER_PARAM, value = COLLAPSIBLE_CONTAINER)}
 )
-public class IntermediateSignalEventCatching extends BaseCatchingIntermediateEvent {
+@XmlRootElement(name = "intermediateCatchEvent", namespace = "http://www.omg.org/spec/BPMN/20100524/MODEL")
+public class IntermediateEscalationEvent extends BaseCatchingIntermediateEvent {
 
     @Property
     @FormField(afterElement = "documentation")
     @Valid
-    protected CancellingSignalEventExecutionSet executionSet;
+    private CancellingEscalationEventExecutionSet executionSet;
 
-    public IntermediateSignalEventCatching() {
+    public IntermediateEscalationEvent() {
         this("",
              "",
              new BackgroundSet(),
@@ -63,17 +67,17 @@ public class IntermediateSignalEventCatching extends BaseCatchingIntermediateEve
              new CircleDimensionSet(),
              new DataIOSet(),
              new AdvancedData(),
-             new CancellingSignalEventExecutionSet());
+             new CancellingEscalationEventExecutionSet());
     }
 
-    public IntermediateSignalEventCatching(final @MapsTo("name") String name,
-                                           final @MapsTo("documentation") String documentation,
-                                           final @MapsTo("backgroundSet") BackgroundSet backgroundSet,
-                                           final @MapsTo("fontSet") FontSet fontSet,
-                                           final @MapsTo("dimensionsSet") CircleDimensionSet dimensionsSet,
-                                           final @MapsTo("dataIOSet") DataIOSet dataIOSet,
-                                           final @MapsTo("advancedData") AdvancedData advancedData,
-                                           final @MapsTo("executionSet") CancellingSignalEventExecutionSet executionSet) {
+    public IntermediateEscalationEvent(final @MapsTo("name") String name,
+                                       final @MapsTo("documentation") String documentation,
+                                       final @MapsTo("backgroundSet") BackgroundSet backgroundSet,
+                                       final @MapsTo("fontSet") FontSet fontSet,
+                                       final @MapsTo("dimensionsSet") CircleDimensionSet dimensionsSet,
+                                       final @MapsTo("dataIOSet") DataIOSet dataIOSet,
+                                       final @MapsTo("advancedData") AdvancedData advancedData,
+                                       final @MapsTo("executionSet") CancellingEscalationEventExecutionSet executionSet) {
         super(name,
               documentation,
               backgroundSet,
@@ -84,32 +88,29 @@ public class IntermediateSignalEventCatching extends BaseCatchingIntermediateEve
         this.executionSet = executionSet;
     }
 
-    @Override
-    protected void initLabels() {
-        super.initLabels();
-        labels.add("FromEventbasedGateway");
-    }
-
-    public CancellingSignalEventExecutionSet getExecutionSet() {
+    public CancellingEscalationEventExecutionSet getExecutionSet() {
         return executionSet;
     }
 
-    public void setExecutionSet(CancellingSignalEventExecutionSet executionSet) {
+    public void setExecutionSet(CancellingEscalationEventExecutionSet executionSet) {
         this.executionSet = executionSet;
     }
 
     @Override
     public int hashCode() {
         return HashUtil.combineHashCodes(super.hashCode(),
-                                         executionSet.hashCode());
+                                         Objects.hashCode(executionSet));
     }
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof IntermediateSignalEventCatching) {
-            IntermediateSignalEventCatching other = (IntermediateSignalEventCatching) o;
+        if (this == o) {
+            return true;
+        }
+        if (o instanceof IntermediateEscalationEvent) {
+            IntermediateEscalationEvent other = (IntermediateEscalationEvent) o;
             return super.equals(other) &&
-                    executionSet.equals(other.executionSet);
+                    Objects.equals(executionSet, other.executionSet);
         }
         return false;
     }

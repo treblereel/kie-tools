@@ -24,11 +24,11 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import org.kie.workbench.common.forms.adf.engine.shared.FormElementFilter;
-import org.kie.workbench.common.stunner.bpmn.definition.IntermediateConditionalEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.IntermediateEscalationEvent;
-import org.kie.workbench.common.stunner.bpmn.definition.IntermediateMessageEventCatching;
-import org.kie.workbench.common.stunner.bpmn.definition.IntermediateSignalEventCatching;
-import org.kie.workbench.common.stunner.bpmn.definition.IntermediateTimerEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.IntermediateConditionalEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.IntermediateEscalationEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.IntermediateMessageEventCatching;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.IntermediateSignalEventCatching;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.IntermediateTimerEvent;
 import org.kie.workbench.common.stunner.core.client.api.SessionManager;
 import org.kie.workbench.common.stunner.core.client.canvas.AbstractCanvasHandler;
 import org.kie.workbench.common.stunner.core.graph.Edge;

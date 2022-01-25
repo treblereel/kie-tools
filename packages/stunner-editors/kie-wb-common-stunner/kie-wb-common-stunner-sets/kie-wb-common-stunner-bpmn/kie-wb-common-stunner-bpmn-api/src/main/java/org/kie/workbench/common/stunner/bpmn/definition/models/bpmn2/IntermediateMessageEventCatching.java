@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 
-package org.kie.workbench.common.stunner.bpmn.definition;
+package org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2;
+
+import java.util.Objects;
 
 import javax.validation.Valid;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.jboss.errai.common.client.api.annotations.MapsTo;
 import org.jboss.errai.common.client.api.annotations.Portable;
@@ -28,7 +31,7 @@ import org.kie.workbench.common.forms.adf.definitions.settings.FieldPolicy;
 import org.kie.workbench.common.stunner.bpmn.definition.property.background.BackgroundSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.dataio.DataIOSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.dimensions.CircleDimensionSet;
-import org.kie.workbench.common.stunner.bpmn.definition.property.event.error.CancellingErrorEventExecutionSet;
+import org.kie.workbench.common.stunner.bpmn.definition.property.event.message.CancellingMessageEventExecutionSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.font.FontSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.variables.AdvancedData;
 import org.kie.workbench.common.stunner.core.definition.annotation.Definition;
@@ -48,14 +51,15 @@ import static org.kie.workbench.common.forms.adf.engine.shared.formGeneration.pr
         policy = FieldPolicy.ONLY_MARKED,
         defaultFieldSettings = {@FieldParam(name = FIELD_CONTAINER_PARAM, value = COLLAPSIBLE_CONTAINER)}
 )
-public class IntermediateErrorEventCatching extends BaseCatchingIntermediateEvent {
+@XmlRootElement(name = "intermediateCatchEvent", namespace = "http://www.omg.org/spec/BPMN/20100524/MODEL")
+public class IntermediateMessageEventCatching extends BaseCatchingIntermediateEvent {
 
     @Property
     @FormField(afterElement = "documentation")
     @Valid
-    protected CancellingErrorEventExecutionSet executionSet;
+    protected CancellingMessageEventExecutionSet executionSet;
 
-    public IntermediateErrorEventCatching() {
+    public IntermediateMessageEventCatching() {
         this("",
              "",
              new BackgroundSet(),
@@ -63,17 +67,17 @@ public class IntermediateErrorEventCatching extends BaseCatchingIntermediateEven
              new CircleDimensionSet(),
              new DataIOSet(),
              new AdvancedData(),
-             new CancellingErrorEventExecutionSet());
+             new CancellingMessageEventExecutionSet());
     }
 
-    public IntermediateErrorEventCatching(final @MapsTo("name") String name,
-                                          final @MapsTo("documentation") String documentation,
-                                          final @MapsTo("backgroundSet") BackgroundSet backgroundSet,
-                                          final @MapsTo("fontSet") FontSet fontSet,
-                                          final @MapsTo("dimensionsSet") CircleDimensionSet dimensionsSet,
-                                          final @MapsTo("dataIOSet") DataIOSet dataIOSet,
-                                          final @MapsTo("advancedData") AdvancedData advancedData,
-                                          final @MapsTo("executionSet") CancellingErrorEventExecutionSet executionSet) {
+    public IntermediateMessageEventCatching(final @MapsTo("name") String name,
+                                            final @MapsTo("documentation") String documentation,
+                                            final @MapsTo("backgroundSet") BackgroundSet backgroundSet,
+                                            final @MapsTo("fontSet") FontSet fontSet,
+                                            final @MapsTo("dimensionsSet") CircleDimensionSet dimensionsSet,
+                                            final @MapsTo("dataIOSet") DataIOSet dataIOSet,
+                                            final @MapsTo("advancedData") AdvancedData advancedData,
+                                            final @MapsTo("executionSet") CancellingMessageEventExecutionSet executionSet) {
         super(name,
               documentation,
               backgroundSet,
@@ -84,18 +88,19 @@ public class IntermediateErrorEventCatching extends BaseCatchingIntermediateEven
         this.executionSet = executionSet;
     }
 
-    @Override
-    protected void initLabels() {
-        super.initLabels();
-        labels.remove("sequence_end");
-    }
-
-    public CancellingErrorEventExecutionSet getExecutionSet() {
+    public CancellingMessageEventExecutionSet getExecutionSet() {
         return executionSet;
     }
 
-    public void setExecutionSet(CancellingErrorEventExecutionSet executionSet) {
+    public void setExecutionSet(CancellingMessageEventExecutionSet executionSet) {
         this.executionSet = executionSet;
+    }
+
+    @Override
+    protected void initLabels() {
+        super.initLabels();
+        labels.add("messageflow_end");
+        labels.add("FromEventbasedGateway");
     }
 
     @Override
@@ -106,10 +111,10 @@ public class IntermediateErrorEventCatching extends BaseCatchingIntermediateEven
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof IntermediateErrorEventCatching) {
-            IntermediateErrorEventCatching other = (IntermediateErrorEventCatching) o;
+        if (o instanceof IntermediateMessageEventCatching) {
+            IntermediateMessageEventCatching other = (IntermediateMessageEventCatching) o;
             return super.equals(other) &&
-                    executionSet.equals(other.executionSet);
+                    Objects.equals(executionSet, other.executionSet);
         }
         return false;
     }

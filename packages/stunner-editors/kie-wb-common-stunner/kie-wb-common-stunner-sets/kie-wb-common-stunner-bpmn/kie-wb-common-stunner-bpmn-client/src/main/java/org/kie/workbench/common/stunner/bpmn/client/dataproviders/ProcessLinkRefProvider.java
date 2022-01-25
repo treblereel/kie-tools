@@ -21,8 +21,8 @@ import java.util.function.Predicate;
 
 import javax.inject.Inject;
 
-import org.kie.workbench.common.stunner.bpmn.definition.IntermediateLinkEventCatching;
-import org.kie.workbench.common.stunner.bpmn.definition.IntermediateLinkEventThrowing;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.IntermediateLinkEventCatching;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.IntermediateLinkEventThrowing;
 import org.kie.workbench.common.stunner.bpmn.definition.property.event.link.LinkRef;
 import org.kie.workbench.common.stunner.core.client.api.SessionManager;
 import org.kie.workbench.common.stunner.core.graph.Node;

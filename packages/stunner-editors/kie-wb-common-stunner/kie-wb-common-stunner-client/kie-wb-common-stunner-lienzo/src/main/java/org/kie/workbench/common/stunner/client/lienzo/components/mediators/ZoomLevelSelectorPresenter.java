@@ -176,7 +176,9 @@ public class ZoomLevelSelectorPresenter {
     }
 
     void cancelHide() {
-        hideTimer.cancel();
+        if (hideTimer != null) {
+            hideTimer.cancel();
+        }
     }
 
     void scheduleHide() {

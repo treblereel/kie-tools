@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package org.kie.workbench.common.stunner.bpmn.definition;
+package org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2;
 
+import org.kie.workbench.common.stunner.bpmn.definition.BPMNCategories;
 import org.kie.workbench.common.stunner.bpmn.definition.property.background.BackgroundSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.dataio.DataIOSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.dimensions.CircleDimensionSet;
@@ -24,17 +25,17 @@ import org.kie.workbench.common.stunner.bpmn.definition.property.variables.Advan
 import org.kie.workbench.common.stunner.core.definition.annotation.definition.Category;
 import org.kie.workbench.common.stunner.core.definition.annotation.morph.MorphBase;
 
-@MorphBase(defaultType = IntermediateSignalEventThrowing.class)
-public abstract class BaseThrowingIntermediateEvent extends BaseIntermediateEvent {
+@MorphBase(defaultType = IntermediateTimerEvent.class)
+public abstract class BaseCatchingIntermediateEvent extends BaseIntermediateEvent {
 
     @Category
     public static final transient String category = BPMNCategories.INTERMEDIATE_EVENTS;
 
-    public BaseThrowingIntermediateEvent() {
+    public BaseCatchingIntermediateEvent() {
         super();
     }
 
-    public BaseThrowingIntermediateEvent(final String name,
+    public BaseCatchingIntermediateEvent(final String name,
                                          final String documentation,
                                          final BackgroundSet backgroundSet,
                                          final FontSet fontSet,
@@ -59,18 +60,21 @@ public abstract class BaseThrowingIntermediateEvent extends BaseIntermediateEven
         labels.add("to_task_event");
         labels.add("from_task_event");
         labels.add("fromtoall");
+        labels.add("IntermediateEventOnSubprocessBoundary");
+        labels.add("IntermediateEventOnActivityBoundary");
+        labels.add("EventOnChoreographyActivityBoundary");
         labels.add("IntermediateEventsMorph");
-        labels.add("cmnop");
-        labels.add("IntermediateEventThrowing");
+        labels.add("cm_nop");
+        labels.add("IntermediateEventCatching");
     }
 
     @Override
-    public boolean hasInputVars() {
+    public boolean hasOutputVars() {
         return true;
     }
 
     @Override
-    public boolean isSingleInputVar() {
+    public boolean isSingleOutputVar() {
         return true;
     }
 

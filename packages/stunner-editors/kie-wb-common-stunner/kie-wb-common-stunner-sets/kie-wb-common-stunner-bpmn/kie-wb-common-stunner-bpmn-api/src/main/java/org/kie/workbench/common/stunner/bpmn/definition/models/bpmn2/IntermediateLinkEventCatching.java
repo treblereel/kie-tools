@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package org.kie.workbench.common.stunner.bpmn.definition;
-
-import java.util.Objects;
+package org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2;
 
 import javax.validation.Valid;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.jboss.errai.common.client.api.annotations.MapsTo;
 import org.jboss.errai.common.client.api.annotations.Portable;
@@ -30,7 +28,7 @@ import org.kie.workbench.common.forms.adf.definitions.settings.FieldPolicy;
 import org.kie.workbench.common.stunner.bpmn.definition.property.background.BackgroundSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.dataio.DataIOSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.dimensions.CircleDimensionSet;
-import org.kie.workbench.common.stunner.bpmn.definition.property.event.escalation.CancellingEscalationEventExecutionSet;
+import org.kie.workbench.common.stunner.bpmn.definition.property.event.link.LinkEventExecutionSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.font.FontSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.variables.AdvancedData;
 import org.kie.workbench.common.stunner.core.definition.annotation.Definition;
@@ -50,14 +48,15 @@ import static org.kie.workbench.common.forms.adf.engine.shared.formGeneration.pr
         policy = FieldPolicy.ONLY_MARKED,
         defaultFieldSettings = {@FieldParam(name = FIELD_CONTAINER_PARAM, value = COLLAPSIBLE_CONTAINER)}
 )
-public class IntermediateEscalationEvent extends BaseCatchingIntermediateEvent {
+@XmlRootElement(name = "intermediateCatchEvent", namespace = "http://www.omg.org/spec/BPMN/20100524/MODEL")
+public class IntermediateLinkEventCatching extends BaseCatchingIntermediateEvent {
 
     @Property
     @FormField(afterElement = "documentation")
     @Valid
-    private CancellingEscalationEventExecutionSet executionSet;
+    protected LinkEventExecutionSet executionSet;
 
-    public IntermediateEscalationEvent() {
+    public IntermediateLinkEventCatching() {
         this("",
              "",
              new BackgroundSet(),
@@ -65,17 +64,17 @@ public class IntermediateEscalationEvent extends BaseCatchingIntermediateEvent {
              new CircleDimensionSet(),
              new DataIOSet(),
              new AdvancedData(),
-             new CancellingEscalationEventExecutionSet());
+             new LinkEventExecutionSet());
     }
 
-    public IntermediateEscalationEvent(final @MapsTo("name") String name,
-                                       final @MapsTo("documentation") String documentation,
-                                       final @MapsTo("backgroundSet") BackgroundSet backgroundSet,
-                                       final @MapsTo("fontSet") FontSet fontSet,
-                                       final @MapsTo("dimensionsSet") CircleDimensionSet dimensionsSet,
-                                       final @MapsTo("dataIOSet") DataIOSet dataIOSet,
-                                       final @MapsTo("advancedData") AdvancedData advancedData,
-                                       final @MapsTo("executionSet") CancellingEscalationEventExecutionSet executionSet) {
+    public IntermediateLinkEventCatching(final @MapsTo("name") String name,
+                                         final @MapsTo("documentation") String documentation,
+                                         final @MapsTo("backgroundSet") BackgroundSet backgroundSet,
+                                         final @MapsTo("fontSet") FontSet fontSet,
+                                         final @MapsTo("dimensionsSet") CircleDimensionSet dimensionsSet,
+                                         final @MapsTo("dataIOSet") DataIOSet dataIOSet,
+                                         final @MapsTo("advancedData") AdvancedData advancedData,
+                                         final @MapsTo("executionSet") LinkEventExecutionSet executionSet) {
         super(name,
               documentation,
               backgroundSet,
@@ -86,29 +85,37 @@ public class IntermediateEscalationEvent extends BaseCatchingIntermediateEvent {
         this.executionSet = executionSet;
     }
 
-    public CancellingEscalationEventExecutionSet getExecutionSet() {
+    @Override
+    protected void initLabels() {
+        super.initLabels();
+        // Link Events can't be boundary events
+        labels.remove("IntermediateEventOnSubprocessBoundary");
+        labels.remove("IntermediateEventOnActivityBoundary");
+        labels.remove("EventOnChoreographyActivityBoundary");
+        // Link Catch Event can't have incoming connection
+        labels.add("Startevents_all");
+    }
+
+    public LinkEventExecutionSet getExecutionSet() {
         return executionSet;
     }
 
-    public void setExecutionSet(CancellingEscalationEventExecutionSet executionSet) {
+    public void setExecutionSet(LinkEventExecutionSet executionSet) {
         this.executionSet = executionSet;
     }
 
     @Override
     public int hashCode() {
         return HashUtil.combineHashCodes(super.hashCode(),
-                                         Objects.hashCode(executionSet));
+                                         executionSet.hashCode());
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o instanceof IntermediateEscalationEvent) {
-            IntermediateEscalationEvent other = (IntermediateEscalationEvent) o;
-            return super.equals(other) &&
-                    Objects.equals(executionSet, other.executionSet);
+        if (o instanceof IntermediateLinkEventCatching) {
+            IntermediateLinkEventCatching other = (IntermediateLinkEventCatching) o;
+            return super.equals(other)
+                    && executionSet.equals(other.executionSet);
         }
         return false;
     }

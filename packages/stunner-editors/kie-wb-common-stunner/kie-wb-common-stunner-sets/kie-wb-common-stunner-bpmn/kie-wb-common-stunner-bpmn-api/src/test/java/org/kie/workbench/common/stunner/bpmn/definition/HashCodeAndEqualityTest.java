@@ -31,6 +31,16 @@ import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EventSubpro
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.ExclusiveGateway;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.GenericServiceTask;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.InclusiveGateway;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.IntermediateCompensationEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.IntermediateCompensationEventThrowing;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.IntermediateConditionalEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.IntermediateEscalationEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.IntermediateEscalationEventThrowing;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.IntermediateLinkEventCatching;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.IntermediateLinkEventThrowing;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.IntermediateMessageEventCatching;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.IntermediateMessageEventThrowing;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.IntermediateTimerEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Lane;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.MultipleInstanceSubprocess;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.NoneTask;

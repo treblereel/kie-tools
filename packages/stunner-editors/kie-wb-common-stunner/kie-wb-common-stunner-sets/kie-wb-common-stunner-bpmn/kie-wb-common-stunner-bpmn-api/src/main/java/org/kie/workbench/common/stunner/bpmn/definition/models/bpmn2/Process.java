@@ -257,9 +257,38 @@ public class Process implements BPMNDiagram<DiagramSet, ProcessData, RootProcess
     @XmlUnwrappedCollection
     @XmlElements({
             @XmlElement(name = "_EndNoneEvent", type = EndNoneEvent.class),
-            @XmlElement(name = "_EndTerminateEvent", type = EndTerminateEvent.class)
+            @XmlElement(name = "_EndTerminateEvent", type = EndTerminateEvent.class),
+            @XmlElement(name = "_EndErrorEvent", type = EndErrorEvent.class),
+            @XmlElement(name = "_EndEscalationEvent", type = EndEscalationEvent.class),
+            @XmlElement(name = "_EndCompensationEvent", type = EndCompensationEvent.class),
+            @XmlElement(name = "_EndSignalEvent", type = EndSignalEvent.class),
+            @XmlElement(name = "_EndMessageEvent", type = EndMessageEvent.class)
     })
     private List<EndEvent> endEvents = new ArrayList<>();
+
+    @XmlElement(name = "intermediateThrowEvent")
+    @XmlUnwrappedCollection
+    @XmlElements({
+            @XmlElement(name = "_LinkThrowEvent", type = IntermediateLinkEventThrowing.class),
+            @XmlElement(name = "_EscalationThrowEvent", type = IntermediateEscalationEventThrowing.class),
+            @XmlElement(name = "_CompensationThrowEvent", type = IntermediateCompensationEventThrowing.class),
+            @XmlElement(name = "_SignalThrowEvent", type = IntermediateSignalEventThrowing.class),
+            @XmlElement(name = "_MessageThrowEvent", type = IntermediateMessageEventThrowing.class)
+    })
+    private List<BaseThrowingIntermediateEvent> intermediateThrowEvent = new ArrayList<>();
+
+    @XmlElement(name = "intermediateCatchEvent")
+    @XmlUnwrappedCollection
+    @XmlElements({
+            @XmlElement(name = "_TimerCatchEvent", type = IntermediateTimerEvent.class),
+            @XmlElement(name = "_LinkCatchEvent", type = IntermediateLinkEventCatching.class),
+            @XmlElement(name = "_ErrorCatchEvent", type = IntermediateErrorEventCatching.class),
+            @XmlElement(name = "_EscalationCatchEvent", type = IntermediateEscalationEvent.class),
+            @XmlElement(name = "_CompensationCatchEvent", type = IntermediateCompensationEvent.class),
+            @XmlElement(name = "_SignalCatchEvent", type = IntermediateSignalEventCatching.class),
+            @XmlElement(name = "_MessageCatchEvent", type = IntermediateMessageEventCatching.class)
+    })
+    private List<BaseCatchingIntermediateEvent> intermediateCatchEvent = new ArrayList<>();
 
     @XmlElement(name = "sequenceFlow")
     @XmlUnwrappedCollection
@@ -672,6 +701,22 @@ public class Process implements BPMNDiagram<DiagramSet, ProcessData, RootProcess
         this.parallelGateways = parallelGateways;
     }
 
+    public List<BaseThrowingIntermediateEvent> getIntermediateThrowEvent() {
+        return intermediateThrowEvent;
+    }
+
+    public void setIntermediateThrowEvent(List<BaseThrowingIntermediateEvent> intermediateThrowEvent) {
+        this.intermediateThrowEvent = intermediateThrowEvent;
+    }
+
+    public List<BaseCatchingIntermediateEvent> getIntermediateCatchEvent() {
+        return intermediateCatchEvent;
+    }
+
+    public void setIntermediateCatchEvent(List<BaseCatchingIntermediateEvent> intermediateCatchEvent) {
+        this.intermediateCatchEvent = intermediateCatchEvent;
+    }
+
     public List<TextAnnotation> getTextAnnotations() {
         return textAnnotations;
     }
@@ -714,6 +759,8 @@ public class Process implements BPMNDiagram<DiagramSet, ProcessData, RootProcess
                                          Objects.hashCode(advancedData),
                                          Objects.hashCode(startEvents),
                                          Objects.hashCode(endEvents),
+                                         Objects.hashCode(intermediateThrowEvent),
+                                         Objects.hashCode(intermediateCatchEvent),
                                          Objects.hashCode(tasks),
                                          Objects.hashCode(scriptTasks),
                                          Objects.hashCode(sequenceFlows),
@@ -735,6 +782,8 @@ public class Process implements BPMNDiagram<DiagramSet, ProcessData, RootProcess
                     && Objects.equals(advancedData, other.advancedData)
                     && Objects.equals(startEvents, other.startEvents)
                     && Objects.equals(endEvents, other.endEvents)
+                    && Objects.equals(intermediateCatchEvent, other.intermediateCatchEvent)
+                    && Objects.equals(intermediateThrowEvent, other.intermediateThrowEvent)
                     && Objects.equals(tasks, other.tasks)
                     && Objects.equals(scriptTasks, other.scriptTasks)
                     && Objects.equals(sequenceFlows, other.sequenceFlows)
