@@ -26,33 +26,33 @@ public class SWMarshallerTests {
 
     private static final String EXAMPLE =
             "{\n" +
-            "  \"id\": \"helloworld\",\n" +
-            "  \"version\": \"1.0\",\n" +
-            "  \"specVersion\": \"0.8\",\n" +
-            "  \"name\": \"Hello World Workflow\",\n" +
-            "  \"description\": \"Inject Hello World\",\n" +
-            "  \"start\": \"Hello State\",\n" +
-            "  \"states\": [\n" +
-            "    {\n" +
-            "      \"name\": \"Hello State\",\n" +
-            "      \"type\": \"inject\",\n" +
-            "      \"data\": {\n" +
-            "        \"result\": \"Hello World!\"\n" +
-            "      },\n" +
-            "      \"end\": true\n" +
-            "    }\n" +
-            "  ]\n" +
-            "}";
+                    "  \"id\": \"helloworld\",\n" +
+                    "  \"version\": \"1.0\",\n" +
+                    "  \"specVersion\": \"0.8\",\n" +
+                    "  \"name\": \"Hello World Workflow\",\n" +
+                    "  \"description\": \"Inject Hello World\",\n" +
+                    "  \"start\": \"Hello State\",\n" +
+                    "  \"states\": [\n" +
+                    "    {\n" +
+                    "      \"name\": \"Hello State\",\n" +
+                    "      \"type\": \"inject\",\n" +
+                    "      \"data\": {\n" +
+                    "        \"result\": \"Hello World!\"\n" +
+                    "      },\n" +
+                    "      \"end\": true\n" +
+                    "    }\n" +
+                    "  ]\n" +
+                    "}";
 
     private static final String PATCH =
             "mydoc = {\n" +
-            "  \"baz\": \"qux\",\n" +
-            "  \"foo\": \"bar\"\n" +
-            "};\n" +
-            "thepatch = [\n" +
-            "  { \"op\": \"replace\", \"path\": \"/baz\", \"value\": \"boo\" }\n" +
-            "]\n" +
-            "patcheddoc = jsonpatch.apply_patch(mydoc, thepatch);";
+                    "  \"baz\": \"qux\",\n" +
+                    "  \"foo\": \"bar\"\n" +
+                    "};\n" +
+                    "thepatch = [\n" +
+                    "  { \"op\": \"replace\", \"path\": \"/baz\", \"value\": \"boo\" }\n" +
+                    "]\n" +
+                    "patcheddoc = jsonpatch.apply_patch(mydoc, thepatch);";
 
     public static void test() {
 

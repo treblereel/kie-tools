@@ -60,7 +60,6 @@ public class SWGraphExamples {
 
         // Start.
         final Start start = new Start();
-        start.setId("start");
         Node startNode = createEventNode("start", start, 137.5, 50);
         graph.addNode(startNode);
 
@@ -76,7 +75,6 @@ public class SWGraphExamples {
 
         // End.
         final End end = new End();
-        end.setId("end");
         Node endNode = createEventNode("end", end, 137.5, 275);
         graph.addNode(endNode);
 
@@ -109,7 +107,6 @@ public class SWGraphExamples {
 
     private static Transition createTransition(String id) {
         final Transition transition = new Transition();
-        transition.setId(id);
         transition.setName(id);
         return transition;
     }
@@ -145,7 +142,6 @@ public class SWGraphExamples {
     }
 
     private static State configureState(String id, State s) {
-        s.setId(id);
         s.setName(id);
         return s;
     }

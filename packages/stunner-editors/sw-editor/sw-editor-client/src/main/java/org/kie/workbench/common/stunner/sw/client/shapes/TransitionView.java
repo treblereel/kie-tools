@@ -33,6 +33,10 @@ public class TransitionView extends WiresConnectorViewExt<TransitionView> {
     private static final double DECORATOR_WIDTH = 10;
     private static final double DECORATOR_HEIGHT = 15;
 
+    public TransitionView() {
+        this(0, 0, 100, 100);
+    }
+
     public TransitionView(final double... points) {
         this(createLine(new PolyLine(points), ONE));
     }

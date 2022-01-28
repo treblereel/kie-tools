@@ -19,16 +19,12 @@ package org.kie.workbench.common.stunner.sw.definition;
 import java.util.Set;
 
 import jsinterop.annotations.JsType;
-import org.jboss.errai.common.client.api.annotations.Portable;
 import org.jboss.errai.databinding.client.api.Bindable;
 import org.kie.soup.commons.util.Sets;
 import org.kie.workbench.common.stunner.core.definition.annotation.Definition;
-import org.kie.workbench.common.stunner.core.definition.annotation.Property;
 import org.kie.workbench.common.stunner.core.definition.annotation.definition.Category;
 import org.kie.workbench.common.stunner.core.definition.annotation.definition.Labels;
-import org.kie.workbench.common.stunner.core.definition.property.PropertyMetaTypes;
 
-@Portable
 @Bindable
 @Definition
 @JsType
@@ -44,18 +40,7 @@ public class End {
             .add(LABEL_END)
             .build();
 
-    @Property(meta = PropertyMetaTypes.ID)
-    public String id;
-
     public End() {
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getId() {
-        return id;
     }
 
     public Set<String> getLabels() {

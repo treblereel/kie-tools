@@ -14,26 +14,23 @@
  * limitations under the License.
  */
 
-package org.kie.workbench.common.stunner.sw.client.editor;
+package org.kie.workbench.common.stunner.sw.client.js;
 
-/**
- * @See test.html
- */
-public class SWTextEditorIntegration {
+import jsinterop.annotations.JsOverlay;
+import jsinterop.annotations.JsPackage;
+import jsinterop.annotations.JsProperty;
+import jsinterop.annotations.JsType;
 
-    public static native void testJsonPatch() /*-{
-        console.log($wnd.jsonpatch.apply_patch({"baz": "qux", "foo": "bar"}, [{
-            "op": "replace",
-            "path": "/baz",
-            "value": "boo"
-        }]));
-    }-*/;
+@JsType(isNative = true, namespace = JsPackage.GLOBAL, name = "window")
+public class JsSWWindow {
 
-    public static void fireTest() {
-        fireOnJsonChanged("[{ \"op\": \"replace\", \"path\": \"/id\", \"value\": \"RogerId1\" }]");
+    @JsProperty
+    private static Object sweditor;
+
+    @JsOverlay
+    public static void linkEditor(Object sweditor) {
+        JsSWWindow.sweditor = sweditor;
     }
 
-    public static native void fireOnJsonChanged(String raw) /*-{
-        $wnd.onJsonChanged(raw);
-    }-*/;
+    public static native void onJsonChanged(String raw);
 }

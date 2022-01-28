@@ -35,7 +35,7 @@ import org.kie.workbench.common.stunner.core.command.Command;
 import org.kie.workbench.common.stunner.core.command.impl.CompositeCommand;
 import org.kie.workbench.common.stunner.core.command.impl.DeferredCommand;
 import org.kie.workbench.common.stunner.core.command.impl.DeferredCompositeCommand;
-import org.kie.workbench.common.stunner.sw.client.editor.SWTextEditorIntegration;
+import org.kie.workbench.common.stunner.sw.client.js.JsSWWindow;
 
 @Singleton
 public class SWPatchRegistry {
@@ -73,7 +73,7 @@ public class SWPatchRegistry {
         DomGlobal.console.log("+- " + command.toString());
         String patch = patchBuilder.build(command);
         DomGlobal.console.log("-> " + patch);
-        SWTextEditorIntegration.fireOnJsonChanged(patch);
+        JsSWWindow.onJsonChanged(patch);
     }
 
     private void onCommandExecuted(Command<AbstractCanvasHandler, CanvasViolation> command) {

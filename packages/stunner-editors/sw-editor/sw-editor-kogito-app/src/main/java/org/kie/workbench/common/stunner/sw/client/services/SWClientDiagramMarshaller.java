@@ -193,7 +193,6 @@ public class SWClientDiagramMarshaller {
         if (null != start) {
             Start startBean = new Start();
             // TODO: The id STATE_START could collide with an existing states from the json model declaration
-            startBean.setId(STATE_START);
             Point2D startLocation = layoutBuilder.getNextLocation();
             startNode = createNodeAt(STATE_START, startBean, startLocation, builder);
             stateNodes.put(STATE_START, startNode);
@@ -205,7 +204,6 @@ public class SWClientDiagramMarshaller {
         // End State.
         final End end = new End();
         // TODO: The id STATE_END could collide with an existing states from the json model declaration
-        end.setId(STATE_END);
         Point2D endLocation = layoutBuilder.getEndLocation(statesArray.length);
         Node endNode = createNodeAt(STATE_END, end, endLocation, builder);
         stateNodes.put(STATE_END, endNode);
@@ -268,7 +266,6 @@ public class SWClientDiagramMarshaller {
                 Node target = stateNodes.get(transition);
                 if (null != target) {
                     final Transition t = new Transition();
-                    t.setId(tid);
                     t.setName(tid);
                     Edge edge = createEdge(tid, t, source, builder);
                     connect(edge, source, target, builder);
@@ -300,7 +297,6 @@ public class SWClientDiagramMarshaller {
                 state = new SwitchState();
                 break;
         }
-        state.setId(id);
         state.setName(name);
         final Node stateNode = createNodeAt(id, state, location, builder);
 
@@ -308,7 +304,6 @@ public class SWClientDiagramMarshaller {
             boolean end = (boolean) map.get(END);
             if (end) {
                 final Transition tend = new Transition();
-                tend.setId("tend");
                 tend.setName("End");
                 Edge tendEdge = createEdge("tend", tend, stateNode, builder);
                 connect(tendEdge, stateNode, endNode, builder);
@@ -323,16 +318,13 @@ public class SWClientDiagramMarshaller {
         final Graph graph = createGraph();
 
         Start start = new Start();
-        start.setId("start");
         Node startNode = createNodeAt("start", start, 137.5, 50, builder);
 
         final State state1 = new InjectState();
-        state1.setId("state1");
         state1.setName("state1");
         final Node state1Node = createNodeAt("state1", state1, 100, 100, builder);
 
         final End end = new End();
-        end.setId("end");
         Node endNode = createNodeAt("end", end, 137.5, 275, builder);
 
         final StartTransition tstart = new StartTransition();
@@ -340,7 +332,6 @@ public class SWClientDiagramMarshaller {
         connect(tstartEdge, startNode, state1Node, builder);
 
         final Transition tend = new Transition();
-        tend.setId("tend");
         tend.setName("End");
         Edge tendEdge = createEdge("tend", tend, state1Node, builder);
         connect(tendEdge, state1Node, endNode, builder);
@@ -445,7 +436,7 @@ public class SWClientDiagramMarshaller {
         }
 
         private Point2D getEndLocation(int statesCount) {
-            return new Point2D(X, (statesCount + 2) * YDELTA);
+            return new Point2D(X, (statesCount + 3) * YDELTA);
         }
     }
 

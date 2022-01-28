@@ -19,7 +19,6 @@ package org.kie.workbench.common.stunner.sw.definition;
 import java.util.Set;
 
 import jsinterop.annotations.JsType;
-import org.jboss.errai.common.client.api.annotations.Portable;
 import org.jboss.errai.databinding.client.api.Bindable;
 import org.kie.soup.commons.util.Sets;
 import org.kie.workbench.common.stunner.core.definition.annotation.Definition;
@@ -29,7 +28,6 @@ import org.kie.workbench.common.stunner.core.factory.graph.EdgeFactory;
 import org.kie.workbench.common.stunner.core.rule.annotation.CanConnect;
 import org.kie.workbench.common.stunner.core.rule.annotation.EdgeOccurrences;
 
-@Portable
 @Bindable
 @Definition(graphFactory = EdgeFactory.class)
 @CanConnect(startRole = State.LABEL_STATE, endRole = State.LABEL_STATE)

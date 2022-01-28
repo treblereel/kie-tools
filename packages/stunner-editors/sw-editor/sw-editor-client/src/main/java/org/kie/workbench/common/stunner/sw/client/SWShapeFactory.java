@@ -24,15 +24,11 @@ import javax.inject.Inject;
 
 import org.kie.workbench.common.stunner.core.client.shape.Shape;
 import org.kie.workbench.common.stunner.core.client.shape.factory.ShapeFactory;
-import org.kie.workbench.common.stunner.core.client.shape.view.ShapeView;
-import org.kie.workbench.common.stunner.core.definition.adapter.binding.BindableAdapterUtils;
 import org.kie.workbench.common.stunner.core.definition.shape.Glyph;
 import org.kie.workbench.common.stunner.core.definition.shape.ShapeViewDef;
 import org.kie.workbench.common.stunner.svg.client.shape.def.SVGShapeDef;
 import org.kie.workbench.common.stunner.svg.client.shape.factory.SVGShapeFactory;
-import org.kie.workbench.common.stunner.sw.client.shapes.EndShapeDef;
-import org.kie.workbench.common.stunner.sw.client.shapes.StartShapeDef;
-import org.kie.workbench.common.stunner.sw.client.shapes.StateShapeDef;
+import org.kie.workbench.common.stunner.sw.client.shapes.AnyStateShapeDef;
 import org.kie.workbench.common.stunner.sw.client.shapes.TransitionShape;
 import org.kie.workbench.common.stunner.sw.client.shapes.TransitionShapeDef;
 import org.kie.workbench.common.stunner.sw.client.shapes.TransitionView;
@@ -44,9 +40,21 @@ import org.kie.workbench.common.stunner.sw.definition.StartTransition;
 import org.kie.workbench.common.stunner.sw.definition.SwitchState;
 import org.kie.workbench.common.stunner.sw.definition.Transition;
 
+import static org.kie.workbench.common.stunner.core.definition.adapter.binding.BindableAdapterUtils.getDefinitionId;
+
 @ApplicationScoped
 public class SWShapeFactory
         implements ShapeFactory<Object, Shape> {
+
+    private static final Map<Class<?>, ShapeViewDef> typeViewDefinitions = new HashMap<Class<?>, ShapeViewDef>() {{
+        put(Start.class, new AnyStateShapeDef());
+        put(End.class, new AnyStateShapeDef());
+        put(InjectState.class, new AnyStateShapeDef());
+        put(SwitchState.class, new AnyStateShapeDef());
+        put(Transition.class, new TransitionShapeDef());
+        put(StartTransition.class, new TransitionShapeDef());
+        put(ErrorTransition.class, new TransitionShapeDef());
+    }};
 
     private final SVGShapeFactory svgShapeFactory;
 
@@ -55,51 +63,24 @@ public class SWShapeFactory
         this.svgShapeFactory = svgShapeFactory;
     }
 
-    private static final Map<Class<?>, ShapeViewDef> typeViewDefinitions = new HashMap<Class<?>, ShapeViewDef>() {{
-        put(Start.class, new StartShapeDef());
-        put(End.class, new EndShapeDef());
-        put(InjectState.class, new StateShapeDef());
-        put(SwitchState.class, new StateShapeDef());
-        put(Transition.class, new TransitionShapeDef());
-        put(StartTransition.class, new TransitionShapeDef());
-        put(ErrorTransition.class, new TransitionShapeDef());
-    }};
-
     @Override
+    @SuppressWarnings("all")
     public Shape newShape(Object instance) {
         ShapeViewDef def = typeViewDefinitions.get(instance.getClass());
-        if (null != def) {
-            if (isTransition(instance)) {
-                return newConnector(instance, (TransitionShapeDef) def);
-            } else {
-                return svgShapeFactory.newShape(instance, (SVGShapeDef) def);
-            }
+        if (def instanceof TransitionShapeDef) {
+            return new TransitionShape((TransitionShapeDef) def, new TransitionView());
+        } else {
+            return svgShapeFactory.newShape(instance, (SVGShapeDef) def);
         }
-        throw new UnsupportedOperationException("No factory available for building shape [" + instance.getClass().getName() + "]");
-    }
-
-    private static boolean isTransition(Object instance) {
-        return ((instance instanceof Transition) ||
-                (instance instanceof StartTransition) ||
-                (instance instanceof ErrorTransition));
-    }
-
-    private Shape<ShapeView> newConnector(final Object instance,
-                                          final TransitionShapeDef def) {
-        TransitionView view = new TransitionView(0,
-                                                 0,
-                                                 100,
-                                                 100);
-        return new TransitionShape<>(def, view);
     }
 
     @Override
+    @SuppressWarnings("all")
     public Glyph getGlyph(String definitionId) {
         Map.Entry<Class<?>, ShapeViewDef> typeDefs = typeViewDefinitions.entrySet().stream()
-                .filter(e -> BindableAdapterUtils.getDefinitionId(e.getKey()).equals(definitionId))
+                .filter(e -> getDefinitionId(e.getKey()).equals(definitionId))
                 .findAny()
                 .get();
-
         Class<?> type = typeDefs.getKey();
         ShapeViewDef def = typeDefs.getValue();
         return def.getGlyph(type, definitionId);

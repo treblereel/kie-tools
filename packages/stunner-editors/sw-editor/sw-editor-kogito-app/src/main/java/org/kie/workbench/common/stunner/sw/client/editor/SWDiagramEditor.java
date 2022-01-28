@@ -29,12 +29,12 @@ import org.kie.workbench.common.stunner.client.widgets.editor.StunnerEditor;
 import org.kie.workbench.common.stunner.client.widgets.presenters.session.SessionPresenter;
 import org.kie.workbench.common.stunner.core.client.service.ClientRuntimeError;
 import org.kie.workbench.common.stunner.core.client.service.ServiceCallback;
-import org.kie.workbench.common.stunner.core.client.session.ClientSession;
 import org.kie.workbench.common.stunner.core.client.util.WindowJSType;
 import org.kie.workbench.common.stunner.core.diagram.Diagram;
 import org.kie.workbench.common.stunner.core.diagram.Metadata;
 import org.kie.workbench.common.stunner.core.graph.Graph;
 import org.kie.workbench.common.stunner.sw.client.js.JsSWDiagramEditor;
+import org.kie.workbench.common.stunner.sw.client.js.JsSWWindow;
 import org.kie.workbench.common.stunner.sw.client.services.SWClientDiagramService;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.backend.vfs.PathFactory;
@@ -135,32 +135,19 @@ public class SWDiagramEditor {
         String title = metadata.getTitle();
         Path path = PathFactory.newPath(title, "/" + title + ".sw");
         metadata.setPath(path);
-        initLienzoType();
-        initSWApiTest();
+        initJsTypes();
     }
 
-    private void initSWApiTest() {
-        ClientSession session = stunnerEditor.getSession();
-        JsSWDiagramEditor jsSWDiagramEditor = new JsSWDiagramEditor();
-        jsSWDiagramEditor.session = session;
-        setupSWApiTest(jsSWDiagramEditor);
-    }
-
-    private native void setupSWApiTest(Object jsSWDiagramEditor) /*-{
-        $wnd.sweditor = jsSWDiagramEditor;
-    }-*/;
-
-    private void initLienzoType() {
+    private void initJsTypes() {
         LienzoCanvas canvas = (LienzoCanvas) stunnerEditor.getCanvasHandler().getCanvas();
         if (canvas != null) {
             LienzoPanel panel = (LienzoPanel) canvas.getView().getPanel();
             LienzoBoundsPanel lienzoPanel = panel.getView();
             JsCanvas jsCanvas = new JsCanvas(lienzoPanel, lienzoPanel.getLayer());
-            setupJsCanvasTypeNative(jsCanvas);
+            WindowJSType.linkCanvasJS(jsCanvas);
+            JsSWDiagramEditor jsSWDiagramEditor = new JsSWDiagramEditor();
+            jsSWDiagramEditor.session = stunnerEditor.getSession();
+            JsSWWindow.linkEditor(jsSWDiagramEditor);
         }
-    }
-
-    private static void setupJsCanvasTypeNative(JsCanvas jsCanvas) {
-        WindowJSType.linkCanvasJS(jsCanvas);
     }
 }
