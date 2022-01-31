@@ -22,6 +22,7 @@ import javax.validation.Valid;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 
 import org.jboss.errai.common.client.api.annotations.MapsTo;
 import org.jboss.errai.common.client.api.annotations.Portable;
@@ -55,6 +56,15 @@ import static org.kie.workbench.common.stunner.core.util.StringUtils.isEmpty;
         policy = FieldPolicy.ONLY_MARKED,
         defaultFieldSettings = {@FieldParam(name = FIELD_CONTAINER_PARAM, value = COLLAPSIBLE_CONTAINER)}
 )
+@XmlType(propOrder = {
+        "documentation",
+        "extensionElements",
+        "outgoing",
+        "dataOutputs",
+        "dataOutputAssociation",
+        "outputSet",
+        "signalEventDefinition"
+})
 @XmlRootElement(name = "startEvent", namespace = "http://www.omg.org/spec/BPMN/20100524/MODEL")
 public class StartSignalEvent extends StartEvent {
 

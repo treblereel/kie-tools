@@ -16,15 +16,22 @@
 
 package org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
 import javax.validation.Valid;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.kie.workbench.common.forms.adf.definitions.annotations.FormField;
 import org.kie.workbench.common.stunner.bpmn.definition.BPMNViewDefinition;
-import org.kie.workbench.common.stunner.bpmn.definition.FlowElement;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpsim.ElementParameters;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpsim.NormalDistribution;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpsim.ProcessingTime;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpsim.TimeParameters;
 import org.kie.workbench.common.stunner.bpmn.definition.property.background.BackgroundSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.dataio.DataIOModel;
 import org.kie.workbench.common.stunner.bpmn.definition.property.dataio.DataIOSet;
@@ -34,35 +41,50 @@ import org.kie.workbench.common.stunner.bpmn.definition.property.variables.Advan
 import org.kie.workbench.common.stunner.core.definition.annotation.Property;
 import org.kie.workbench.common.stunner.core.definition.annotation.definition.Labels;
 import org.kie.workbench.common.stunner.core.util.HashUtil;
+import org.treblereel.gwt.xml.mapper.api.annotation.XmlUnwrappedCollection;
 
-public abstract class BaseIntermediateEvent extends FlowElement
+public abstract class BaseIntermediateEvent extends FlowNode
         implements BPMNViewDefinition,
                    DataIOModel {
 
     @Labels
+    @XmlTransient
     protected final Set<String> labels = new HashSet<>();
 
     @Property
     @Valid
+    @XmlTransient
     protected BackgroundSet backgroundSet;
 
     @Property
+    @XmlTransient
     protected FontSet fontSet;
 
     @Property
+    @XmlTransient
     protected CircleDimensionSet dimensionsSet;
 
     @Property
     @FormField(afterElement = "executionSet")
     @Valid
+    @XmlTransient
     protected DataIOSet dataIOSet;
 
-    @Property
-    @FormField(
-            afterElement = "dataIOSet"
-    )
-    @Valid
-    protected AdvancedData advancedData;
+    @XmlUnwrappedCollection
+    @XmlElement(name = "incoming")
+    private List<Incoming> incoming = new ArrayList<>();
+
+    @XmlUnwrappedCollection
+    @XmlElement(name = "outgoing")
+    private List<Outgoing> outgoing = new ArrayList<>();
+
+    /*
+    Simulation parameters for the start event. Used in Simulation section during marshalling/unmarshalling
+    This parameter currently not changed by Stunner but can preserve users values.
+    Shouldn't be handled in Equals/HashCode.
+     */
+    @XmlTransient
+    private ElementParameters elementParameters = new ElementParameters();
 
     public BaseIntermediateEvent() {
         initLabels();
@@ -137,21 +159,54 @@ public abstract class BaseIntermediateEvent extends FlowElement
         this.dataIOSet = dataIOSet;
     }
 
-    public AdvancedData getAdvancedData() {
-        return advancedData;
-    }
-
-    public void setAdvancedData(AdvancedData advancedData) {
-        this.advancedData = advancedData;
-    }
-
     public Set<String> getLabels() {
         return labels;
     }
 
-    @Override
-    public String getId() {
-        return null;
+    /*
+    We should keep ID updated for simulation data since during marshalling
+    simulation section will be moved to separate part of XML.
+     */
+    public void setId(String id) {
+        super.setId(id);
+        getElementParameters().setElementRef(id);
+    }
+
+    //TODO maybe we don't need simulation data for End Events at all, need to check BPMN Spec
+    /*
+    For compatibility reasons if simulation data is missing we need to generate default one.
+     */
+    public ElementParameters getElementParameters() {
+        if (elementParameters.getTimeParameters() == null) {
+            elementParameters.setTimeParameters(
+                    new TimeParameters(
+                            new ProcessingTime(
+                                    new NormalDistribution()
+                            )
+                    )
+            );
+        }
+        return elementParameters;
+    }
+
+    public void setElementParameters(ElementParameters elementParameters) {
+        this.elementParameters = elementParameters;
+    }
+
+    public List<Incoming> getIncoming() {
+        return incoming;
+    }
+
+    public void setIncoming(List<Incoming> incoming) {
+        this.incoming = incoming;
+    }
+
+    public List<Outgoing> getOutgoing() {
+        return outgoing;
+    }
+
+    public void setOutgoing(List<Outgoing> outgoing) {
+        this.outgoing = outgoing;
     }
 
     @Override
@@ -163,6 +218,9 @@ public abstract class BaseIntermediateEvent extends FlowElement
                                          Objects.hashCode(dimensionsSet),
                                          Objects.hashCode(advancedData),
                                          Objects.hashCode(dataIOSet),
+                                         Objects.hashCode(incoming),
+                                         Objects.hashCode(outgoing),
+                                         Objects.hashCode(elementParameters),
                                          Objects.hashCode(labels));
     }
 
@@ -179,6 +237,9 @@ public abstract class BaseIntermediateEvent extends FlowElement
                     Objects.equals(dimensionsSet, other.dimensionsSet) &&
                     Objects.equals(advancedData, other.advancedData) &&
                     Objects.equals(dataIOSet, other.dataIOSet) &&
+                    Objects.equals(incoming, other.incoming) &&
+                    Objects.equals(outgoing, other.outgoing) &&
+                    Objects.equals(elementParameters, other.elementParameters) &&
                     Objects.equals(labels, other.labels);
         }
         return false;

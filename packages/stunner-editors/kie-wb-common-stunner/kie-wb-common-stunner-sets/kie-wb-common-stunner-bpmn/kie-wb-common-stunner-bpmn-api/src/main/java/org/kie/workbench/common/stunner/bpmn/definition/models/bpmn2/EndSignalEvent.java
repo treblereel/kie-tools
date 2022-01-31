@@ -83,6 +83,11 @@ public class EndSignalEvent extends EndEvent {
     @XmlTransient
     private String signalId;
 
+    /**
+     * for marshallers purposes, not stored the value
+     **/
+    private List<InputSet> inputSet;
+
     @XmlElement(name = "dataInput")
     @XmlUnwrappedCollection
     private List<DataInput> dataInputs;
@@ -169,6 +174,10 @@ public class EndSignalEvent extends EndEvent {
 
     public List<InputSet> getInputSet() {
         return AssignmentParser.getInputSet(getId(), dataIOSet.getAssignmentsinfo().getValue());
+    }
+
+    public void setInputSet(List<InputSet> inputSets) {
+        this.inputSet = inputSets;
     }
 
     public String getSignalId() {

@@ -30,6 +30,7 @@ import org.kie.workbench.common.stunner.bpmn.definition.BPMNViewDefinition;
 import org.kie.workbench.common.stunner.bpmn.definition.FlowElement;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Association;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BaseGateway;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BaseIntermediateEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BaseTask;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.DataObjectReference;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Definitions;
@@ -42,6 +43,8 @@ import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.ExtensionEl
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.FlowNodeRef;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.InclusiveGateway;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Incoming;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.IntermediateSignalEventCatching;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.IntermediateSignalEventThrowing;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.ItemDefinition;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Lane;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.NonDirectionalAssociation;
@@ -194,6 +197,42 @@ public class BPMNClientMarshalling {
 
                 // Adding simulation properties
                 simulationElements.add(endEvent.getElementParameters());
+            }
+
+            if (definition instanceof BaseIntermediateEvent) {
+                BaseIntermediateEvent intermediateEvent = (BaseIntermediateEvent) definition;
+
+                // Sequence Flows
+                List<Incoming> incoming = checkIncomingFlows(node.getInEdges(), intermediateEvent.getId(), sequenceFlows, plane);
+                intermediateEvent.setIncoming(incoming);
+                List<Outgoing> outgoing = checkOutgoingFlows(node.getOutEdges(), intermediateEvent.getId(), sequenceFlows, plane);
+                intermediateEvent.setOutgoing(outgoing);
+
+                // Type ID
+                if (intermediateEvent instanceof IntermediateSignalEventThrowing) {
+                    IntermediateSignalEventThrowing throwingSignal = (IntermediateSignalEventThrowing) intermediateEvent;
+                    throwingSignal.setSignalId(IdGenerator.getTypeId(intermediateEvent));
+                    Signal signal = throwingSignal.getSignal();
+                    if (signal != null) {
+                        definitions.getSignals().add(signal);
+                    }
+                    definitions.getItemDefinitions().addAll(throwingSignal.getItemDefinition());
+                    process.getIntermediateThrowEvent().add(throwingSignal);
+                }
+
+                if (intermediateEvent instanceof IntermediateSignalEventCatching) {
+                    IntermediateSignalEventCatching catchingSignal = (IntermediateSignalEventCatching) intermediateEvent;
+                    catchingSignal.setSignalId(IdGenerator.getTypeId(intermediateEvent));
+                    Signal signal = catchingSignal.getSignal();
+                    if (signal != null) {
+                        definitions.getSignals().add(signal);
+                    }
+                    definitions.getItemDefinitions().addAll(catchingSignal.getItemDefinition());
+                    process.getIntermediateCatchEvent().add(catchingSignal);
+                }
+
+                // Adding simulation properties
+                simulationElements.add(intermediateEvent.getElementParameters());
             }
 
             if (definition instanceof TextAnnotation) {

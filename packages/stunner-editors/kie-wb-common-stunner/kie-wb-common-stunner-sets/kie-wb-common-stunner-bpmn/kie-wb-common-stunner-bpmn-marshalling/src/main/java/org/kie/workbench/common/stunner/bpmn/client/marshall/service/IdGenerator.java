@@ -20,11 +20,15 @@ import java.util.Map;
 
 import org.kie.workbench.common.stunner.bpmn.definition.BPMNViewDefinition;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Association;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BaseCatchingIntermediateEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BaseGateway;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BaseTask;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.BaseThrowingIntermediateEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.DataObjectReference;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndEvent;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.EndSignalEvent;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.IntermediateSignalEventCatching;
+import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.IntermediateSignalEventThrowing;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.Lane;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.ScriptTask;
 import org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2.StartEvent;
@@ -59,6 +63,10 @@ public class IdGenerator {
 
     private static int dataObjectCounter = 1;
 
+    private static int catchEventCounter = 1;
+
+    private static int throwEventCounter = 1;
+
     // key is old ID and value is new ID
     private static Map<String, String> oldNewId = new HashMap<>();
 
@@ -75,6 +83,8 @@ public class IdGenerator {
         textAnnotationCounter = 1;
         associationCounter = 1;
         dataObjectCounter = 1;
+        catchEventCounter = 1;
+        throwEventCounter = 1;
         oldNewId = new HashMap<>();
     }
 
@@ -128,6 +138,14 @@ public class IdGenerator {
         if (flowElement instanceof DataObjectReference) {
             return "DataObject_" + dataObjectCounter++;
         }
+
+        if (flowElement instanceof BaseCatchingIntermediateEvent) {
+            return "catchEvent_" + catchEventCounter;
+        }
+
+        if (flowElement instanceof BaseThrowingIntermediateEvent) {
+            return "throwEvent_" + throwEventCounter;
+        }
         return null;
     }
 
@@ -137,7 +155,9 @@ public class IdGenerator {
         }
 
         if (event instanceof StartSignalEvent
-                || event instanceof EndSignalEvent) {
+                || event instanceof EndSignalEvent
+                || event instanceof IntermediateSignalEventThrowing
+                || event instanceof IntermediateSignalEventCatching) {
             return "Signal_" + signalCounter++;
         }
 

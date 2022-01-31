@@ -111,7 +111,6 @@ public abstract class EndEvent extends FlowNode implements BPMNViewDefinition,
         return labels;
     }
 
-    //TODO maybe we don't need simulation data for End Events at all, need to check BPMN Spec
     /*
     We should keep ID updated for simulation data since during marshalling
     simulation section will be moved to separate part of XML.

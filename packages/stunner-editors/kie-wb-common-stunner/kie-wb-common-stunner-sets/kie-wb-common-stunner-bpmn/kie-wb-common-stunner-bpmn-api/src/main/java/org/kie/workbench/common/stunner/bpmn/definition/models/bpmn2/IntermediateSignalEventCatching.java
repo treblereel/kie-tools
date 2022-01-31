@@ -18,6 +18,8 @@ package org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2;
 
 import javax.validation.Valid;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 
 import org.jboss.errai.common.client.api.annotations.MapsTo;
 import org.jboss.errai.common.client.api.annotations.Portable;
@@ -26,6 +28,7 @@ import org.kie.workbench.common.forms.adf.definitions.annotations.FieldParam;
 import org.kie.workbench.common.forms.adf.definitions.annotations.FormDefinition;
 import org.kie.workbench.common.forms.adf.definitions.annotations.FormField;
 import org.kie.workbench.common.forms.adf.definitions.settings.FieldPolicy;
+import org.kie.workbench.common.stunner.bpmn.definition.models.drools.MetaData;
 import org.kie.workbench.common.stunner.bpmn.definition.property.background.BackgroundSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.dataio.DataIOSet;
 import org.kie.workbench.common.stunner.bpmn.definition.property.dimensions.CircleDimensionSet;
@@ -39,6 +42,7 @@ import org.kie.workbench.common.stunner.core.util.HashUtil;
 
 import static org.kie.workbench.common.forms.adf.engine.shared.formGeneration.processing.fields.fieldInitializers.nestedForms.SubFormFieldInitializer.COLLAPSIBLE_CONTAINER;
 import static org.kie.workbench.common.forms.adf.engine.shared.formGeneration.processing.fields.fieldInitializers.nestedForms.SubFormFieldInitializer.FIELD_CONTAINER_PARAM;
+import static org.kie.workbench.common.stunner.core.util.StringUtils.isEmpty;
 
 @Portable
 @Bindable
@@ -49,13 +53,32 @@ import static org.kie.workbench.common.forms.adf.engine.shared.formGeneration.pr
         policy = FieldPolicy.ONLY_MARKED,
         defaultFieldSettings = {@FieldParam(name = FIELD_CONTAINER_PARAM, value = COLLAPSIBLE_CONTAINER)}
 )
+@XmlType(propOrder = {
+        "documentation",
+        "extensionElements",
+        "incoming",
+        "outgoing",
+        "dataOutputs",
+        "dataOutputAssociation",
+        "outputSet",
+        "signalEventDefinition"
+})
 @XmlRootElement(name = "intermediateCatchEvent", namespace = "http://www.omg.org/spec/BPMN/20100524/MODEL")
 public class IntermediateSignalEventCatching extends BaseCatchingIntermediateEvent {
 
     @Property
     @FormField(afterElement = "documentation")
     @Valid
+    @XmlTransient
     protected CancellingSignalEventExecutionSet executionSet;
+
+    @XmlTransient
+    private String signalId;
+
+    /**
+     * used by marshaller, generated on the fly, no need to store the value
+     **/
+    private SignalEventDefinition signalEventDefinition;
 
     public IntermediateSignalEventCatching() {
         this("",
@@ -98,6 +121,44 @@ public class IntermediateSignalEventCatching extends BaseCatchingIntermediateEve
 
     public void setExecutionSet(CancellingSignalEventExecutionSet executionSet) {
         this.executionSet = executionSet;
+    }
+
+    @Override
+    public ExtensionElements getExtensionElements() {
+        ExtensionElements elements = super.getExtensionElements();
+
+        if (executionSet.getSlaDueDate().getValue() != null && !executionSet.getSlaDueDate().getValue().isEmpty()) {
+            MetaData customAutoStart = new MetaData("customSLADueDate",
+                                                    executionSet.getSlaDueDate().getValue());
+            elements.getMetaData().add(customAutoStart);
+        }
+
+        return elements.getMetaData().isEmpty() ? null : elements;
+    }
+
+    public String getSignalId() {
+        return signalId;
+    }
+
+    public void setSignalId(String signalId) {
+        this.signalId = signalId;
+    }
+
+    public Signal getSignal() {
+        if (isEmpty(executionSet.getSignalRef().getValue())) {
+            return null;
+        }
+
+        return new Signal(getSignalId(),
+                          executionSet.getSignalRef().getValue());
+    }
+
+    public SignalEventDefinition getSignalEventDefinition() {
+        return new SignalEventDefinition(signalId);
+    }
+
+    public void setSignalEventDefinition(SignalEventDefinition signalEventDefinition) {
+        this.signalEventDefinition = signalEventDefinition;
     }
 
     @Override
