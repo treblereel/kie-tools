@@ -17,7 +17,6 @@ package org.kie.workbench.common.stunner.core.domainobject;
 
 import io.crysknife.ui.databinding.client.api.Bindable;
 import org.jboss.errai.common.client.api.annotations.Portable;
-import org.kie.workbench.common.forms.adf.definitions.annotations.FormDefinition;
 import org.kie.workbench.common.stunner.core.definition.annotation.Definition;
 import org.kie.workbench.common.stunner.core.definition.annotation.DefinitionSet;
 import org.kie.workbench.common.stunner.core.definition.annotation.Property;

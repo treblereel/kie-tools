@@ -36,6 +36,7 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
@@ -242,7 +243,10 @@ public class MainProcessor extends AbstractErrorAbsorbingProcessor {
 
         // 1- DefinitionSets.
         for (Element e : roundEnv.getElementsAnnotatedWith(elementUtils.getTypeElement(ANNOTATION_DEFINITION_SET))) {
-            processDefinitionSets(e);
+            System.out.println("DefinitionSets " + e);
+            if(!e.getModifiers().contains(Modifier.PRIVATE)) {
+                processDefinitionSets(e);
+            }
         }
 
         // 2- Properties.
@@ -312,7 +316,7 @@ public class MainProcessor extends AbstractErrorAbsorbingProcessor {
         final boolean isClass = e.getKind() == ElementKind.CLASS;
         if (isClass) {
             TypeElement classElement = (TypeElement) e;
-            PackageElement packageElement = (PackageElement) classElement.getEnclosingElement();
+            PackageElement packageElement = getPackage(e);
             messager.printMessage(Diagnostic.Kind.NOTE,
                                   "Discovered definition set class [" + classElement.getSimpleName() + "]");
             final String packageName = packageElement.getQualifiedName().toString();
@@ -384,7 +388,7 @@ public class MainProcessor extends AbstractErrorAbsorbingProcessor {
         final boolean isClass = e.getKind() == ElementKind.CLASS;
         if (isClass) {
             TypeElement classElement = (TypeElement) e;
-            PackageElement packageElement = (PackageElement) classElement.getEnclosingElement();
+            PackageElement packageElement = getPackage(e);
             String defintionClassName = packageElement.getQualifiedName().toString() + "." + classElement.getSimpleName();
             Map<String, String> baseTypes = processingContext.getDefinitionAnnotations().getBaseTypes();
             TypeElement parentElement = getDefinitionInheritedType(classElement);
@@ -673,7 +677,7 @@ public class MainProcessor extends AbstractErrorAbsorbingProcessor {
         final boolean isClass = e.getKind() == ElementKind.CLASS;
         if (isClass) {
             TypeElement classElement = (TypeElement) e;
-            PackageElement packageElement = (PackageElement) classElement.getEnclosingElement();
+            PackageElement packageElement = getPackage(e);
             String propertyClassName = packageElement.getQualifiedName().toString() + "." + classElement.getSimpleName();
             // Meta-properties
             Property metaProperty = e.getAnnotation(Property.class);
@@ -827,9 +831,9 @@ public class MainProcessor extends AbstractErrorAbsorbingProcessor {
         final Messager messager = processingEnv.getMessager();
         final boolean isIface = e.getKind() == ElementKind.INTERFACE;
         final boolean isClass = e.getKind() == ElementKind.CLASS;
-        if (isIface || isClass) {
+        if ((isIface || isClass) && !e.getModifiers().contains(Modifier.PRIVATE)) {
             TypeElement classElement = (TypeElement) e;
-            PackageElement packageElement = (PackageElement) classElement.getEnclosingElement();
+            PackageElement packageElement = getPackage(e);
             messager.printMessage(Diagnostic.Kind.NOTE,
                                   "Discovered containment rule for class [" + classElement.getSimpleName() + "]");
             final String classNameActivity = classElement.getSimpleName() + RULE_CONTAINMENT_SUFFIX_CLASSNAME;
@@ -846,9 +850,9 @@ public class MainProcessor extends AbstractErrorAbsorbingProcessor {
         final Messager messager = processingEnv.getMessager();
         final boolean isIface = e.getKind() == ElementKind.INTERFACE;
         final boolean isClass = e.getKind() == ElementKind.CLASS;
-        if (isIface || isClass) {
+        if ((isIface || isClass) && !e.getModifiers().contains(Modifier.PRIVATE)) {
             TypeElement classElement = (TypeElement) e;
-            PackageElement packageElement = (PackageElement) classElement.getEnclosingElement();
+            PackageElement packageElement = getPackage(e);
             messager.printMessage(Diagnostic.Kind.NOTE,
                                   "Discovered rule extension for class [" + classElement.getSimpleName() + "]");
             final String classNameActivity = classElement.getSimpleName() + RULE_EXTENSION_SUFFIX_CLASSNAME;
@@ -865,9 +869,9 @@ public class MainProcessor extends AbstractErrorAbsorbingProcessor {
         final Messager messager = processingEnv.getMessager();
         final boolean isIface = e.getKind() == ElementKind.INTERFACE;
         final boolean isClass = e.getKind() == ElementKind.CLASS;
-        if (isIface || isClass) {
+        if ((isIface || isClass) && !e.getModifiers().contains(Modifier.PRIVATE)) {
             TypeElement classElement = (TypeElement) e;
-            PackageElement packageElement = (PackageElement) classElement.getEnclosingElement();
+            PackageElement packageElement = getPackage(e);
             messager.printMessage(Diagnostic.Kind.NOTE,
                                   "Discovered docking rule for class [" + classElement.getSimpleName() + "]");
             final String classNameActivity = classElement.getSimpleName() + RULE_DOCKING_SUFFIX_CLASSNAME;
@@ -884,9 +888,9 @@ public class MainProcessor extends AbstractErrorAbsorbingProcessor {
         final Messager messager = processingEnv.getMessager();
         final boolean isIface = e.getKind() == ElementKind.INTERFACE;
         final boolean isClass = e.getKind() == ElementKind.CLASS;
-        if (isIface || isClass) {
+        if ((isIface || isClass) && !e.getModifiers().contains(Modifier.PRIVATE)) {
             TypeElement classElement = (TypeElement) e;
-            PackageElement packageElement = (PackageElement) classElement.getEnclosingElement();
+            PackageElement packageElement = getPackage(e);
             messager.printMessage(Diagnostic.Kind.NOTE,
                                   "Discovered edge cardinality rule for class [" + classElement.getSimpleName() + "]");
             final String classNameActivity = classElement.getSimpleName() + RULE_EDGE_CARDINALITY_SUFFIX_CLASSNAME;
@@ -903,9 +907,9 @@ public class MainProcessor extends AbstractErrorAbsorbingProcessor {
         final Messager messager = processingEnv.getMessager();
         final boolean isIface = e.getKind() == ElementKind.INTERFACE;
         final boolean isClass = e.getKind() == ElementKind.CLASS;
-        if (isIface || isClass) {
+        if ((isIface || isClass) && !e.getModifiers().contains(Modifier.PRIVATE)) {
             TypeElement classElement = (TypeElement) e;
-            PackageElement packageElement = (PackageElement) classElement.getEnclosingElement();
+            PackageElement packageElement = getPackage(e);
             messager.printMessage(Diagnostic.Kind.NOTE,
                                   "Discovered cardinality rule for class [" + classElement.getSimpleName() + "]");
             final String classNameActivity = classElement.getSimpleName() + RULE_CARDINALITY_SUFFIX_CLASSNAME;
@@ -922,9 +926,9 @@ public class MainProcessor extends AbstractErrorAbsorbingProcessor {
         final Messager messager = processingEnv.getMessager();
         final boolean isIface = element.getKind() == ElementKind.INTERFACE;
         final boolean isClass = element.getKind() == ElementKind.CLASS;
-        if (isIface || isClass) {
+        if ((isIface || isClass) && !element.getModifiers().contains(Modifier.PRIVATE)) {
             TypeElement classElement = (TypeElement) element;
-            PackageElement packageElement = (PackageElement) classElement.getEnclosingElement();
+            PackageElement packageElement = getPackage(element);
             messager.printMessage(Diagnostic.Kind.NOTE,
                                   "Discovered connection rule for class [" + classElement.getSimpleName() + "]");
             final String classNameActivity = classElement.getSimpleName() + RULE_CONNECTION_SUFFIX_CLASSNAME;
@@ -961,13 +965,15 @@ public class MainProcessor extends AbstractErrorAbsorbingProcessor {
     }
 
     private boolean processLastRound() throws Exception {
-        processLastRoundDefinitionSetProxyAdapter();
-        processLastRoundDefinitionSetAdapter();
-        processLastRoundDefinitionFactory();
-        processLastRoundDefinitionAdapter();
-        processLastRoundPropertyAdapter();
-        processLastRoundRuleAdapter();
-        processLastRoundMorphing();
+        if(processingContext.getDefinitionSet() != null) {
+            processLastRoundDefinitionSetProxyAdapter();
+            processLastRoundDefinitionSetAdapter();
+            processLastRoundDefinitionFactory();
+            processLastRoundDefinitionAdapter();
+            processLastRoundPropertyAdapter();
+            processLastRoundRuleAdapter();
+            processLastRoundMorphing();
+        }
         return true;
     }
 
@@ -1241,5 +1247,12 @@ public class MainProcessor extends AbstractErrorAbsorbingProcessor {
         final Messager messager = processingEnv.getMessager();
         messager.printMessage(kind,
                               message);
+    }
+
+    private PackageElement getPackage(Element element) {
+        if(element.getKind().equals(ElementKind.PACKAGE)) {
+            return (PackageElement) element;
+        }
+        return getPackage(element.getEnclosingElement());
     }
 }
