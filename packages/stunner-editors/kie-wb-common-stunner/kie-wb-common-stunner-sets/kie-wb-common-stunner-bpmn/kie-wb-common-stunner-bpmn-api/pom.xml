@@ -166,8 +166,7 @@
     <!-- New Marshaller -->
     <dependency>
       <groupId>org.treblereel.gwt.xml.mapper</groupId>
-      <artifactId>gwt-backend</artifactId>
-      <!-- <scope>provided</scope> -->
+      <artifactId>jre-backend</artifactId>
     </dependency>
 
     <dependency>
@@ -246,13 +245,6 @@
           <artifactId>jetty-annotations</artifactId>
         </exclusion>
       </exclusions>
-    </dependency>
-
-    <!-- New Marshalling Testing -->
-    <dependency>
-      <groupId>org.treblereel.gwt.xml.mapper</groupId>
-      <artifactId>jre-backend</artifactId>
-      <scope>test</scope>
     </dependency>
 
   </dependencies>

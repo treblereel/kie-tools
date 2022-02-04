@@ -53,6 +53,8 @@ public class StartConditionalEvent extends StartEvent {
     @Valid
     protected InterruptingConditionalEventExecutionSet executionSet;
 
+    public ConditionalEventDefinition conditionalEventDefinition;
+
     public StartConditionalEvent() {
         this("",
              "",
@@ -76,6 +78,14 @@ public class StartConditionalEvent extends StartEvent {
 
     public void setExecutionSet(InterruptingConditionalEventExecutionSet executionSet) {
         this.executionSet = executionSet;
+    }
+
+    public ConditionalEventDefinition getConditionalEventDefinition() {
+        return conditionalEventDefinition;
+    }
+
+    public void setConditionalEventDefinition(ConditionalEventDefinition conditionalEventDefinition) {
+        this.conditionalEventDefinition = conditionalEventDefinition;
     }
 
     @Override

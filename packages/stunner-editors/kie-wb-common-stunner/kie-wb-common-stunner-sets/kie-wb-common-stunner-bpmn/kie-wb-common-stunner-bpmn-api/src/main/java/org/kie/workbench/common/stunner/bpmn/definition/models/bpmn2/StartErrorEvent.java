@@ -17,6 +17,7 @@
 package org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2;
 
 import javax.validation.Valid;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.jboss.errai.common.client.api.annotations.MapsTo;
 import org.jboss.errai.common.client.api.annotations.Portable;
@@ -45,12 +46,15 @@ import static org.kie.workbench.common.forms.adf.engine.shared.formGeneration.pr
         policy = FieldPolicy.ONLY_MARKED,
         defaultFieldSettings = {@FieldParam(name = FIELD_CONTAINER_PARAM, value = COLLAPSIBLE_CONTAINER)}
 )
+@XmlRootElement(name = "startEvent", namespace = "http://www.omg.org/spec/BPMN/20100524/MODEL")
 public class StartErrorEvent extends StartEvent {
 
     @Property
     @FormField(afterElement = "documentation")
     @Valid
     protected InterruptingErrorEventExecutionSet executionSet;
+
+    public ErrorEventDefinition errorEventDefinition;
 
     @Property
     @FormField(afterElement = "executionSet")
@@ -83,6 +87,14 @@ public class StartErrorEvent extends StartEvent {
 
     public void setExecutionSet(final InterruptingErrorEventExecutionSet executionSet) {
         this.executionSet = executionSet;
+    }
+
+    public ErrorEventDefinition getErrorEventDefinition() {
+        return errorEventDefinition;
+    }
+
+    public void setErrorEventDefinition(ErrorEventDefinition errorEventDefinition) {
+        this.errorEventDefinition = errorEventDefinition;
     }
 
     public DataIOSet getDataIOSet() {

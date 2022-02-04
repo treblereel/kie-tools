@@ -19,6 +19,7 @@ package org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2;
 import java.util.Objects;
 
 import javax.validation.Valid;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.jboss.errai.common.client.api.annotations.MapsTo;
 import org.jboss.errai.common.client.api.annotations.Portable;
@@ -47,12 +48,15 @@ import static org.kie.workbench.common.forms.adf.engine.shared.formGeneration.pr
         policy = FieldPolicy.ONLY_MARKED,
         defaultFieldSettings = {@FieldParam(name = FIELD_CONTAINER_PARAM, value = COLLAPSIBLE_CONTAINER)}
 )
+@XmlRootElement(name = "startEvent", namespace = "http://www.omg.org/spec/BPMN/20100524/MODEL")
 public class StartEscalationEvent extends StartEvent {
 
     @Property
     @FormField(afterElement = "documentation")
     @Valid
     private InterruptingEscalationEventExecutionSet executionSet;
+
+    public EscalationEventDefinition escalationEventDefinition;
 
     @Property
     @FormField(afterElement = "executionSet")
@@ -85,6 +89,14 @@ public class StartEscalationEvent extends StartEvent {
 
     public void setExecutionSet(InterruptingEscalationEventExecutionSet executionSet) {
         this.executionSet = executionSet;
+    }
+
+    public EscalationEventDefinition getEscalationEventDefinition() {
+        return escalationEventDefinition;
+    }
+
+    public void setEscalationEventDefinition(EscalationEventDefinition escalationEventDefinition) {
+        this.escalationEventDefinition = escalationEventDefinition;
     }
 
     public DataIOSet getDataIOSet() {

@@ -30,7 +30,7 @@ import org.treblereel.gwt.xml.mapper.api.annotation.XMLMapper;
 import org.treblereel.gwt.xml.mapper.api.annotation.XmlUnwrappedCollection;
 
 @XMLMapper
-@XmlType(propOrder = {"itemDefinitions", "messages", "signals", "process", "bpmnDiagram", "relationship"})
+@XmlType(propOrder = {"itemDefinitions", "messages", "signals", "errors", "process", "bpmnDiagram", "relationship"})
 @XmlRootElement(name = "definitions", namespace = "http://www.omg.org/spec/BPMN/20100524/MODEL")
 public class Definitions {
 
@@ -61,6 +61,14 @@ public class Definitions {
     @XmlElement(name = "signal")
     @XmlUnwrappedCollection
     private List<Signal> signals = new ArrayList<>();
+
+    @XmlElement(name = "error")
+    @XmlUnwrappedCollection
+    private List<ErrorRef> errors = new ArrayList<>();
+
+    @XmlElement(name = "escalation")
+    @XmlUnwrappedCollection
+    private List<Escalation> escalations = new ArrayList<>();
 
     // All code behind this comment is auto generated.
     // Please regenerate it again if you added new property.
@@ -137,6 +145,22 @@ public class Definitions {
         this.signals = signals;
     }
 
+    public List<ErrorRef> getErrors() {
+        return errors;
+    }
+
+    public void setErrors(List<ErrorRef> errors) {
+        this.errors = errors;
+    }
+
+    public List<Escalation> getEscalations() {
+        return escalations;
+    }
+
+    public void setEscalations(List<Escalation> escalations) {
+        this.escalations = escalations;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -154,7 +178,8 @@ public class Definitions {
                 && Objects.equals(getProcess(), that.getProcess())
                 && Objects.equals(getItemDefinitions(), that.getItemDefinitions())
                 && Objects.equals(getSignals(), that.getSignals())
-                && Objects.equals(getMessages(), that.getMessages());
+                && Objects.equals(getMessages(), that.getMessages())
+                && Objects.equals(getErrors(), that.getErrors());
     }
 
     @Override
@@ -167,6 +192,7 @@ public class Definitions {
                                          Objects.hashCode(process),
                                          Objects.hashCode(itemDefinitions),
                                          Objects.hashCode(messages),
-                                         Objects.hashCode(signals));
+                                         Objects.hashCode(signals),
+                                         Objects.hashCode(errors));
     }
 }

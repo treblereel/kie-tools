@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:bpsim="http://www.bpsim.org/schemas/1.0" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:drools="http://www.jboss.org/drools" id="_nKKUcGZSEDqe-YVnMy7Aew" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd http://www.jboss.org/drools drools.xsd http://www.bpsim.org/schemas/1.0 bpsim.xsd http://www.omg.org/spec/DD/20100524/DC DC.xsd" exporter="jBPM Process Modeler" exporterVersion="2.0" targetNamespace="http://www.omg.org/bpmn20">
+  <bpmn2:itemDefinition id="__E0B80D84-4554-4AED-A2E7-99E25C04FFD3_DOAStartMessageNameOutputXItem" structureRef="DOAStartMessageDataType"/>
+  <bpmn2:itemDefinition id="StartMessageRefType" structureRef="DOAStartMessageDataType"/>
+  <bpmn2:itemDefinition id="__CBF68C0C-00FF-45E8-9051-676A323E94AA_DOAStartSignaleNameOutputXItem" structureRef="DOAStartSignalDataType"/>
+  <bpmn2:itemDefinition id="__E6F791DE-F339-42C5-A140-EE00DEC19955_DOAStartErrorNameOutputXItem" structureRef="DOAStartErrorDataType"/>
+  <bpmn2:itemDefinition id="__D860887F-C04E-4484-AF52-2B62A1E880D4_DOAStartEscalationNameOutputXItem" structureRef="DOAStartEscalationDataType"/>
+  <bpmn2:message id="_nKLikGZSEDqe-YVnMy7Aew" itemRef="StartMessageRefType" name="StartMessageRef"/>
+  <bpmn2:signal id="_-283023703" name="StartSignalRef"/>
+  <bpmn2:error id="StartErrorRef" errorCode="StartErrorRef"/>
+  <bpmn2:escalation id="_-1709070180" escalationCode="StartEscalationRef"/>
+  <bpmn2:process id="process1" drools:packageName="com.example" drools:version="1.0" drools:adHoc="false" name="process1" isExecutable="true" processType="Public">
+    <bpmn2:startEvent id="_0FB90B63-6650-469A-9A54-1796214441A5" name="Start Compensation Name" isInterrupting="false">
+      <bpmn2:documentation><![CDATA[Start Compensation Documentation]]></bpmn2:documentation>
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[Start Compensation Name]]></drools:metaValue>
+        </drools:metaData>
+        <drools:metaData name="MAStartCompensationName">
+          <drools:metaValue><![CDATA[MAStartCompensationValue]]></drools:metaValue>
+        </drools:metaData>
+        <drools:metaData name="customSLADueDate">
+          <drools:metaValue><![CDATA[08/01/2022]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:compensateEventDefinition/>
+    </bpmn2:startEvent>
+    <bpmn2:startEvent id="_D860887F-C04E-4484-AF52-2B62A1E880D4" name="Start Escalation Name">
+      <bpmn2:documentation><![CDATA[Start Escalation Documentation]]></bpmn2:documentation>
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[Start Escalation Name]]></drools:metaValue>
+        </drools:metaData>
+        <drools:metaData name="MAStartEscalationName">
+          <drools:metaValue><![CDATA[MAStartEscalationValue]]></drools:metaValue>
+        </drools:metaData>
+        <drools:metaData name="customSLADueDate">
+          <drools:metaValue><![CDATA[07/01/2022]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:dataOutput id="_D860887F-C04E-4484-AF52-2B62A1E880D4_DOAStartEscalationNameOutputX" drools:dtype="DOAStartEscalationDataType" itemSubjectRef="__D860887F-C04E-4484-AF52-2B62A1E880D4_DOAStartEscalationNameOutputXItem" name="DOAStartEscalationName"/>
+      <bpmn2:dataOutputAssociation>
+        <bpmn2:sourceRef>_D860887F-C04E-4484-AF52-2B62A1E880D4_DOAStartEscalationNameOutputX</bpmn2:sourceRef>
+        <bpmn2:assignment>
+          <bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[_D860887F-C04E-4484-AF52-2B62A1E880D4_DOAStartEscalationNameOutputX]]></bpmn2:from>
+          <bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[DOAStartEscalationTarget]]></bpmn2:to>
+        </bpmn2:assignment>
+      </bpmn2:dataOutputAssociation>
+      <bpmn2:outputSet>
+        <bpmn2:dataOutputRefs>_D860887F-C04E-4484-AF52-2B62A1E880D4_DOAStartEscalationNameOutputX</bpmn2:dataOutputRefs>
+      </bpmn2:outputSet>
+      <bpmn2:escalationEventDefinition drools:esccode="StartEscalationRef" escalationRef="_-1709070180"/>
+    </bpmn2:startEvent>
+    <bpmn2:startEvent id="_7A62598D-48F7-4686-893C-FB59195E952A" name="Start Conditional Name">
+      <bpmn2:documentation><![CDATA[Start Conditional Documentation]]></bpmn2:documentation>
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[Start Conditional Name]]></drools:metaValue>
+        </drools:metaData>
+        <drools:metaData name="MAStartConditionalName">
+          <drools:metaValue><![CDATA[MAStartConditionalValue]]></drools:metaValue>
+        </drools:metaData>
+        <drools:metaData name="customSLADueDate">
+          <drools:metaValue><![CDATA[06/01/2022]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:conditionalEventDefinition>
+        <bpmn2:condition xsi:type="bpmn2:tFormalExpression" language="http://www.jboss.org/drools/rule"><![CDATA[Start Conditional Expression]]></bpmn2:condition>
+      </bpmn2:conditionalEventDefinition>
+    </bpmn2:startEvent>
+    <bpmn2:startEvent id="_E6F791DE-F339-42C5-A140-EE00DEC19955" name="Start Error Name">
+      <bpmn2:documentation><![CDATA[Start Error Documentation]]></bpmn2:documentation>
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[Start Error Name]]></drools:metaValue>
+        </drools:metaData>
+        <drools:metaData name="MAStartErrorName">
+          <drools:metaValue><![CDATA[MAStartErrorValue]]></drools:metaValue>
+        </drools:metaData>
+        <drools:metaData name="customSLADueDate">
+          <drools:metaValue><![CDATA[05/01/2022]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:dataOutput id="_E6F791DE-F339-42C5-A140-EE00DEC19955_DOAStartErrorNameOutputX" drools:dtype="DOAStartErrorDataType" itemSubjectRef="__E6F791DE-F339-42C5-A140-EE00DEC19955_DOAStartErrorNameOutputXItem" name="DOAStartErrorName"/>
+      <bpmn2:dataOutputAssociation>
+        <bpmn2:sourceRef>_E6F791DE-F339-42C5-A140-EE00DEC19955_DOAStartErrorNameOutputX</bpmn2:sourceRef>
+        <bpmn2:assignment>
+          <bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[_E6F791DE-F339-42C5-A140-EE00DEC19955_DOAStartErrorNameOutputX]]></bpmn2:from>
+          <bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[DoaStartErrorTarget]]></bpmn2:to>
+        </bpmn2:assignment>
+      </bpmn2:dataOutputAssociation>
+      <bpmn2:outputSet>
+        <bpmn2:dataOutputRefs>_E6F791DE-F339-42C5-A140-EE00DEC19955_DOAStartErrorNameOutputX</bpmn2:dataOutputRefs>
+      </bpmn2:outputSet>
+      <bpmn2:errorEventDefinition drools:erefname="StartErrorRef" errorRef="StartErrorRef"/>
+    </bpmn2:startEvent>
+    <bpmn2:startEvent id="_5A2028BB-BE09-4BAC-ADCE-3AF9080DCC42" name="Start Timer Name">
+      <bpmn2:documentation><![CDATA[Start Timer Documentation]]></bpmn2:documentation>
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[Start Timer Name]]></drools:metaValue>
+        </drools:metaData>
+        <drools:metaData name="MAStartTimerName">
+          <drools:metaValue><![CDATA[MAStartTimerValue]]></drools:metaValue>
+        </drools:metaData>
+        <drools:metaData name="customSLADueDate">
+          <drools:metaValue><![CDATA[04/01/2022]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:timerEventDefinition>
+        <bpmn2:timeDate xsi:type="bpmn2:tFormalExpression">2022-01-01T10:00:00-03:00</bpmn2:timeDate>
+      </bpmn2:timerEventDefinition>
+    </bpmn2:startEvent>
+    <bpmn2:startEvent id="_CBF68C0C-00FF-45E8-9051-676A323E94AA" name="Start Signal Name">
+      <bpmn2:documentation><![CDATA[Start Signal Documentation]]></bpmn2:documentation>
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[Start Signal Name]]></drools:metaValue>
+        </drools:metaData>
+        <drools:metaData name="MAStartSignalName">
+          <drools:metaValue><![CDATA[MAStartSignalValue]]></drools:metaValue>
+        </drools:metaData>
+        <drools:metaData name="customSLADueDate">
+          <drools:metaValue><![CDATA[03/01/2022]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:dataOutput id="_CBF68C0C-00FF-45E8-9051-676A323E94AA_DOAStartSignaleNameOutputX" drools:dtype="DOAStartSignalDataType" itemSubjectRef="__CBF68C0C-00FF-45E8-9051-676A323E94AA_DOAStartSignaleNameOutputXItem" name="DOAStartSignaleName"/>
+      <bpmn2:dataOutputAssociation>
+        <bpmn2:sourceRef>_CBF68C0C-00FF-45E8-9051-676A323E94AA_DOAStartSignaleNameOutputX</bpmn2:sourceRef>
+        <bpmn2:assignment>
+          <bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[_CBF68C0C-00FF-45E8-9051-676A323E94AA_DOAStartSignaleNameOutputX]]></bpmn2:from>
+          <bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[DOAStartSignalTarget]]></bpmn2:to>
+        </bpmn2:assignment>
+      </bpmn2:dataOutputAssociation>
+      <bpmn2:outputSet>
+        <bpmn2:dataOutputRefs>_CBF68C0C-00FF-45E8-9051-676A323E94AA_DOAStartSignaleNameOutputX</bpmn2:dataOutputRefs>
+      </bpmn2:outputSet>
+      <bpmn2:signalEventDefinition signalRef="_-283023703"/>
+    </bpmn2:startEvent>
+    <bpmn2:startEvent id="_E0B80D84-4554-4AED-A2E7-99E25C04FFD3" name="Start Message Name">
+      <bpmn2:documentation><![CDATA[Start Message Documentation]]></bpmn2:documentation>
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[Start Message Name]]></drools:metaValue>
+        </drools:metaData>
+        <drools:metaData name="MAStartMessageName">
+          <drools:metaValue><![CDATA[MAStartMessageValue]]></drools:metaValue>
+        </drools:metaData>
+        <drools:metaData name="customSLADueDate">
+          <drools:metaValue><![CDATA[02/01/2022]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:dataOutput id="_E0B80D84-4554-4AED-A2E7-99E25C04FFD3_DOAStartMessageNameOutputX" drools:dtype="DOAStartMessageDataType" itemSubjectRef="__E0B80D84-4554-4AED-A2E7-99E25C04FFD3_DOAStartMessageNameOutputXItem" name="DOAStartMessageName"/>
+      <bpmn2:dataOutputAssociation>
+        <bpmn2:sourceRef>_E0B80D84-4554-4AED-A2E7-99E25C04FFD3_DOAStartMessageNameOutputX</bpmn2:sourceRef>
+        <bpmn2:assignment>
+          <bpmn2:from xsi:type="bpmn2:tFormalExpression"><![CDATA[_E0B80D84-4554-4AED-A2E7-99E25C04FFD3_DOAStartMessageNameOutputX]]></bpmn2:from>
+          <bpmn2:to xsi:type="bpmn2:tFormalExpression"><![CDATA[DOAStartMessageTarget]]></bpmn2:to>
+        </bpmn2:assignment>
+      </bpmn2:dataOutputAssociation>
+      <bpmn2:outputSet>
+        <bpmn2:dataOutputRefs>_E0B80D84-4554-4AED-A2E7-99E25C04FFD3_DOAStartMessageNameOutputX</bpmn2:dataOutputRefs>
+      </bpmn2:outputSet>
+      <bpmn2:messageEventDefinition drools:msgref="StartMessageRef" messageRef="_nKLikGZSEDqe-YVnMy7Aew"/>
+    </bpmn2:startEvent>
+    <bpmn2:startEvent id="_639930D6-5686-441D-9D46-23EC49103DCA" name="Start None Name">
+      <bpmn2:documentation><![CDATA[StartNoneDocumentation]]></bpmn2:documentation>
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[Start None Name]]></drools:metaValue>
+        </drools:metaData>
+        <drools:metaData name="MAStartNoneName">
+          <drools:metaValue><![CDATA[MAStartNoneValue]]></drools:metaValue>
+        </drools:metaData>
+        <drools:metaData name="customSLADueDate">
+          <drools:metaValue><![CDATA[01/01/2022]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+    </bpmn2:startEvent>
+  </bpmn2:process>
+  <bpmndi:BPMNDiagram>
+    <bpmndi:BPMNPlane bpmnElement="process1">
+      <bpmndi:BPMNShape id="shape__639930D6-5686-441D-9D46-23EC49103DCA" bpmnElement="_639930D6-5686-441D-9D46-23EC49103DCA">
+        <dc:Bounds height="56" width="56" x="162" y="74"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape__E0B80D84-4554-4AED-A2E7-99E25C04FFD3" bpmnElement="_E0B80D84-4554-4AED-A2E7-99E25C04FFD3">
+        <dc:Bounds height="56" width="56" x="162" y="202"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape__CBF68C0C-00FF-45E8-9051-676A323E94AA" bpmnElement="_CBF68C0C-00FF-45E8-9051-676A323E94AA">
+        <dc:Bounds height="56" width="56" x="162" y="330"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape__5A2028BB-BE09-4BAC-ADCE-3AF9080DCC42" bpmnElement="_5A2028BB-BE09-4BAC-ADCE-3AF9080DCC42">
+        <dc:Bounds height="56" width="56" x="162" y="458"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape__E6F791DE-F339-42C5-A140-EE00DEC19955" bpmnElement="_E6F791DE-F339-42C5-A140-EE00DEC19955">
+        <dc:Bounds height="56" width="56" x="346" y="74"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape__7A62598D-48F7-4686-893C-FB59195E952A" bpmnElement="_7A62598D-48F7-4686-893C-FB59195E952A">
+        <dc:Bounds height="56" width="56" x="346" y="202"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape__D860887F-C04E-4484-AF52-2B62A1E880D4" bpmnElement="_D860887F-C04E-4484-AF52-2B62A1E880D4">
+        <dc:Bounds height="56" width="56" x="346" y="330"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape__0FB90B63-6650-469A-9A54-1796214441A5" bpmnElement="_0FB90B63-6650-469A-9A54-1796214441A5">
+        <dc:Bounds height="56" width="56" x="346" y="458"/>
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  <bpmn2:relationship type="BPSimData">
+    <bpmn2:extensionElements>
+      <bpsim:BPSimData>
+        <bpsim:Scenario id="default" name="Simulationscenario">
+          <bpsim:ScenarioParameters/>
+          <bpsim:ElementParameters elementRef="_639930D6-5686-441D-9D46-23EC49103DCA">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:NormalDistribution mean="0" standardDeviation="0"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="_5A2028BB-BE09-4BAC-ADCE-3AF9080DCC42">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:NormalDistribution mean="0" standardDeviation="0"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="_7A62598D-48F7-4686-893C-FB59195E952A">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:NormalDistribution mean="0" standardDeviation="0"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="_D860887F-C04E-4484-AF52-2B62A1E880D4">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:NormalDistribution mean="0" standardDeviation="0"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="_0FB90B63-6650-469A-9A54-1796214441A5">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:NormalDistribution mean="0" standardDeviation="0"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>
+      </bpsim:BPSimData>
+    </bpmn2:extensionElements>
+    <bpmn2:source>_nKKUcGZSEDqe-YVnMy7Aew</bpmn2:source>
+    <bpmn2:target>_nKKUcGZSEDqe-YVnMy7Aew</bpmn2:target>
+  </bpmn2:relationship>
+</bpmn2:definitions>

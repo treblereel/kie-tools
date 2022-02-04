@@ -28,6 +28,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.jboss.errai.common.client.api.annotations.MapsTo;
@@ -232,16 +233,7 @@ public class Process implements BPMNDiagram<DiagramSet, ProcessData, RootProcess
 
     @XmlElement(name = "startEvent")
     @XmlUnwrappedCollection
-    @XmlElements({
-            @XmlElement(name = "_StartNoneEvent", type = StartNoneEvent.class),
-            @XmlElement(name = "_StartCompensationEvent", type = StartCompensationEvent.class),
-            @XmlElement(name = "_StartMessageEvent", type = StartMessageEvent.class),
-            @XmlElement(name = "_StartSignalEvent", type = StartSignalEvent.class),
-            @XmlElement(name = "_StartTimerEvent", type = StartTimerEvent.class),
-            @XmlElement(name = "_StartEscalationEvent", type = StartEscalationEvent.class),
-            @XmlElement(name = "_StartErrorEvent", type = StartErrorEvent.class),
-            @XmlElement(name = "_StartConditionalEvent", type = StartConditionalEvent.class)
-    })
+    @XmlJavaTypeAdapter(FallbackStartEventAdapter.class)
     private List<StartEvent> startEvents = new ArrayList<>();
 
     @XmlElement(name = "laneSet")
