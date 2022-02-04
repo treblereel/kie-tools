@@ -20,8 +20,11 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import elemental2.dom.DomGlobal;
+import elemental2.dom.HTMLElement;
 import elemental2.promise.Promise;
+import jsinterop.base.Js;
+import org.gwtproject.user.client.ui.IsWidget;
 import org.uberfire.client.mvp.AbstractActivity;
 import org.uberfire.client.mvp.EditorActivity;
 import org.uberfire.mvp.PlaceRequest;
@@ -37,6 +40,8 @@ public class SWDiagramEditorActivity extends AbstractActivity implements EditorA
 
     @Override
     public void onStartup(final PlaceRequest place) {
+        DomGlobal.console.log(getClass().getSimpleName() + ".onStartup");
+
         super.onStartup(place);
         realPresenter.onStartup(place);
     }
@@ -49,8 +54,13 @@ public class SWDiagramEditorActivity extends AbstractActivity implements EditorA
 
     @Override
     public void onOpen() {
+        DomGlobal.console.log(getClass().getSimpleName() + ".asWidget");
+
         super.onOpen();
         realPresenter.onOpen();
+
+
+        //DomGlobal.document.body.append(Js.<HTMLElement>uncheckedCast(getWidget().asWidget().getElement()));
     }
 
     @Override

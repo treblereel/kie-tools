@@ -17,12 +17,14 @@
 package org.kie.workbench.common.stunner.sw;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.Startup;
+import javax.inject.Singleton;
 
-import org.jboss.errai.ioc.client.api.EntryPoint;
-import org.jboss.errai.ui.shared.api.annotations.Bundle;
+import io.crysknife.ui.translation.api.annotations.Bundle;
 import org.uberfire.client.views.pfly.sys.PatternFlyBootstrapper;
 
-@EntryPoint
+@Startup
+@Singleton
 @Bundle("resources/i18n/SWConstants.properties")
 public class SWEntryPoint {
 

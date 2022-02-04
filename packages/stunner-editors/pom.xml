@@ -114,6 +114,7 @@
 <!--
     <module>lienzo-webapp</module>
 -->
+    <module>sw-editor</module>
 
   </modules>
 

@@ -20,9 +20,9 @@ import javax.inject.Inject;
 
 import com.ait.lienzo.client.core.types.JsCanvas;
 import com.ait.lienzo.client.widget.panel.LienzoBoundsPanel;
-import com.google.gwt.user.client.ui.IsWidget;
 import elemental2.dom.DomGlobal;
 import elemental2.promise.Promise;
+import org.gwtproject.user.client.ui.IsWidget;
 import org.kie.workbench.common.stunner.client.lienzo.canvas.LienzoCanvas;
 import org.kie.workbench.common.stunner.client.lienzo.canvas.LienzoPanel;
 import org.kie.workbench.common.stunner.client.widgets.editor.StunnerEditor;
@@ -61,6 +61,8 @@ public class SWDiagramEditor {
     }
 
     public void onStartup(final PlaceRequest place) {
+        DomGlobal.console.log("SWDiagramEditor.onStartup");
+
         stunnerEditor.setReadOnly(false);
     }
 
@@ -76,6 +78,8 @@ public class SWDiagramEditor {
     }
 
     public IsWidget asWidget() {
+        DomGlobal.console.log("SWDiagramEditor.asWidget");
+
         return stunnerEditor.getView();
     }
 
@@ -96,6 +100,8 @@ public class SWDiagramEditor {
     }
 
     public Promise<Void> setContent(final String path, final String value) {
+        DomGlobal.console.log("SWDiagramEditor.setContent " + value);
+
         close();
         return promises.create((success, failure) -> {
             diagramService.transform(path,
@@ -104,11 +110,16 @@ public class SWDiagramEditor {
 
                                          @Override
                                          public void onSuccess(final Diagram diagram) {
+                                             DomGlobal.console.log("SWDiagramEditor.onSuccess 1");
+
+
                                              stunnerEditor
                                                      .close()
                                                      .open(diagram, new SessionPresenter.SessionPresenterCallback() {
                                                          @Override
                                                          public void onSuccess() {
+                                                             DomGlobal.console.log("SWDiagramEditor.onSuccess 2");
+
                                                              onDiagramOpenSuccess();
                                                              success.onInvoke((Void) null);
                                                          }
@@ -130,6 +141,9 @@ public class SWDiagramEditor {
     }
 
     private void onDiagramOpenSuccess() {
+        DomGlobal.console.log("SWDiagramEditor.onDiagramOpenSuccess");
+
+
         Diagram diagram = stunnerEditor.getCanvasHandler().getDiagram();
         Metadata metadata = diagram.getMetadata();
         String title = metadata.getTitle();
@@ -139,6 +153,8 @@ public class SWDiagramEditor {
     }
 
     private void initJsTypes() {
+        DomGlobal.console.log("SWDiagramEditor.initJsTypes");
+
         LienzoCanvas canvas = (LienzoCanvas) stunnerEditor.getCanvasHandler().getCanvas();
         if (canvas != null) {
             LienzoPanel panel = (LienzoPanel) canvas.getView().getPanel();

@@ -18,8 +18,9 @@ package org.kie.workbench.common.stunner.sw.definition;
 
 import java.util.Set;
 
+import io.crysknife.ui.databinding.client.api.Bindable;
+import jsinterop.annotations.JsConstructor;
 import jsinterop.annotations.JsType;
-import org.jboss.errai.databinding.client.api.Bindable;
 import org.kie.soup.commons.util.Sets;
 import org.kie.workbench.common.stunner.core.definition.annotation.Definition;
 import org.kie.workbench.common.stunner.core.definition.annotation.definition.Category;
@@ -33,7 +34,7 @@ import org.kie.workbench.common.stunner.core.rule.annotation.EdgeOccurrences;
 @CanConnect(startRole = Start.LABEL_START, endRole = State.LABEL_STATE)
 @EdgeOccurrences(role = Start.LABEL_START, type = EdgeOccurrences.EdgeType.INCOMING, max = 0)
 @EdgeOccurrences(role = Start.LABEL_START, type = EdgeOccurrences.EdgeType.OUTGOING, max = 1)
-@JsType
+//@JsType
 public class StartTransition {
 
     public static final String LABEL_TRANSITION_START = "transition_start";

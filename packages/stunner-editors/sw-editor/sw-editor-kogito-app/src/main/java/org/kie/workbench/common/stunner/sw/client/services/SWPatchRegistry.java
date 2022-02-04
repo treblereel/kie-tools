@@ -24,6 +24,11 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import elemental2.dom.DomGlobal;
+import elemental2.dom.HTMLIFrameElement;
+import elemental2.dom.Window;
+import jsinterop.annotations.JsFunction;
+import jsinterop.base.Js;
+import jsinterop.base.JsForEachCallbackFn;
 import org.appformer.client.stateControl.registry.Registry;
 import org.kie.workbench.common.stunner.core.client.api.SessionManager;
 import org.kie.workbench.common.stunner.core.client.canvas.AbstractCanvasHandler;
@@ -73,7 +78,10 @@ public class SWPatchRegistry {
         DomGlobal.console.log("+- " + command.toString());
         String patch = patchBuilder.build(command);
         DomGlobal.console.log("-> " + patch);
-        JsSWWindow.onJsonChanged(patch);
+
+        ((OnJsonChanged)Js.asPropertyMap(DomGlobal.window.parent).get("onJsonChanged")).apply(patch);
+
+        //JsSWWindow.onJsonChanged(patch);
     }
 
     private void onCommandExecuted(Command<AbstractCanvasHandler, CanvasViolation> command) {
@@ -92,5 +100,12 @@ public class SWPatchRegistry {
         for (Command<AbstractCanvasHandler, CanvasViolation> c : commands) {
             onCommandExecuted(c);
         }
+    }
+
+    @JsFunction
+    @FunctionalInterface
+    private interface OnJsonChanged {
+
+        void apply(String raw);
     }
 }

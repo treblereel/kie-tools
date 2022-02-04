@@ -351,7 +351,7 @@
     <outputDirectory>src/main/webapp/WEB-INF/classes</outputDirectory>
 
     <plugins>
-      <plugin>
+<!--      <plugin>
         <groupId>com.vertispan.j2cl</groupId>
         <artifactId>j2cl-maven-plugin</artifactId>
         <version>0.19-SNAPSHOT</version>
@@ -368,7 +368,7 @@
           <webappDirectory>${project.build.directory}/gwt/launcherDir/</webappDirectory>
           <compilationLevel>ADVANCED</compilationLevel>
         </configuration>
-      </plugin>
+      </plugin>-->
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

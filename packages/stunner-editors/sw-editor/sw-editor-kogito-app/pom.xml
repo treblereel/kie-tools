@@ -18,510 +18,565 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <parent>
-    <artifactId>sw-editor</artifactId>
-    <groupId>org.kie.kogito.stunner.editors</groupId>
-    <version>0.0.0</version>
-    <relativePath>../pom.xml</relativePath>
-  </parent>
-  <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>sw-editor</artifactId>
+        <groupId>org.kie.kogito.stunner.editors</groupId>
+        <version>0.0.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>sw-editor-kogito-app</artifactId>
-  <packaging>war</packaging>
+    <artifactId>sw-editor-kogito-app</artifactId>
+    <packaging>war</packaging>
 
-  <name>Kogito SW Editor - Kogito App</name>
-  <description>Kogito SW Editor - Kogito App</description>
+    <name>Kogito SW Editor - Kogito App</name>
+    <description>Kogito SW Editor - Kogito App</description>
 
-  <!-- CNCF SW Repos. -->
-  <repositories>
-    <repository>
-    <id>oss.sonatype.org-snapshot</id>
-    <url>http://oss.sonatype.org/content/repositories/snapshots</url>
-    <releases>
-      <enabled>false</enabled>
-    </releases>
-    <snapshots>
-      <enabled>true</enabled>
-    </snapshots>
-  </repository>
-  </repositories>
+    <dependencies>
 
-  <dependencies>
-    <!--Logs-->
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <scope>provided</scope>
-    </dependency>
+        <dependency>
+            <groupId>org.treblereel.j2cl.processors</groupId>
+            <artifactId>annotations</artifactId>
+        </dependency>
 
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-ext</artifactId>
-      <scope>provided</scope>
-    </dependency>
+        <dependency>
+            <groupId>org.treblereel.j2cl.processors</groupId>
+            <artifactId>processors</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <scope>provided</scope>
-    </dependency>
+        <dependency>
+            <groupId>io.crysknife</groupId>
+            <artifactId>crysknife-core</artifactId>
+        </dependency>
 
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>log4j-over-slf4j</artifactId>
-      <scope>provided</scope>
-    </dependency>
+        <dependency>
+            <groupId>io.crysknife.ui.templates</groupId>
+            <artifactId>api</artifactId>
+        </dependency>
 
-    <!-- Errai -->
-    <dependency>
-      <groupId>com.google.inject</groupId>
-      <artifactId>guice</artifactId>
-      <scope>provided</scope>
-    </dependency>
+        <dependency>
+            <groupId>io.crysknife.ui.templates</groupId>
+            <artifactId>generator</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
-    <dependency>
-      <groupId>org.jboss.spec.javax.xml.bind</groupId>
-      <artifactId>jboss-jaxb-api_2.3_spec</artifactId>
-      <scope>provided</scope>
-    </dependency>
+        <dependency>
+            <groupId>io.crysknife.ui</groupId>
+            <artifactId>gwt-dom-generator</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
-    <!-- Stunner -->
-    <dependency>
-      <groupId>org.kie.kogito.stunner.editors</groupId>
-      <artifactId>kie-wb-common-stunner-core-api</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.kie.kogito.stunner.editors</groupId>
-      <artifactId>kie-wb-common-stunner-client-api</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.kie.kogito.stunner.editors</groupId>
-      <artifactId>kie-wb-common-stunner-backend-api</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.kie.kogito.stunner.editors</groupId>
-      <artifactId>kie-wb-common-stunner-core-common</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.kie.kogito.stunner.editors</groupId>
-      <artifactId>kie-wb-common-stunner-processors</artifactId>
-      <scope>provided</scope>
-    </dependency>
+        <dependency>
+            <groupId>io.crysknife.ui</groupId>
+            <artifactId>elemental2-generator</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
-    <dependency>
-      <groupId>org.kie.kogito.stunner.editors</groupId>
-      <artifactId>kie-wb-common-stunner-client-common</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.kie.kogito.stunner.editors</groupId>
-      <artifactId>kie-wb-common-stunner-lienzo</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>org.kie.kogito.stunner.editors</groupId>
-          <artifactId>uberfire-all</artifactId>
-        </exclusion>
-      </exclusions>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.kie.kogito.stunner.editors</groupId>
-      <artifactId>kie-wb-common-stunner-svg-client</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.kie.kogito.stunner.editors</groupId>
-      <artifactId>kie-wb-common-stunner-svg-gen</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.kie.kogito.stunner.editors</groupId>
-      <artifactId>kie-wb-common-stunner-lienzo-extensions</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.kie.kogito.stunner.editors</groupId>
-      <artifactId>kie-wb-common-stunner-widgets</artifactId>
-      <scope>provided</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>org.kie.kogito.stunner.editors</groupId>
-          <artifactId>uberfire-all</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
+        <dependency>
+            <groupId>io.crysknife.ui.databinding</groupId>
+            <artifactId>api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.crysknife.ui.databinding</groupId>
+            <artifactId>generator</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.crysknife.ui.translation</groupId>
+            <artifactId>api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.crysknife.ui.translation</groupId>
+            <artifactId>generator</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.crysknife.ui.validation</groupId>
+            <artifactId>api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.crysknife.ui.validation</groupId>
+            <artifactId>generator</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.crysknife</groupId>
+            <artifactId>crysknife-processor</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.gwtproject.validation</groupId>
+            <artifactId>gwt-validation-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.gwtproject.validation</groupId>
+            <artifactId>gwt-validation-processor</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.gwtproject.resources</groupId>
+            <artifactId>gwt-resources-processor</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!--Logs-->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+<!--        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-ext</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>log4j-over-slf4j</artifactId>
+            <scope>provided</scope>
+        </dependency>-->
+
+        <!-- Stunner -->
+        <dependency>
+            <groupId>org.kie.kogito.stunner.editors</groupId>
+            <artifactId>kie-wb-common-stunner-core-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.kie.kogito.stunner.editors</groupId>
+            <artifactId>kie-wb-common-forms-adf-engine-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.kie.kogito.stunner.editors</groupId>
+            <artifactId>kie-wb-common-dynamic-forms-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.kie.kogito.stunner.editors</groupId>
+            <artifactId>kie-wb-common-stunner-client-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.kie.kogito.stunner.editors</groupId>
+            <artifactId>kie-wb-common-stunner-backend-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.kie.kogito.stunner.editors</groupId>
+            <artifactId>kie-wb-common-stunner-core-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.kie.kogito.stunner.editors</groupId>
+            <artifactId>kie-wb-common-stunner-processors</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.kie.kogito.stunner.editors</groupId>
+            <artifactId>kie-wb-common-stunner-client-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.kie.kogito.stunner.editors</groupId>
+            <artifactId>kie-wb-common-stunner-lienzo</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.kie.kogito.stunner.editors</groupId>
+            <artifactId>kie-wb-common-stunner-svg-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.kie.kogito.stunner.editors</groupId>
+            <artifactId>kie-wb-common-stunner-svg-gen</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.kie.kogito.stunner.editors</groupId>
+            <artifactId>kie-wb-common-stunner-lienzo-extensions</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.kie.kogito.stunner.editors</groupId>
+            <artifactId>kie-wb-common-stunner-widgets</artifactId>
+        </dependency>
 
 
-    <!-- Lienzo -->
-    <dependency>
-      <groupId>org.kie.kogito.stunner.editors</groupId>
-      <artifactId>lienzo-core</artifactId>
-      <scope>provided</scope>
-    </dependency>
+        <!-- Lienzo -->
+        <dependency>
+            <groupId>org.kie.kogito.stunner.editors</groupId>
+            <artifactId>lienzo-core</artifactId>
+        </dependency>
 
-    <!-- SW. -->
+        <!-- SW. -->
 
-    <dependency>
-      <groupId>org.kie.kogito.stunner.editors</groupId>
-      <artifactId>sw-editor-api</artifactId>
-      <version>${project.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.kie.kogito.stunner.editors</groupId>
-      <artifactId>sw-editor-client</artifactId>
-      <version>${project.version}</version>
-      <scope>provided</scope>
-    </dependency>
+        <dependency>
+            <groupId>org.kie.kogito.stunner.editors</groupId>
+            <artifactId>sw-editor-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.kie.kogito.stunner.editors</groupId>
+            <artifactId>sw-editor-client</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
-    <!-- Needed by forms for JSR303 validation -->
-    <dependency>
-      <groupId>javax.validation</groupId>
-      <artifactId>validation-api</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>javax.validation</groupId>
-      <artifactId>validation-api</artifactId>
-      <classifier>sources</classifier>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-validator</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-validator</artifactId>
-      <classifier>sources</classifier>
-      <scope>provided</scope>
-    </dependency>
+        <!-- Layout Editor API -->
+        <!-- Needed by kie-wb-common-dynamic-forms that is needed by stunner -->
+        <dependency>
+            <groupId>org.kie.kogito.stunner.editors</groupId>
+            <artifactId>uberfire-layout-editor-api</artifactId>
+        </dependency>
 
-    <!-- Layout Editor API -->
-    <!-- Needed by kie-wb-common-dynamic-forms that is needed by stunner -->
-    <dependency>
-      <groupId>org.kie.kogito.stunner.editors</groupId>
-      <artifactId>uberfire-layout-editor-api</artifactId>
-      <scope>provided</scope>
-    </dependency>
+        <!-- UberFire Commons Editor -->
+        <!-- Basics for uberfire's generic editor support -->
+        <dependency>
+            <groupId>org.kie.kogito.stunner.editors</groupId>
+            <artifactId>uberfire-commons-editor-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.kie.kogito.stunner.editors</groupId>
+            <artifactId>uberfire-commons-editor-client</artifactId>
+        </dependency>
 
-    <!-- UberFire Commons Editor -->
-    <!-- Basics for uberfire's generic editor support -->
-    <dependency>
-      <groupId>org.kie.kogito.stunner.editors</groupId>
-      <artifactId>uberfire-commons-editor-api</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.kie.kogito.stunner.editors</groupId>
-      <artifactId>uberfire-commons-editor-client</artifactId>
-      <scope>provided</scope>
-    </dependency>
+        <!-- Core UberFire dependencies -->
+        <dependency>
+            <groupId>org.kie.kogito.stunner.editors</groupId>
+            <artifactId>uberfire-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.kie.kogito.stunner.editors</groupId>
+            <artifactId>uberfire-client-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.kie.kogito.stunner.editors</groupId>
+            <artifactId>uberfire-workbench-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.kie.kogito.stunner.editors</groupId>
+            <artifactId>uberfire-simple-docks-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.kie.kogito.stunner.editors</groupId>
+            <artifactId>uberfire-workbench-processors</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.kie.kogito.stunner.editors</groupId>
+            <artifactId>uberfire-workbench-client-views-patternfly</artifactId>
+        </dependency>
 
-    <!-- Core UberFire dependencies -->
-    <dependency>
-      <groupId>org.kie.kogito.stunner.editors</groupId>
-      <artifactId>uberfire-api</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.kie.kogito.stunner.editors</groupId>
-      <artifactId>uberfire-client-api</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.kie.kogito.stunner.editors</groupId>
-      <artifactId>uberfire-workbench-client</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.kie.kogito.stunner.editors</groupId>
-      <artifactId>uberfire-simple-docks-client</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.kie.kogito.stunner.editors</groupId>
-      <artifactId>uberfire-workbench-processors</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.kie.kogito.stunner.editors</groupId>
-      <artifactId>uberfire-workbench-client-views-patternfly</artifactId>
-      <scope>provided</scope>
-    </dependency>
+        <!-- UberFire Kogito dependencies -->
+        <dependency>
+            <groupId>com.google.elemental2</groupId>
+            <artifactId>elemental2-promise</artifactId>
+        </dependency>
 
-    <!-- UberFire Kogito dependencies -->
-    <dependency>
-      <groupId>com.google.elemental2</groupId>
-      <artifactId>elemental2-promise</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>xml-apis</groupId>
-      <artifactId>xml-apis</artifactId>
-      <scope>provided</scope>
-    </dependency>
+        <!-- Generic ui components -->
+        <dependency>
+            <groupId>org.kie.kogito.stunner.editors</groupId>
+            <artifactId>uberfire-widgets-commons</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.kie.kogito.stunner.editors</groupId>
+            <artifactId>uberfire-widgets-table</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.kie.kogito.stunner.editors</groupId>
+            <artifactId>kie-wb-common-ui</artifactId>
+        </dependency>
 
-    <!-- Core utility classes -->
-    <dependency>
-      <groupId>org.kie.soup</groupId>
-      <artifactId>kie-soup-commons</artifactId>
-      <scope>provided</scope>
-    </dependency>
+        <!-- GWT and extensions -->
+        <dependency>
+            <groupId>org.gwtbootstrap3</groupId>
+            <artifactId>gwtbootstrap3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.gwtbootstrap3</groupId>
+            <artifactId>gwtbootstrap3-extras</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.elemental2</groupId>
+            <artifactId>elemental2-dom</artifactId>
+        </dependency>
 
-    <!-- Generic ui components -->
-    <dependency>
-      <groupId>org.kie.kogito.stunner.editors</groupId>
-      <artifactId>uberfire-widgets-commons</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.kie.kogito.stunner.editors</groupId>
-      <artifactId>uberfire-widgets-table</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.kie.kogito.stunner.editors</groupId>
-      <artifactId>kie-wb-common-ui</artifactId>
-      <scope>provided</scope>
-    </dependency>
+        <!-- Kogito -->
+        <dependency>
+            <groupId>org.kie.kogito.stunner.editors</groupId>
+            <artifactId>kie-wb-common-kogito-client</artifactId>
+        </dependency>
 
-    <!-- GWT and extensions -->
-    <dependency>
-      <groupId>com.google.gwt</groupId>
-      <artifactId>gwt-user</artifactId>
-      <scope>provided</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>javax.servlet</groupId>
-          <artifactId>javax.servlet-api</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.gwtbootstrap3</groupId>
-      <artifactId>gwtbootstrap3</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.gwtbootstrap3</groupId>
-      <artifactId>gwtbootstrap3-extras</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.google.elemental2</groupId>
-      <artifactId>elemental2-dom</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.google.gwt</groupId>
-      <artifactId>gwt-dev</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>org.mortbay.jasper</groupId>
-          <artifactId>apache-el</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>xml-apis</groupId>
-          <artifactId>xml-apis</artifactId>
-        </exclusion>
-      </exclusions>
-      <scope>provided</scope>
-    </dependency>
+        <!--  Appformer Kogito -->
+        <dependency>
+            <groupId>org.kie.kogito.stunner.editors</groupId>
+            <artifactId>appformer-client-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.kie.kogito.stunner.editors</groupId>
+            <artifactId>appformer-kogito-bridge</artifactId>
+        </dependency>
 
-    <!-- Kogito -->
-    <dependency>
-      <groupId>org.kie.kogito.stunner.editors</groupId>
-      <artifactId>kie-wb-common-kogito-client</artifactId>
-      <scope>provided</scope>
-    </dependency>
+        <!-- Test dependencies -->
+        <dependency>
+            <groupId>com.google.gwt.gwtmockito</groupId>
+            <artifactId>gwtmockito</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
-    <!--  Appformer Kogito -->
-    <dependency>
-      <groupId>org.kie.kogito.stunner.editors</groupId>
-      <artifactId>appformer-client-api</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.kie.kogito.stunner.editors</groupId>
-      <artifactId>appformer-kogito-bridge</artifactId>
-      <scope>provided</scope>
-    </dependency>
+        <!-- CNCF SW Java. -->
+        <dependency>
+            <groupId>io.serverlessworkflow</groupId>
+            <artifactId>serverlessworkflow-api</artifactId>
+            <version>5.0.0-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
 
-    <!-- Test dependencies -->
-    <dependency>
-      <groupId>com.google.gwt.gwtmockito</groupId>
-      <artifactId>gwtmockito</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.seleniumhq.selenium</groupId>
-      <artifactId>selenium-java</artifactId>
-      <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>commons-logging</groupId>
-          <artifactId>commons-logging</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
+        <dependency>
+            <groupId>io.serverlessworkflow</groupId>
+            <artifactId>serverlessworkflow-spi</artifactId>
+            <version>5.0.0-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
 
-    <!-- CNCF SW Java. -->
-    <dependency>
-      <groupId>io.serverlessworkflow</groupId>
-      <artifactId>serverlessworkflow-api</artifactId>
-      <version>5.0.0-SNAPSHOT</version>
-      <scope>test</scope>
-    </dependency>
+        <dependency>
+            <groupId>io.serverlessworkflow</groupId>
+            <artifactId>serverlessworkflow-validation</artifactId>
+            <version>5.0.0-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
 
-    <dependency>
-      <groupId>io.serverlessworkflow</groupId>
-      <artifactId>serverlessworkflow-spi</artifactId>
-      <version>5.0.0-SNAPSHOT</version>
-      <scope>test</scope>
-    </dependency>
+        <dependency>
+            <groupId>io.serverlessworkflow</groupId>
+            <artifactId>serverlessworkflow-diagram</artifactId>
+            <version>5.0.0-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
 
-    <dependency>
-      <groupId>io.serverlessworkflow</groupId>
-      <artifactId>serverlessworkflow-validation</artifactId>
-      <version>5.0.0-SNAPSHOT</version>
-      <scope>test</scope>
-    </dependency>
+        <dependency>
+            <groupId>io.serverlessworkflow</groupId>
+            <artifactId>serverlessworkflow-util</artifactId>
+            <version>5.0.0-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
 
-    <dependency>
-      <groupId>io.serverlessworkflow</groupId>
-      <artifactId>serverlessworkflow-diagram</artifactId>
-      <version>5.0.0-SNAPSHOT</version>
-      <scope>test</scope>
-    </dependency>
+    </dependencies>
 
-    <dependency>
-      <groupId>io.serverlessworkflow</groupId>
-      <artifactId>serverlessworkflow-util</artifactId>
-      <version>5.0.0-SNAPSHOT</version>
-      <scope>test</scope>
-    </dependency>
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <outputDirectory>src/main/webapp/WEB-INF/classes</outputDirectory>
 
-  </dependencies>
+        <plugins>
+            <plugin>
+                <groupId>com.vertispan.j2cl</groupId>
+                <artifactId>j2cl-maven-plugin</artifactId>
+                <version>0.19-SNAPSHOT</version>
+                <executions>
+                    <execution>
+                        <id>build-js</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <webappDirectory>${project.build.directory}/gwt/launcherDir/</webappDirectory>
+                    <compilationLevel>ADVANCED</compilationLevel>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>default-compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <skipMain>true</skipMain>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 
-  <build>
-    <finalName>${project.artifactId}</finalName>
-    <outputDirectory>src/main/webapp/WEB-INF/classes</outputDirectory>
+            <!-- Override the enforcer rules here to exclude some classes from BPMN client-side marshallers (Eclipse EMF)-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>ban-duplicated-classes</id>
+                        <phase>none</phase>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <banTransitiveDependencies>
+                                    <excludes>
+                                        <!-- the rule will not fail even if it detects ignoredArtifact
+                                             of group org.apache.maven, because it is excluded -->
+                                        <exclude>org.apache.maven:ignoredArtifact</exclude>
+                                        <exclude>*:anotherIgnoredArtifact</exclude>
+                                    </excludes>
+                                    <includes>
+                                        <!-- override "org.apache.maven:ignoredArtifact" to fail
+                                             if exactly 1.0 version of ignoreArtifact is detected
+                                             to be transitive dependency of the project -->
+                                        <include>org.apache.maven:ignoredArtifact:[1.0]</include>
+                                    </includes>
+                                </banTransitiveDependencies>
+                                <banDuplicateClasses>
+                                    <dependencies>
+                                        <dependency>
+                                            <artifactId>org.eclipse.emf.gwt.ecore</artifactId>
+                                            <ignoreClasses>
+                                                <ignoreClass>org.eclipse.emf.ecore.util.*</ignoreClass>
+                                            </ignoreClasses>
+                                        </dependency>
+                                    </dependencies>
+                                </banDuplicateClasses>
+                                <requirePluginVersions>
+                                    <message>Best Practice is to always define plugin versions!</message>
+                                    <banSnapshots>false</banSnapshots>
+                                    <phases>clean,deploy,site</phases>
+                                    <unCheckedPluginList>com.vertispan.j2cl:j2cl-maven-plugin</unCheckedPluginList>
+                                </requirePluginVersions>
+                            </rules>
+                            <fail>true</fail>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <configuration>
+                    <failOnError>false</failOnError>
+                    <filesets>
+                        <fileset>
+                            <directory>${basedir}</directory>
+                            <includes>
+                                <include>www-test/**</include>
+                                <include>src/main/webapp/org.kie.workbench.common.stunner.sw.KogitoSWEditor/</include>
+                                <include>src/main/webapp/WEB-INF/classes/</include>
+                                <include>src/main/webapp/WEB-INF/deploy/</include>
+                                <include>src/main/webapp/WEB-INF/lib/</include>
+                                <include>**/gwt-unitCache/**</include>
+                                <include>.gwt/**</include>
+                                <include>.errai/</include>
+                                <include>.index/**</include>
+                                <include>**/*.JUnit/**</include>
+                            </includes>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+        </plugins>
 
-    <plugins>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>gwt-maven-plugin</artifactId>
-        <configuration>
-          <extraJvmArgs>-Xmx4G -Xms1G -Xss1M -XX:CompileThreshold=7000 -Derrai.dynamic_validation.enabled=true</extraJvmArgs>
-          <module>org.kie.workbench.common.stunner.sw.KogitoSWEditor</module>
-          <localWorkers>8</localWorkers>
-          <noServer>false</noServer>
-          <logLevel>WARN</logLevel>
-          <disableCastChecking>true</disableCastChecking>
-          <optimizationLevel>9</optimizationLevel>
-          <draftCompile>false</draftCompile>
-          <strict>true</strict>
-          <style>OBFUSCATED</style>
-          <deploy>${project.build.directory}/gwt-symbols-deploy</deploy>
-          <hostedWebapp>src/main/webapp</hostedWebapp>
-          <runTarget>test.html</runTarget>
-          <generateJsInteropExports>true</generateJsInteropExports>
+    </build>
 
-          <compileSourcesArtifacts>
-            <!-- UberFire -->
-            <compileSourcesArtifact>org.kie.soup:kie-soup-commons</compileSourcesArtifact>
-            <compileSourcesArtifact>org.kie.kogito.stunner.editors:uberfire-api</compileSourcesArtifact>
-            <compileSourcesArtifact>org.kie.kogito.stunner.editors:uberfire-client-api</compileSourcesArtifact>
-            <compileSourcesArtifact>org.kie.kogito.stunner.editors:uberfire-workbench-client</compileSourcesArtifact>
-            <compileSourcesArtifact>org.kie.kogito.stunner.editors:uberfire-workbench-client-views-patternfly</compileSourcesArtifact>
-            <compileSourcesArtifact>org.kie.kogito.stunner.editors:uberfire-simple-docks-client</compileSourcesArtifact>
-            <!-- Errai, Drools etc -->
-            <compileSourcesArtifact>org.kie.kogito.stunner.editors:errai-data-binding</compileSourcesArtifact>
-            <compileSourcesArtifact>org.kie.kogito.stunner.editors:kie-wb-common-ui</compileSourcesArtifact>
-            <compileSourcesArtifact>org.kie.kogito.stunner.editors:kie-wb-common-kogito-client</compileSourcesArtifact>
-            <!-- UF-ext -->
-            <compileSourcesArtifact>org.kie.kogito.stunner.editors:uberfire-commons-editor-api</compileSourcesArtifact>
-            <compileSourcesArtifact>org.kie.kogito.stunner.editors:uberfire-commons-editor-client</compileSourcesArtifact>
-            <compileSourcesArtifact>org.kie.kogito.stunner.editors:uberfire-widgets-commons</compileSourcesArtifact>
-            <compileSourcesArtifact>org.kie.kogito.stunner.editors:uberfire-widgets-table</compileSourcesArtifact>
-            <compileSourcesArtifact>org.kie.kogito.stunner.editors:uberfire-widgets-core-client</compileSourcesArtifact>
-            <!-- Appformer -->
-            <compileSourcesArtifact>org.kie.kogito.stunner.editors:appformer-client-api</compileSourcesArtifact>
-            <compileSourcesArtifact>org.kie.kogito.stunner.editors:appformer-kogito-bridge</compileSourcesArtifact>
-            <!-- Stunner -->
-            <compileSourcesArtifact>org.kie.kogito.stunner.editors:kie-wb-common-stunner-core-api</compileSourcesArtifact>
-            <compileSourcesArtifact>org.kie.kogito.stunner.editors:kie-wb-common-stunner-backend-api</compileSourcesArtifact>
-            <compileSourcesArtifact>org.kie.kogito.stunner.editors:kie-wb-common-stunner-client-api</compileSourcesArtifact>
-            <compileSourcesArtifact>org.kie.kogito.stunner.editors:kie-wb-common-stunner-core-common</compileSourcesArtifact>
-            <compileSourcesArtifact>org.kie.kogito.stunner.editors:kie-wb-common-stunner-client-common</compileSourcesArtifact>
-            <compileSourcesArtifact>org.kie.kogito.stunner.editors:kie-wb-common-stunner-lienzo</compileSourcesArtifact>
-            <compileSourcesArtifact>org.kie.kogito.stunner.editors:kie-wb-common-stunner-svg-client</compileSourcesArtifact>
-            <compileSourcesArtifact>org.kie.kogito.stunner.editors:kie-wb-common-stunner-lienzo-extensions</compileSourcesArtifact>
-            <compileSourcesArtifact>org.kie.kogito.stunner.editors:kie-wb-common-stunner-widgets</compileSourcesArtifact>
-            <compileSourcesArtifact>org.kie.kogito.stunner.editors:sw-editor-api</compileSourcesArtifact>
-            <compileSourcesArtifact>org.kie.kogito.stunner.editors:sw-editor-client</compileSourcesArtifact>
-          </compileSourcesArtifacts>
-        </configuration>
-        <executions>
-          <execution>
-            <id>gwt-clean</id>
-            <phase>clean</phase>
-            <goals>
-              <goal>clean</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>gwt-compile</id>
-            <goals>
-              <goal>resources</goal>
-              <goal>compile</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
+    <!-- CNCF SW Repos. -->
+    <pluginRepositories>
+        <pluginRepository>
+            <id>vertispan-releases</id>
+            <name>Vertispan hosted artifacts-releases</name>
+            <url>https://repo.vertispan.com/j2cl</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+        <pluginRepository>
+            <id>sonatype-snapshots-repo</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
 
-      <plugin>
-        <artifactId>maven-war-plugin</artifactId>
-        <configuration>
-          <packagingExcludes>**/javax/**/*.*,**/*.class,**/*.symbolMap,WEB-INF/classes/**</packagingExcludes>
-          <archive>
-            <addMavenDescriptor>true</addMavenDescriptor>
-          </archive>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <artifactId>maven-clean-plugin</artifactId>
-        <configuration>
-          <failOnError>false</failOnError>
-          <filesets>
-            <fileset>
-              <directory>${basedir}</directory>
-              <includes>
-                <include>www-test/**</include>
-                <include>src/main/webapp/org.kie.workbench.common.stunner.sw.KogitoSWEditor/</include>
-                <include>src/main/webapp/WEB-INF/classes/</include>
-                <include>src/main/webapp/WEB-INF/deploy/</include>
-                <include>src/main/webapp/WEB-INF/lib/</include>
-                <include>**/gwt-unitCache/**</include>
-                <include>.gwt/**</include>
-                <include>.errai/</include>
-                <include>.index/**</include>
-                <include>**/*.JUnit/**</include>
-              </includes>
-            </fileset>
-          </filesets>
-        </configuration>
-      </plugin>
-    </plugins>
-
-  </build>
-
+    <repositories>
+        <repository>
+            <id>treblereel-snapshots</id>
+            <name>treblereel hosted artifacts-releases</name>
+            <url>https://repo.treblereel.org/snapshots</url>
+        </repository>
+        <repository>
+            <id>google-snapshots</id>
+            <name>google-snapshots</name>
+            <url>https://oss.sonatype.org/content/repositories/google-snapshots/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>vertispan-releases</id>
+            <name>Vertispan hosted artifacts-releases</name>
+            <url>https://repo.vertispan.com/j2cl</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>vertispan-snapshots</id>
+            <name>Vertispan Snapshots</name>
+            <url>https://repo.vertispan.com/gwt-snapshot/</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>sonatype-snapshots-repo</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>sonatype-repo</id>
+            <url>https://oss.sonatype.org/content/repositories/repositories</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </snapshots>
+        </repository>
+    </repositories>
 
 </project>

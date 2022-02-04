@@ -93,19 +93,19 @@ public abstract class AbstractToolboxControl
         return toolboxControl.getToolboxes(element);
     }
 
-    void onCanvasSelectionEvent(final @Observes CanvasSelectionEvent event) {
+    public void onCanvasSelectionEvent(final @Observes CanvasSelectionEvent event) {
         checkNotNull("event",
                      event);
         handleCanvasSelectionEvent(event);
     }
 
-    void onCanvasClearSelectionEvent(final @Observes CanvasClearSelectionEvent event) {
+    public void onCanvasClearSelectionEvent(final @Observes CanvasClearSelectionEvent event) {
         checkNotNull("event",
                      event);
         handleCanvasClearSelectionEvent(event);
     }
 
-    void onCanvasShapeRemovedEvent(final @Observes CanvasShapeRemovedEvent event) {
+    public void onCanvasShapeRemovedEvent(final @Observes CanvasShapeRemovedEvent event) {
         checkNotNull("event",
                      event);
         handleCanvasShapeRemovedEvent(event);
