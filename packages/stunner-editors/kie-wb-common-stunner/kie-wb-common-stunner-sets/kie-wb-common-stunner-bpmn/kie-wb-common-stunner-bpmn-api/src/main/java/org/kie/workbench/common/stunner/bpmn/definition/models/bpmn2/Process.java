@@ -232,7 +232,6 @@ public class Process implements BPMNDiagram<DiagramSet, ProcessData, RootProcess
     public static final Double HEIGHT = 950d;
 
     @XmlElement(name = "startEvent")
-    @XmlUnwrappedCollection
     @XmlJavaTypeAdapter(FallbackStartEventAdapter.class)
     private List<StartEvent> startEvents = new ArrayList<>();
 

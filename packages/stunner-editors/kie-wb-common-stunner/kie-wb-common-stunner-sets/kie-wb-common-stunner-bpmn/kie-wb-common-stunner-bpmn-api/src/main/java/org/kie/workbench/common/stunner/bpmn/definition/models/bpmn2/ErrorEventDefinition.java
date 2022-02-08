@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.kie.workbench.common.stunner.core.util.HashUtil;
 
 @XmlRootElement(name = "errorEventDefinition", namespace = "http://www.omg.org/spec/BPMN/20100524/MODEL")
-public class ErrorEventDefinition {
+public class ErrorEventDefinition extends AbstractEventDefinition {
 
     @XmlAttribute(namespace = "http://www.jboss.org/drools")
     private String erefname;

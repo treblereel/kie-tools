@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.kie.workbench.common.stunner.core.util.HashUtil;
 
 @XmlRootElement(name = "escalationEventDefinition", namespace = "http://www.omg.org/spec/BPMN/20100524/MODEL")
-public class EscalationEventDefinition {
+public class EscalationEventDefinition extends AbstractEventDefinition {
 
     @XmlAttribute(namespace = "http://www.jboss.org/drools")
     private String esccode;

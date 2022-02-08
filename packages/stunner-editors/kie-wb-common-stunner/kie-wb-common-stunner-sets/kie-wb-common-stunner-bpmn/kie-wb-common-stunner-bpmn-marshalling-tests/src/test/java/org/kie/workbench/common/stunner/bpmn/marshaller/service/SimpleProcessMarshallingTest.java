@@ -87,7 +87,7 @@ public class SimpleProcessMarshallingTest {
     @Test
     public void testNewStartEvent() {
         List<StartEvent> startEvents = processNew.getStartEvents();
-        assertEquals(1, startEvents.size());
+        assertEquals(8, startEvents.size());
     }
 
     @SuppressWarnings("unchecked")

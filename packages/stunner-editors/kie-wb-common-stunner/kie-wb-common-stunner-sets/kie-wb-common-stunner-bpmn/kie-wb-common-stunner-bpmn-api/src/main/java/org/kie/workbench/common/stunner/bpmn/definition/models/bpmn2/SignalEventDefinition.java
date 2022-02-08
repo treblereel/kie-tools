@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.kie.workbench.common.stunner.core.util.HashUtil;
 
 @XmlRootElement(name = "signalEventDefinition", namespace = "http://www.omg.org/spec/BPMN/20100524/MODEL")
-public class SignalEventDefinition {
+public class SignalEventDefinition extends AbstractEventDefinition {
 
     @XmlAttribute
     private String signalRef;

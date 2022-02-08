@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.kie.workbench.common.stunner.core.util.HashUtil;
 
 @XmlRootElement(name = "messageEventDefinition", namespace = "http://www.omg.org/spec/BPMN/20100524/MODEL")
-public class MessageEventDefinition {
+public class MessageEventDefinition extends AbstractEventDefinition {
 
     @XmlAttribute(namespace = "http://www.jboss.org/drools")
     private String msgref;

@@ -18,92 +18,47 @@ package org.kie.workbench.common.stunner.bpmn.definition.models.bpmn2;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementRef;
+import javax.xml.bind.annotation.XmlElementRefs;
 
+import org.kie.workbench.common.stunner.bpmn.definition.property.common.ConditionExpression;
+import org.kie.workbench.common.stunner.bpmn.definition.property.dataio.DataIOSet;
+import org.kie.workbench.common.stunner.bpmn.definition.property.event.timer.TimerSettings;
 import org.treblereel.gwt.xml.mapper.api.annotation.XMLMapper;
 
 @XMLMapper
-public class FallbackStartEvent {
+public class FallbackStartEvent extends StartEvent {
 
-    protected CompensateEventDefinition compensateEventDefinition;
-
-    protected MessageEventDefinition messageEventDefinition;
-
-    protected SignalEventDefinition signalEventDefinition;
-
-    protected ErrorEventDefinition errorEventDefinition;
-
-    protected EscalationEventDefinition escalationEventDefinition;
-
-    protected ConditionalEventDefinition conditionalEventDefinition;
-
-    protected TimerEventDefinition timerEventDefinition;
+    @XmlElementRefs({
+            @XmlElementRef(name = "compensateEventDefinition", type = CompensateEventDefinition.class),
+            @XmlElementRef(name = "messageEventDefinition", type = MessageEventDefinition.class),
+            @XmlElementRef(name = "signalEventDefinition", type = SignalEventDefinition.class),
+            @XmlElementRef(name = "errorEventDefinition", type = ErrorEventDefinition.class),
+            @XmlElementRef(name = "escalationEventDefinition", type = EscalationEventDefinition.class),
+            @XmlElementRef(name = "conditionalEventDefinition", type = ConditionalEventDefinition.class),
+            @XmlElementRef(name = "timerEventDefinition", type = TimerEventDefinition.class),
+    })
+    private AbstractEventDefinition eventDefinition;
 
     @XmlElement(name = "dataOutput")
-    protected List<DataOutput> dataOutputs;
+    private List<DataOutput> dataOutputs;
 
     @XmlElement(name = "dataOutputAssociation")
-    protected List<DataOutputAssociation> dataOutputAssociation;
+    private List<DataOutputAssociation> dataOutputAssociation;
 
     @XmlElement(name = "outputSet")
-    protected List<OutputSet> outputSet;
+    private List<OutputSet> outputSet;
 
-    public FallbackStartEvent() {
+    private FallbackStartEventExecutionSet executionSet;
+
+    private DataIOSet dataIOSet;
+
+    public AbstractEventDefinition getEventDefinition() {
+        return eventDefinition;
     }
 
-    protected CompensateEventDefinition getCompensateEventDefinition() {
-        return compensateEventDefinition;
-    }
-
-    protected void setCompensateEventDefinition(CompensateEventDefinition compensateEventDefinition) {
-        this.compensateEventDefinition = compensateEventDefinition;
-    }
-
-    protected MessageEventDefinition getMessageEventDefinition() {
-        return messageEventDefinition;
-    }
-
-    protected void setMessageEventDefinition(MessageEventDefinition messageEventDefinition) {
-        this.messageEventDefinition = messageEventDefinition;
-    }
-
-    protected SignalEventDefinition getSignalEventDefinition() {
-        return signalEventDefinition;
-    }
-
-    protected void setSignalEventDefinition(SignalEventDefinition signalEventDefinition) {
-        this.signalEventDefinition = signalEventDefinition;
-    }
-
-    public ErrorEventDefinition getErrorEventDefinition() {
-        return errorEventDefinition;
-    }
-
-    public void setErrorEventDefinition(ErrorEventDefinition errorEventDefinition) {
-        this.errorEventDefinition = errorEventDefinition;
-    }
-
-    public EscalationEventDefinition getEscalationEventDefinition() {
-        return escalationEventDefinition;
-    }
-
-    public void setEscalationEventDefinition(EscalationEventDefinition escalationEventDefinition) {
-        this.escalationEventDefinition = escalationEventDefinition;
-    }
-
-    public ConditionalEventDefinition getConditionalEventDefinition() {
-        return conditionalEventDefinition;
-    }
-
-    public void setConditionalEventDefinition(ConditionalEventDefinition conditionalEventDefinition) {
-        this.conditionalEventDefinition = conditionalEventDefinition;
-    }
-
-    public TimerEventDefinition getTimerEventDefinition() {
-        return timerEventDefinition;
-    }
-
-    public void setTimerEventDefinition(TimerEventDefinition timerEventDefinition) {
-        this.timerEventDefinition = timerEventDefinition;
+    public void setEventDefinition(AbstractEventDefinition eventDefinition) {
+        this.eventDefinition = eventDefinition;
     }
 
     public List<DataOutput> getDataOutputs() {
@@ -128,5 +83,110 @@ public class FallbackStartEvent {
 
     public void setOutputSet(List<OutputSet> outputSet) {
         this.outputSet = outputSet;
+    }
+
+    public FallbackStartEventExecutionSet getExecutionSet() {
+        return executionSet;
+    }
+
+    public void setExecutionSet(FallbackStartEventExecutionSet executionSet) {
+        this.executionSet = executionSet;
+    }
+
+    public DataIOSet getDataIOSet() {
+        return dataIOSet;
+    }
+
+    public void setDataIOSet(DataIOSet dataIOSet) {
+        this.dataIOSet = dataIOSet;
+    }
+
+    public static class FallbackStartEventExecutionSet {
+
+        private Boolean isInterrupting;
+
+        private String metaData;
+
+        private TimerSettings timerSettings;
+
+        private ErrorRefHolder errorRef;
+
+        private EscalationRefHolder escalationRef;
+
+        private ConditionExpression conditionExpression;
+
+        public TimerSettings getTimerSettings() {
+            return timerSettings;
+        }
+
+        public void setTimerSettings(TimerSettings timerSettings) {
+            this.timerSettings = timerSettings;
+        }
+
+        public Boolean isIsInterrupting() {
+            return isInterrupting;
+        }
+
+        public void setIsInterrupting(Boolean interrupting) {
+            isInterrupting = interrupting;
+        }
+
+        public String getMetaData() {
+            return metaData;
+        }
+
+        public void setMetaData(String metaData) {
+            this.metaData = metaData;
+        }
+
+        public ErrorRefHolder getErrorRef() {
+            return errorRef;
+        }
+
+        public void setErrorRef(ErrorRefHolder errorRef) {
+            this.errorRef = errorRef;
+        }
+
+        public ConditionExpression getConditionExpression() {
+            return conditionExpression;
+        }
+
+        public void setConditionExpression(ConditionExpression conditionExpression) {
+            this.conditionExpression = conditionExpression;
+        }
+
+        public EscalationRefHolder getEscalationRef() {
+            return escalationRef;
+        }
+
+        public void setEscalationRef(EscalationRefHolder escalationRef) {
+            this.escalationRef = escalationRef;
+        }
+    }
+
+    public static class ErrorRefHolder {
+
+        private String value;
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
+    }
+
+    public static class EscalationRefHolder {
+
+        private String value;
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
     }
 }
