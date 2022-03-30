@@ -22,8 +22,8 @@ import javax.annotation.PreDestroy;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
-import com.google.gwt.user.client.ui.IsWidget;
-import org.jboss.errai.ioc.client.api.ManagedInstance;
+import io.crysknife.client.ManagedInstance;
+import org.gwtproject.user.client.ui.IsWidget;
 import org.kie.workbench.common.stunner.client.widgets.presenters.session.SessionDiagramPresenter;
 import org.kie.workbench.common.stunner.client.widgets.presenters.session.SessionPresenter;
 import org.kie.workbench.common.stunner.client.widgets.presenters.session.impl.SessionEditorPresenter;
@@ -160,7 +160,7 @@ public class StunnerEditor {
             if (e instanceof DefinitionNotFoundException) {
                 final DefinitionNotFoundException dnfe = (DefinitionNotFoundException) e;
                 message = translationService.getValue(CoreTranslationMessages.DIAGRAM_LOAD_FAIL_UNSUPPORTED_ELEMENTS,
-                                                      dnfe.getDefinitionId());
+                        dnfe.getDefinitionId());
             } else {
                 message = error.getThrowable() != null ?
                         error.getThrowable().getMessage() : error.getMessage();

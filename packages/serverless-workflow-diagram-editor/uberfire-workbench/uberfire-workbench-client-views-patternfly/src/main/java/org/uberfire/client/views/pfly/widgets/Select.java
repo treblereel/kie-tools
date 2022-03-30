@@ -21,25 +21,25 @@ import java.util.function.Consumer;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.user.client.TakesValue;
-import org.jboss.errai.common.client.api.IsElement;
-import org.jboss.errai.common.client.dom.Document;
-import org.jboss.errai.common.client.dom.HTMLElement;
-import org.jboss.errai.common.client.dom.Option;
-import org.jboss.errai.common.client.dom.OptionsCollection;
-
-import static com.google.common.base.Strings.isNullOrEmpty;
+import elemental2.dom.Document;
+import elemental2.dom.DomGlobal;
+import elemental2.dom.HTMLElement;
+import elemental2.dom.HTMLOptionElement;
+import elemental2.dom.HTMLOptionsCollection;
+import elemental2.dom.HTMLSelectElement;
+import io.crysknife.client.IsElement;
+import org.gwtbootstrap3.extras.select.client.ui.SelectPicker;
+import org.gwtproject.core.client.Scheduler;
+import org.gwtproject.user.client.TakesValue;
 
 @Dependent
 public class Select implements IsElement,
-                               TakesValue<String> {
+        TakesValue<String> {
+
+    private Document document = DomGlobal.document;
 
     @Inject
-    private Document document;
-
-    @Inject
-    private org.jboss.errai.common.client.dom.Select select;
+    private HTMLSelectElement select;
 
     @Override
     public HTMLElement getElement() {
@@ -48,42 +48,46 @@ public class Select implements IsElement,
 
     public void addOption(final String text) {
         addOption(text,
-                  text);
+                text);
     }
 
     public void addOption(final String text,
                           final String value) {
         addOption(text,
-                  value,
-                  false);
+                value,
+                false);
     }
 
     public void addOption(final String text,
                           final String value,
                           final Boolean selected) {
         addOption(text,
-                  null,
-                  value,
-                  selected);
+                null,
+                value,
+                selected);
     }
 
     public void addOption(final String text,
                           final String subText,
                           final String value,
                           final Boolean selected) {
-        final Option option = (Option) document.createElement("option");
-        option.setText(text);
-        option.setValue(value);
-        option.setSelected(selected);
+        final HTMLOptionElement option = (HTMLOptionElement) document.createElement("option");
+        option.text = (text);
+        option.value = (value);
+        option.selected = (selected);
         if (isNullOrEmpty(subText) == false) {
             option.setAttribute("data-subtext",
-                                subText);
+                    subText);
         }
         select.add(option);
     }
 
-    public OptionsCollection getOptions() {
-        return select.getOptions();
+    private boolean isNullOrEmpty(String subText) {
+        return subText == null || subText.isEmpty();
+    }
+
+    public HTMLOptionsCollection getOptions() {
+        return select.options;
     }
 
     public void removeAllOptions() {
@@ -105,13 +109,13 @@ public class Select implements IsElement,
 
     @Override
     public String getValue() {
-        return select.getValue();
+        return select.value;
     }
 
     @Override
     public void setValue(final String value) {
         setValue(select,
-                 value);
+                value);
     }
 
     public void enable() {
@@ -137,7 +141,7 @@ public class Select implements IsElement,
     }
 
     public void setTitle(final String title) {
-        select.setTitle(title);
+        select.title = (title);
     }
 
     public void setLiveSearch(final Boolean liveSearch){
@@ -152,32 +156,52 @@ public class Select implements IsElement,
         selectpicker(select);
     }
 
-    private native void refreshElement(final HTMLElement e) /*-{
+    private void refreshElement(final HTMLElement e) {
+        SelectPicker.jQuery(e).selectpicker("refresh");
+    }/*-{
         $wnd.jQuery(e).selectpicker('refresh');
     }-*/;
 
-    private native void setValue(final HTMLElement e,
-                                 final String value) /*-{
+    private void setValue(final HTMLElement e,
+                          final String value) {
+        SelectPicker.jQuery(e).selectpicker("val", value);
+
+    }/*-{
         $wnd.jQuery(e).selectpicker('val', value);
     }-*/;
 
-    private native void disable(final HTMLElement e) /*-{
+    private void disable(final HTMLElement e) {
+        SelectPicker.jQuery(e).prop("disabled", true);
+
+    }/*-{
         $wnd.jQuery(e).prop('disabled', true);
     }-*/;
 
-    private native void enable(final HTMLElement e) /*-{
+    private void enable(final HTMLElement e) {
+        SelectPicker.jQuery(e).prop("disabled", false);
+
+    }/*-{
         $wnd.jQuery(e).prop('disabled', false);
     }-*/;
 
-    private native void removeAllOptions(final HTMLElement e) /*-{
+    private void removeAllOptions(final HTMLElement e) {
+        SelectPicker.jQuery(e).find("option").remove();
+
+    }/*-{
         $wnd.jQuery(e).find('option').remove();
     }-*/;
 
-    private native void selectpicker(final HTMLElement e) /*-{
+    private void selectpicker(final HTMLElement e) {
+        SelectPicker.jQuery(e).selectpicker();
+
+    }/*-{
         $wnd.jQuery(e).selectpicker();
     }-*/;
 
-    private native void selectpicker(final HTMLElement e, final String method) /*-{
+    private void selectpicker(final HTMLElement e, final String method) {
+        SelectPicker.jQuery(e).selectpicker(method);
+
+    }/*-{
         $wnd.jQuery(e).selectpicker(method);
     }-*/;
 

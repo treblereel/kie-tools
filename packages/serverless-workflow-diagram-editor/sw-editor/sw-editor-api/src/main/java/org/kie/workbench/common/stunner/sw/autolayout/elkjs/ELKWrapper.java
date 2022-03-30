@@ -16,7 +16,8 @@
 
 package org.kie.workbench.common.stunner.sw.autolayout.elkjs;
 
-import com.google.gwt.core.client.ScriptInjector;
+import elemental2.dom.DomGlobal;
+import org.gwtproject.core.client.ScriptInjector;
 
 public class ELKWrapper {
 
@@ -27,7 +28,12 @@ public class ELKWrapper {
     }
 
     //TODO Migrate from JSNI to Native
-    private native final boolean isInjected() /*-{
+    private final boolean isInjected() {
+        DomGlobal.console.error("isInjected");
+
+        throw new Error();
+
+    }/*-{
         if (!(typeof $wnd.ELK === "undefined") && !(null===$wnd.ELK)) {
             return true;
         }

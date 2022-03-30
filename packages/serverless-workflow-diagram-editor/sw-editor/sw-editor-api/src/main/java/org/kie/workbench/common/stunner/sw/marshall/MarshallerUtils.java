@@ -69,7 +69,9 @@ public class MarshallerUtils {
         return Js.uncheckedCast(instance);
     }
 
-    public static native <T> T nativeMerge(Object o1, Object o2) /*-{
+    public static <T> T nativeMerge(Object o1, Object o2) {
+        throw new Error(MarshallerUtils.class.getCanonicalName() + ".nativeMerge");
+    }/*-{
         if (typeof Object.assign != 'function') {
             Object.assign = function (target) {
                 'use strict';

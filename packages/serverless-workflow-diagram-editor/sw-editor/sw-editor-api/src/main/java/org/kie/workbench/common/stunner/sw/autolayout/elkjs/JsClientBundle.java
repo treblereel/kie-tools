@@ -16,13 +16,14 @@
 
 package org.kie.workbench.common.stunner.sw.autolayout.elkjs;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.resources.client.ClientBundle;
-import com.google.gwt.resources.client.TextResource;
+import org.gwtproject.resources.client.ClientBundle;
+import org.gwtproject.resources.client.Resource;
+import org.gwtproject.resources.client.TextResource;
 
+@Resource
 interface JsClientBundle extends ClientBundle {
-    JsClientBundle INSTANCE = GWT.create(JsClientBundle.class);
+    JsClientBundle INSTANCE = new JsClientBundleImpl();
 
-    @Source("elk.bundled.js")
+    @Source("elk.bundled.js.bak")
     TextResource elk();
 }

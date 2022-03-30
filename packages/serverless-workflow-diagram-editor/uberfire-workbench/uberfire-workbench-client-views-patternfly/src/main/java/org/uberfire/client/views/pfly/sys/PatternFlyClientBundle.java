@@ -16,13 +16,13 @@
 
 package org.uberfire.client.views.pfly.sys;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.resources.client.ClientBundle;
-import com.google.gwt.resources.client.TextResource;
+import org.gwtproject.resources.client.ClientBundle;
+import org.gwtproject.resources.client.TextResource;
 
+//@Resource
 public interface PatternFlyClientBundle extends ClientBundle {
 
-    PatternFlyClientBundle INSTANCE = GWT.create(PatternFlyClientBundle.class);
+    PatternFlyClientBundle INSTANCE = new PatternFlyClientBundle_default_InlineClientBundleGenerator();
 
     @Source("org/uberfire/client/views/static/bootstrap-select/js/bootstrap-select.min.js")
     TextResource bootstrapSelect();
@@ -36,4 +36,6 @@ public interface PatternFlyClientBundle extends ClientBundle {
     @Source("org/uberfire/client/views/static/moment-timezone/moment-timezone-with-data-2012-2022.min.js")
     TextResource momentTimeZone();
 
+    @Source("org/uberfire/client/views/static/appformer-js-monaco/monaco.min.js.txt")
+    TextResource monacoEditor();
 }
