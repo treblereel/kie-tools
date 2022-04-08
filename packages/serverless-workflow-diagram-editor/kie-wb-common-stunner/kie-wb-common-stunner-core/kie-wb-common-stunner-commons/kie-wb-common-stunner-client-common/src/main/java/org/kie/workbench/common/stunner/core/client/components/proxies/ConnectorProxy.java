@@ -16,10 +16,6 @@
 
 package org.kie.workbench.common.stunner.core.client.components.proxies;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.Dependent;
-import javax.inject.Inject;
-
 import org.kie.workbench.common.stunner.core.client.canvas.AbstractCanvasHandler;
 import org.kie.workbench.common.stunner.core.client.command.CanvasCommandFactory;
 import org.kie.workbench.common.stunner.core.client.shape.EdgeShape;
@@ -30,6 +26,11 @@ import org.kie.workbench.common.stunner.core.graph.Node;
 import org.kie.workbench.common.stunner.core.graph.content.view.MagnetConnection;
 import org.kie.workbench.common.stunner.core.graph.content.view.View;
 import org.kie.workbench.common.stunner.core.graph.content.view.ViewConnector;
+
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 @Dependent
 public class ConnectorProxy implements ShapeProxy {
@@ -42,7 +43,7 @@ public class ConnectorProxy implements ShapeProxy {
 
     @Inject
     public ConnectorProxy(final ElementProxy proxy,
-                          final ShapeProxyView<EdgeShape> view) {
+                          @Named("LienzoConnectorProxyView") final ShapeProxyView<EdgeShape> view) {
         this.proxy = proxy;
         this.view = view;
     }

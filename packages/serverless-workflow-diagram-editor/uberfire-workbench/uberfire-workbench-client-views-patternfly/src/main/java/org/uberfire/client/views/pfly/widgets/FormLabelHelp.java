@@ -30,7 +30,7 @@ public class FormLabelHelp extends Composite implements HasText {
 
     public FormLabelHelp() {
         this(new FormLabel(),
-                new FlowPanel());
+             new FlowPanel());
     }
 
     // Defined for testing purposes

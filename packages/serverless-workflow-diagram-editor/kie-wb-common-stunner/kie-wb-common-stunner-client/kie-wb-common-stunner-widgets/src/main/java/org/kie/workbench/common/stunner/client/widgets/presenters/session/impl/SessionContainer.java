@@ -64,4 +64,9 @@ public class SessionContainer extends ResizeFlowPanel implements HasHTML {
     public void onResize() {
         super.onResize();
     }
+
+    @Override
+    public void clear() {
+        getElement().removeAllChildren();
+    }
 }

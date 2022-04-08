@@ -74,16 +74,13 @@ public class MainEntryPoint {
         new SliderEntryPoint().onModuleLoad();
         new TagsInputEntryPoint().onModuleLoad();
         new ToggleSwitchEntryPoint().onModuleLoad();
-
         new TableEntryPoint().startApp();
-
         new CommonsEntryPoint().startApp();
-
         diagramEditor.onStartup(new DefaultPlaceRequest());
 
         Reflect.set(DomGlobal.window, "setContent", (Serialize) (path, value) -> diagramEditor.setContent(path, value));
         Reflect.set(DomGlobal.window,"getContent", (Deserialize) (xml) -> diagramEditor.getContent());
-
+        Reflect.set(DomGlobal.window,"getPreview", (Preview) () -> diagramEditor.getContent());
         workbenchEntryPoint.afterInitialization();
     }
 
@@ -97,6 +94,12 @@ public class MainEntryPoint {
     @JsFunction
     public interface Deserialize {
         Promise<String> onInvoke(String xml);
+    }
+
+    @FunctionalInterface
+    @JsFunction
+    public interface Preview {
+        Promise<String> onInvoke();
     }
 
 }

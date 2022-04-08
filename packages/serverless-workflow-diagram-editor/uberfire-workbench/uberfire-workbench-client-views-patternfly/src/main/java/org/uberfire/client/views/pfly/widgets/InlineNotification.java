@@ -73,7 +73,7 @@ public class InlineNotification implements IsElement {
         removeAllElementChildren(this.message);
         final HTMLElement ul = (HTMLElement) document.createElement("ul");
         addCSSClass(ul,
-                "list-unstyled");
+                    "list-unstyled");
         for (String message : messages) {
             final HTMLElement li = (HTMLElement) document.createElement("li");
             li.textContent = message;
@@ -84,9 +84,9 @@ public class InlineNotification implements IsElement {
 
     public void setDismissable() {
         addCSSClass(alert,
-                "alert-dismissable");
+                    "alert-dismissable");
         removeCSSClass(dismiss,
-                "hidden");
+                       "hidden");
     }
 
     public void setType(final InlineNotificationType type) {
@@ -95,9 +95,9 @@ public class InlineNotification implements IsElement {
             removeCSSClass(icon, availableType.getIcon());
         });
         addCSSClass(alert,
-                type.getCssClass());
+                    type.getCssClass());
         addCSSClass(icon,
-                type.getIcon());
+                    type.getIcon());
     }
 
     public enum InlineNotificationType {
@@ -105,11 +105,11 @@ public class InlineNotification implements IsElement {
         SUCCESS("alert-success",
                 "pficon-ok"),
         INFO("alert-info",
-                "pficon-info"),
+             "pficon-info"),
         WARNING("alert-warning",
                 "pficon-warning-triangle-o"),
         DANGER("alert-danger",
-                "pficon-error-circle-o");
+               "pficon-error-circle-o");
 
         private String cssClass;
 

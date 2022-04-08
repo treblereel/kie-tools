@@ -16,28 +16,22 @@
 
 package org.kie.workbench.common.stunner.sw.autolayout.elkjs;
 
+import elemental2.core.Reflect;
 import elemental2.dom.DomGlobal;
+import jsinterop.base.Js;
 import org.gwtproject.core.client.ScriptInjector;
 
 public class ELKWrapper {
 
     public void injectScript() {
         if (!isInjected()) {
+            DomGlobal.console.log("INJECT ELK");
            ScriptInjector.fromString(JsClientBundle.INSTANCE.elk().getText()).setWindow(ScriptInjector.TOP_WINDOW).inject();
         }
     }
 
-    //TODO Migrate from JSNI to Native
     private final boolean isInjected() {
-        DomGlobal.console.error("isInjected");
-
-        throw new Error();
-
-    }/*-{
-        if (!(typeof $wnd.ELK === "undefined") && !(null===$wnd.ELK)) {
-            return true;
-        }
-        return false;
-    }-*/;
+        return Reflect.get(DomGlobal.window, "ELK") != Js.undefined();
+    }
 
 }

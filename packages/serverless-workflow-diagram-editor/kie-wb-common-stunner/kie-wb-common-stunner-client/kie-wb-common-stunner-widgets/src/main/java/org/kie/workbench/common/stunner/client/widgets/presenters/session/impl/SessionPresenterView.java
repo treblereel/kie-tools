@@ -332,6 +332,7 @@ public class SessionPresenterView extends Composite
         palettePanel.removeFromParent();
         sessionHeaderContainer.clear();
         sessionHeaderContainer.removeFromParent();
+
         sessionContainer.clear();
         sessionContainer.removeFromParent();
         this.removeFromParent();

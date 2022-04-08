@@ -31,8 +31,8 @@ public class HelpIcon extends Composite {
 
     public HelpIcon() {
         this(new Icon(),
-                new SimplePanel(),
-                new Popover());
+             new SimplePanel(),
+             new Popover());
     }
 
     // Defined for testing purposes

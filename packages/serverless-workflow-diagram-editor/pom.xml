@@ -869,7 +869,15 @@
             <retryFailedDeploymentCount>10</retryFailedDeploymentCount>
           </configuration>
         </plugin>
-
+        <plugin>
+          <groupId>com.vertispan.j2cl</groupId>
+          <artifactId>j2cl-maven-plugin</artifactId>
+          <inherited>false</inherited>
+          <version>0.19</version>
+          <configuration>
+            <webappDirectory>\${project.build.directory}/j2cl-watch</webappDirectory>
+          </configuration>
+        </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-enforcer-plugin</artifactId>

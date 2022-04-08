@@ -1,11 +1,11 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2021 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package org.appformer.kogito.bridge.client.guided.tour.service.api;
+package org.kie.workbench.common.stunner.core.client.components.proxies;
 
-import jsinterop.annotations.JsPackage;
-import jsinterop.annotations.JsType;
+import javax.inject.Qualifier;
+import java.lang.annotation.*;
 
-/**
- * Native class defined into the Guided Tour component.
- */
-@JsType(isNative = true, namespace = JsPackage.GLOBAL, name = "Object")
-public interface Mode {
-    // empty
+@Target({ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER, ElementType.FIELD})
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Qualifier
+public @interface NodeShapeQualifier {
+
 }

@@ -16,14 +16,6 @@
 
 package org.kie.workbench.common.stunner.core.client.components.proxies;
 
-import java.lang.annotation.Annotation;
-import java.util.function.Supplier;
-
-import javax.enterprise.context.Dependent;
-import javax.enterprise.event.Event;
-import javax.enterprise.inject.Any;
-import javax.inject.Inject;
-
 import io.crysknife.client.ManagedInstance;
 import org.gwtproject.timer.client.Timer;
 import org.kie.workbench.common.stunner.core.client.api.SessionManager;
@@ -44,6 +36,13 @@ import org.kie.workbench.common.stunner.core.command.Command;
 import org.kie.workbench.common.stunner.core.command.CommandResult;
 import org.kie.workbench.common.stunner.core.diagram.Diagram;
 import org.kie.workbench.common.stunner.core.util.DefinitionUtils;
+
+import javax.enterprise.context.Dependent;
+import javax.enterprise.event.Event;
+import javax.enterprise.inject.Any;
+import javax.inject.Inject;
+import java.lang.annotation.Annotation;
+import java.util.function.Supplier;
 
 import static org.kie.workbench.common.stunner.core.client.canvas.util.CanvasLayoutUtils.fireElementSelectedEvent;
 
@@ -151,8 +150,8 @@ public class ElementProxy implements ShapeProxy {
             @Override
             public void run() {
                 fireElementSelectedEvent(selectionEvent,
-                        canvasHandler,
-                        uuid);
+                                         canvasHandler,
+                                         uuid);
             }
         };
         t.schedule(150);

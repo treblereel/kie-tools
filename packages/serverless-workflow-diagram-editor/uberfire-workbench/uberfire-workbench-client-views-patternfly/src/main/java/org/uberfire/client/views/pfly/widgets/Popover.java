@@ -55,36 +55,36 @@ public abstract class Popover extends JQueryProducer.JQueryElement {
     }
 
     public abstract void on(String event,
-                            PopoverEventCallback callback);
+            PopoverEventCallback callback);
 
     @JsOverlay
     public final void addShowListener(final PopoverEventCallback callback) {
         on("show.bs.popover",
-                callback);
+           callback);
     }
 
     @JsOverlay
     final void addShownListener(final PopoverEventCallback callback) {
         on("shown.bs.popover",
-                callback);
+           callback);
     }
 
     @JsOverlay
     final void addHiddenListener(final PopoverEventCallback callback) {
         on("hidden.bs.popover",
-                callback);
+           callback);
     }
 
     @JsOverlay
     final void addHideListener(final PopoverEventCallback callback) {
         on("hide.bs.popover",
-                callback);
+           callback);
     }
 
     @JsOverlay
     final void addInsertedListener(final PopoverEventCallback callback) {
         on("inserted.bs.popover",
-                callback);
+           callback);
     }
 
     @JsFunction

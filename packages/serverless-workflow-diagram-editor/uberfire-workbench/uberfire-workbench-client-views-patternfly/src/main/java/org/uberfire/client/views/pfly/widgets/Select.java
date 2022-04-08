@@ -34,7 +34,7 @@ import org.gwtproject.user.client.TakesValue;
 
 @Dependent
 public class Select implements IsElement,
-        TakesValue<String> {
+                               TakesValue<String> {
 
     private Document document = DomGlobal.document;
 
@@ -48,23 +48,23 @@ public class Select implements IsElement,
 
     public void addOption(final String text) {
         addOption(text,
-                text);
+                  text);
     }
 
     public void addOption(final String text,
                           final String value) {
         addOption(text,
-                value,
-                false);
+                  value,
+                  false);
     }
 
     public void addOption(final String text,
                           final String value,
                           final Boolean selected) {
         addOption(text,
-                null,
-                value,
-                selected);
+                  null,
+                  value,
+                  selected);
     }
 
     public void addOption(final String text,
@@ -77,7 +77,7 @@ public class Select implements IsElement,
         option.selected = (selected);
         if (isNullOrEmpty(subText) == false) {
             option.setAttribute("data-subtext",
-                    subText);
+                                subText);
         }
         select.add(option);
     }
@@ -115,7 +115,7 @@ public class Select implements IsElement,
     @Override
     public void setValue(final String value) {
         setValue(select,
-                value);
+                 value);
     }
 
     public void enable() {
@@ -163,7 +163,7 @@ public class Select implements IsElement,
     }-*/;
 
     private void setValue(final HTMLElement e,
-                          final String value) {
+                                 final String value) {
         SelectPicker.jQuery(e).selectpicker("val", value);
 
     }/*-{
