@@ -91,14 +91,19 @@
     <dependency>
       <groupId>org.powermock</groupId>
       <artifactId>powermock-module-junit4</artifactId>
-      <version>${version.org.powermock}</version>
       <scope>test</scope>
     </dependency>
-      <dependency>
-          <groupId>com.google.gwt.gwtmockito</groupId>
-          <artifactId>gwtmockito</artifactId>
-          <scope>test</scope>
-      </dependency>
+    <dependency>
+      <groupId>com.google.gwt.gwtmockito</groupId>
+      <artifactId>gwtmockito</artifactId>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
 
 
   </dependencies>

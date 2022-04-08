@@ -113,11 +113,17 @@
       <artifactId>mockito-core</artifactId>
       <scope>test</scope>
     </dependency>
-      <dependency>
-          <groupId>com.google.gwt.gwtmockito</groupId>
-          <artifactId>gwtmockito</artifactId>
-          <scope>test</scope>
-      </dependency>
+    <dependency>
+      <groupId>com.google.gwt.gwtmockito</groupId>
+      <artifactId>gwtmockito</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging</artifactId>
+        </exclusion>
+      </exclusions>
+      <scope>test</scope>
+    </dependency>
 
   </dependencies>
 

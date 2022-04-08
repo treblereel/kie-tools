@@ -84,27 +84,23 @@
     <dependency>
       <groupId>org.treblereel.gwt.gwtproject.uibinder</groupId>
       <artifactId>gwt-uibinder-processor</artifactId>
-      <version>${version.gwtproject}</version>
       <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>org.treblereel.gwt.gwtproject.resources</groupId>
       <artifactId>gwt-resources-processor</artifactId>
-      <version>${version.gwtproject}</version>
       <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>org.treblereel.gwt.gwtproject.i18n</groupId>
       <artifactId>gwt-i18n</artifactId>
-      <version>${version.gwtproject}</version>
     </dependency>
 
     <dependency>
       <groupId>org.treblereel.gwt.gwtproject.i18n</groupId>
       <artifactId>gwt-i18n-processor</artifactId>
-      <version>${version.gwtproject}</version>
       <scope>provided</scope>
     </dependency>
 

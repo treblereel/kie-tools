@@ -16,11 +16,11 @@
 
 package org.kie.workbench.common.stunner.core.client.components.proxies;
 
-import org.kie.workbench.common.stunner.core.client.canvas.Canvas;
-import org.kie.workbench.common.stunner.core.client.shape.ElementShape;
-
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+
+import org.kie.workbench.common.stunner.core.client.canvas.Canvas;
+import org.kie.workbench.common.stunner.core.client.shape.ElementShape;
 
 public interface ShapeProxyView<S extends ElementShape> extends ShapeProxy {
 

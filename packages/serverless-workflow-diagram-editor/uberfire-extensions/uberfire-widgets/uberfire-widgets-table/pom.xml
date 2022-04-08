@@ -47,25 +47,28 @@
     <dependency>
       <groupId>org.treblereel.gwt.gwtproject.resources</groupId>
       <artifactId>gwt-resources-processor</artifactId>
-      <version>${version.gwtproject}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.treblereel.gwt.gwtproject.uibinder</groupId>
       <artifactId>gwt-uibinder-processor</artifactId>
-      <version>${version.gwtproject}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.treblereel.gwt.gwtproject.i18n</groupId>
       <artifactId>gwt-i18n-processor</artifactId>
-      <version>${version.gwtproject}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.google.gwt.gwtmockito</groupId>
       <artifactId>gwtmockito</artifactId>
       <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
 

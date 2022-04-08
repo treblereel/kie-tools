@@ -22,7 +22,6 @@ import javax.inject.Inject;
 
 import io.crysknife.annotation.CircularDependency;
 import org.kie.workbench.common.stunner.core.definition.adapter.bootstrap.BootstrapAdapterFactory;
-import org.kie.workbench.common.stunner.core.registry.RegistryFactory;
 import org.kie.workbench.common.stunner.core.registry.definition.AdapterRegistry;
 import org.kie.workbench.common.stunner.core.registry.impl.AdapterRegistryImpl;
 
