@@ -29,11 +29,13 @@ import org.kie.workbench.common.stunner.core.definition.annotation.definition.Ca
 import org.kie.workbench.common.stunner.core.definition.annotation.definition.Labels;
 import org.kie.workbench.common.stunner.core.definition.property.PropertyMetaTypes;
 import org.kie.workbench.common.stunner.core.rule.annotation.CanContain;
+import org.treblereel.gwt.json.mapper.annotation.JSONMapper;
 
 @Bindable
 @Definition
 @CanContain(roles = {Workflow.LABEL_ROOT_NODE})
 @JsType
+@JSONMapper
 // TODO: Missing to create a custom GraphFactory, so when creating a new graph it just adds the parent Workflow node by default?
 public class Workflow {
 

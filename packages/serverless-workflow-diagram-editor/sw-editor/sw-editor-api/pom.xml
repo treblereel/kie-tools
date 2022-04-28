@@ -117,6 +117,17 @@
       <artifactId>uberfire-client-api</artifactId>
     </dependency>
 
+    <!-- Json marshalling -->
+
+    <dependency>
+      <groupId>org.treblereel.gwt.json.mapper</groupId>
+      <artifactId>common</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.treblereel.gwt.json.mapper</groupId>
+      <artifactId>processor</artifactId>
+    </dependency>
+
     <!-- Testing -->
 
     <dependency>

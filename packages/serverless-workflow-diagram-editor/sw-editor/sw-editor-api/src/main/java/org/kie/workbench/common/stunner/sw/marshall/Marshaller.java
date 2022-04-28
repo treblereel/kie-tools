@@ -21,7 +21,6 @@ import javax.inject.Inject;
 
 import elemental2.core.Global;
 import elemental2.promise.Promise;
-import jsinterop.base.Js;
 import org.kie.workbench.common.stunner.core.api.DefinitionManager;
 import org.kie.workbench.common.stunner.core.api.FactoryManager;
 import org.kie.workbench.common.stunner.core.command.impl.CompositeCommand;
@@ -47,6 +46,7 @@ import org.kie.workbench.common.stunner.sw.definition.StartTransition;
 import org.kie.workbench.common.stunner.sw.definition.SwitchState;
 import org.kie.workbench.common.stunner.sw.definition.Transition;
 import org.kie.workbench.common.stunner.sw.definition.Workflow;
+import org.kie.workbench.common.stunner.sw.definition.Workflow_JsonMapperImpl;
 import org.uberfire.client.promise.Promises;
 
 import static org.kie.workbench.common.stunner.sw.marshall.StateMarshalling.EVENT_STATE_MARSHALLER;
@@ -82,10 +82,12 @@ public class Marshaller {
 
     private Context context;
 
+    private Workflow_JsonMapperImpl mapper = Workflow_JsonMapperImpl.INSTANCE;
+
     @SuppressWarnings("all")
     public Promise<Graph> unmarshall(String raw) {
         final Object root = parse(raw);
-        final Workflow workflow = parser.parse(Js.uncheckedCast(root));
+        final Workflow workflow = parser.parse(mapper.fromJSON(raw));
 
         // TODO: Use dedicated factory instead.
         final GraphImpl<Object> graph = GraphImpl.build(workflow.id);
@@ -113,7 +115,7 @@ public class Marshaller {
         // Marshall from the workflow root node.
         Workflow workflow = marshallNode(context, context.getWorkflowRootNode());
         // Stringify the workflow js type.
-        String raw = stringify(workflow);
+        String raw = mapper.toJSON(workflow);
         return promises.resolve(raw);
     }
 
@@ -123,21 +125,6 @@ public class Marshaller {
 
     public static Object parse(String raw) {
         return Global.JSON.parse(raw);
-    }
-
-    public static String stringify(Object jsonObj) {
-        return Global.JSON.stringify(jsonObj, (key, value) -> {
-            if (null == value) {
-                return Global.undefined;
-            }
-            if (key.contains("hashCode") ||
-                    key.contains("host") ||
-                    key.contains("labels") ||
-                    key.startsWith("$")) {
-                return Global.undefined;
-            }
-            return value;
-        });
     }
 
     /* +++++++++++++++++ UN-MARSHALLING +++++++++++++++++ */
