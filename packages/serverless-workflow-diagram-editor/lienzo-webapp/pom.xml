@@ -90,6 +90,7 @@
 		<dependency>
 			<groupId>com.google.gwt</groupId>
 			<artifactId>gwt-user</artifactId>
+			<version>2.10.0-new-groupid-5</version>
 		</dependency>
 		<dependency>
 			<groupId>org.kie.kogito.stunner.serverless.editor</groupId>
@@ -116,6 +117,11 @@
 			<artifactId>elemental2-promise</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-user</artifactId>
+			<version>2.10.0-new-groupid-5</version>
+		</dependency>
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -126,14 +132,6 @@
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
 			<scope>test</scope>
-			<!--
-			TODO: Enforcer complains here, but otherwise selenium doesn't run
-			<exclusions>
-				<exclusion>
-					<groupId>commons-logging</groupId>
-					<artifactId>commons-logging</artifactId>
-				</exclusion>
-			</exclusions>-->
 		</dependency>
 		<dependency>
 			<groupId>org.xmlunit</groupId>

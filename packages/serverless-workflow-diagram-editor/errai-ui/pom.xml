@@ -69,6 +69,7 @@
       <groupId>com.google.gwt</groupId>
       <artifactId>gwt-elemental</artifactId>
       <scope>test</scope>
+      <version>2.9.0</version>
     </dependency>
 
     <dependency>

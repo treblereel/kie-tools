@@ -59,6 +59,11 @@
 
   <repositories>
     <repository>
+      <id>vertispan</id>
+      <name>vertispan Public Repo</name>
+      <url>https://repo.vertispan.com/gwt-groupid-migration-test</url>
+    </repository>
+    <repository>
       <id>jboss</id>
       <name>JBoss Public Repo</name>
       <url>https://repository.jboss.org/nexus/content/groups/public</url>
