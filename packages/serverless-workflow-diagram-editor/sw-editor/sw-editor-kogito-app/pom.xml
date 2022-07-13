@@ -339,7 +339,6 @@
       <plugin>
         <groupId>com.vertispan.j2cl</groupId>
         <artifactId>j2cl-maven-plugin</artifactId>
-        <version>0.19</version>
         <executions>
           <execution>
             <id>build-js</id>
@@ -389,7 +388,6 @@
           <plugin>
             <groupId>com.vertispan.j2cl</groupId>
             <artifactId>j2cl-maven-plugin</artifactId>
-            <version>0.19</version>
             <executions>
               <execution>
                 <id>build-js</id>
