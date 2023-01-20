@@ -30,9 +30,7 @@ import org.kie.workbench.common.stunner.core.definition.annotation.definition.Ca
 import org.kie.workbench.common.stunner.core.definition.annotation.definition.Labels;
 import org.kie.workbench.common.stunner.core.definition.annotation.morph.MorphBase;
 import org.kie.workbench.common.stunner.core.definition.property.PropertyMetaTypes;
-import org.kie.workbench.common.stunner.sw.definition.custom.FunctionRefJsonDeserializer;
 import org.kie.workbench.common.stunner.sw.definition.custom.FunctionRefJsonSerializer;
-import org.kie.workbench.common.stunner.sw.definition.custom.SubFlowRefJsonDeserializer;
 import org.kie.workbench.common.stunner.sw.definition.custom.SubFlowRefJsonSerializer;
 
 /**
@@ -71,7 +69,7 @@ public class ActionNode {
      */
 
     @JsonbTypeSerializer(FunctionRefJsonSerializer.class)
-    @JsonbTypeDeserializer(FunctionRefJsonDeserializer.class)
+    @JsonbTypeDeserializer(FunctionRefJsonSerializer.class)
     private Object functionRef;
 
     /**
@@ -83,7 +81,7 @@ public class ActionNode {
      * Reference to a workflow to be invoked.
      */
     @JsonbTypeSerializer(SubFlowRefJsonSerializer.class)
-    @JsonbTypeDeserializer(SubFlowRefJsonDeserializer.class)
+    @JsonbTypeDeserializer(SubFlowRefJsonSerializer.class)
     private Object subFlowRef;
 
     private String retryRef;
