@@ -24,6 +24,7 @@ import jakarta.json.bind.annotation.JsonbTypeDeserializer;
 import jakarta.json.bind.annotation.JsonbTypeSerializer;
 import jsinterop.annotations.JsType;
 import org.jboss.errai.databinding.client.api.Bindable;
+import org.kie.workbench.common.stunner.client.json.mapper.annotation.JSONMapper;
 import org.kie.workbench.common.stunner.core.definition.annotation.Definition;
 import org.kie.workbench.common.stunner.core.definition.annotation.Property;
 import org.kie.workbench.common.stunner.core.definition.annotation.definition.Category;
@@ -31,10 +32,9 @@ import org.kie.workbench.common.stunner.core.definition.annotation.definition.La
 import org.kie.workbench.common.stunner.core.definition.annotation.morph.MorphBase;
 import org.kie.workbench.common.stunner.core.definition.property.PropertyMetaTypes;
 import org.kie.workbench.common.stunner.core.rule.annotation.CanDock;
-import org.kie.workbench.common.stunner.sw.definition.custom.StateEndDefinitionJsonbTypeDeserializer;
 import org.kie.workbench.common.stunner.sw.definition.custom.StateEndDefinitionJsonbTypeSerializer;
-import org.kie.workbench.common.stunner.sw.definition.custom.StateTransitionDefinitionJsonbTypeDeserializer;
 import org.kie.workbench.common.stunner.sw.definition.custom.StateTransitionDefinitionJsonbTypeSerializer;
+import org.kie.workbench.common.stunner.sw.definition.custom.WorkflowTimeoutsJsonSerializer;
 
 /**
  * This class defines workflow states define building blocks of the workflow execution instructions.
@@ -47,6 +47,7 @@ import org.kie.workbench.common.stunner.sw.definition.custom.StateTransitionDefi
 @CanDock(roles = {Timeout.LABEL_TIMEOUT})
 @MorphBase(defaultType = InjectState.class)
 @JsType
+@JSONMapper
 public class State {
 
     public static final String LABEL_STATE = "state";
@@ -76,7 +77,7 @@ public class State {
      */
     // TODO: Not all states supports this (eg: switch state)
     @JsonbTypeSerializer(StateTransitionDefinitionJsonbTypeSerializer.class)
-    @JsonbTypeDeserializer(StateTransitionDefinitionJsonbTypeDeserializer.class)
+    @JsonbTypeDeserializer(StateTransitionDefinitionJsonbTypeSerializer.class)
     private Object transition;
 
     /**
@@ -84,7 +85,7 @@ public class State {
      */
     // TODO: Not all states supports this (eg: switch state)
     @JsonbTypeSerializer(StateEndDefinitionJsonbTypeSerializer.class)
-    @JsonbTypeDeserializer(StateEndDefinitionJsonbTypeDeserializer.class)
+    @JsonbTypeDeserializer(StateEndDefinitionJsonbTypeSerializer.class)
     private Object end;
 
     /**
@@ -99,7 +100,9 @@ public class State {
 
     private StateDataFilter stateDataFilter;
 
-    private WorkflowTimeouts timeouts;
+    @JsonbTypeSerializer(WorkflowTimeoutsJsonSerializer.class)
+    @JsonbTypeDeserializer(WorkflowTimeoutsJsonSerializer.class)
+    private Object timeouts;
 
     public State() {
         this.name = "State";
@@ -183,11 +186,11 @@ public class State {
         this.stateDataFilter = stateDataFilter;
     }
 
-    public WorkflowTimeouts getTimeouts() {
+    public Object getTimeouts() {
         return timeouts;
     }
 
-    public void setTimeouts(WorkflowTimeouts timeouts) {
+    public void setTimeouts(Object timeouts) {
         this.timeouts = timeouts;
     }
 }
