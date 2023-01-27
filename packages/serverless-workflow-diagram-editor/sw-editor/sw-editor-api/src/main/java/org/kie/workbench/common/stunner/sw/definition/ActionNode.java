@@ -24,14 +24,18 @@ import jakarta.json.bind.annotation.JsonbTypeDeserializer;
 import jakarta.json.bind.annotation.JsonbTypeSerializer;
 import jsinterop.annotations.JsType;
 import org.jboss.errai.databinding.client.api.Bindable;
+import org.kie.workbench.common.stunner.client.yaml.mapper.api.annotation.YamlTypeDeserializer;
+import org.kie.workbench.common.stunner.client.yaml.mapper.api.annotation.YamlTypeSerializer;
 import org.kie.workbench.common.stunner.core.definition.annotation.Definition;
 import org.kie.workbench.common.stunner.core.definition.annotation.Property;
 import org.kie.workbench.common.stunner.core.definition.annotation.definition.Category;
 import org.kie.workbench.common.stunner.core.definition.annotation.definition.Labels;
 import org.kie.workbench.common.stunner.core.definition.annotation.morph.MorphBase;
 import org.kie.workbench.common.stunner.core.definition.property.PropertyMetaTypes;
-import org.kie.workbench.common.stunner.sw.definition.custom.FunctionRefJsonSerializer;
-import org.kie.workbench.common.stunner.sw.definition.custom.SubFlowRefJsonSerializer;
+import org.kie.workbench.common.stunner.sw.definition.custom.json.FunctionRefJsonSerializer;
+import org.kie.workbench.common.stunner.sw.definition.custom.json.SubFlowRefJsonSerializer;
+import org.kie.workbench.common.stunner.sw.definition.custom.yaml.FunctionRefYamlSerializer;
+import org.kie.workbench.common.stunner.sw.definition.custom.yaml.SubFlowRefYamlSerializer;
 
 /**
  * Actions specify invocations of services or other workflows during workflow execution.
@@ -70,6 +74,8 @@ public class ActionNode {
 
     @JsonbTypeSerializer(FunctionRefJsonSerializer.class)
     @JsonbTypeDeserializer(FunctionRefJsonSerializer.class)
+    @YamlTypeSerializer(FunctionRefYamlSerializer.class)
+    @YamlTypeDeserializer(FunctionRefYamlSerializer.class)
     private Object functionRef;
 
     /**
@@ -82,6 +88,8 @@ public class ActionNode {
      */
     @JsonbTypeSerializer(SubFlowRefJsonSerializer.class)
     @JsonbTypeDeserializer(SubFlowRefJsonSerializer.class)
+    @YamlTypeSerializer(SubFlowRefYamlSerializer.class)
+    @YamlTypeDeserializer(SubFlowRefYamlSerializer.class)
     private Object subFlowRef;
 
     private String retryRef;
