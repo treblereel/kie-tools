@@ -19,6 +19,7 @@ package org.kie.workbench.common.stunner.sw.definition;
 import jsinterop.annotations.JsType;
 import org.jboss.errai.databinding.client.api.Bindable;
 import org.kie.workbench.common.stunner.client.json.mapper.annotation.JSONMapper;
+import org.kie.workbench.common.stunner.client.yaml.mapper.api.annotation.YAMLMapper;
 import org.kie.workbench.common.stunner.core.definition.annotation.Definition;
 import org.kie.workbench.common.stunner.core.definition.annotation.Property;
 import org.kie.workbench.common.stunner.core.definition.annotation.morph.Morph;
@@ -32,6 +33,7 @@ import org.kie.workbench.common.stunner.core.definition.annotation.morph.Morph;
 @Definition
 @Morph(base = State.class)
 @JSONMapper
+@YAMLMapper
 @JsType
 public class EventState extends State {
 
