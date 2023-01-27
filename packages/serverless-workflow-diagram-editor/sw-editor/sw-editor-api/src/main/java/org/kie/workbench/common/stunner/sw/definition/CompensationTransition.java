@@ -24,6 +24,8 @@ import jakarta.json.bind.annotation.JsonbTypeDeserializer;
 import jakarta.json.bind.annotation.JsonbTypeSerializer;
 import jsinterop.annotations.JsType;
 import org.jboss.errai.databinding.client.api.Bindable;
+import org.kie.workbench.common.stunner.client.yaml.mapper.api.annotation.YamlTypeDeserializer;
+import org.kie.workbench.common.stunner.client.yaml.mapper.api.annotation.YamlTypeSerializer;
 import org.kie.workbench.common.stunner.core.definition.annotation.Definition;
 import org.kie.workbench.common.stunner.core.definition.annotation.Property;
 import org.kie.workbench.common.stunner.core.definition.annotation.definition.Category;
@@ -31,7 +33,8 @@ import org.kie.workbench.common.stunner.core.definition.annotation.definition.La
 import org.kie.workbench.common.stunner.core.factory.graph.EdgeFactory;
 import org.kie.workbench.common.stunner.core.rule.annotation.CanConnect;
 import org.kie.workbench.common.stunner.core.rule.annotation.EdgeOccurrences;
-import org.kie.workbench.common.stunner.sw.definition.custom.StateTransitionDefinitionJsonbTypeSerializer;
+import org.kie.workbench.common.stunner.sw.definition.custom.json.StateTransitionDefinitionJsonbTypeSerializer;
+import org.kie.workbench.common.stunner.sw.definition.custom.yaml.StateTransitionDefinitionYamlTypeSerializer;
 
 /**
  * Compensation deals with undoing or reversing the work of one or more states which have already successfully completed.
@@ -69,6 +72,8 @@ public class CompensationTransition {
      */
     @JsonbTypeSerializer(StateTransitionDefinitionJsonbTypeSerializer.class)
     @JsonbTypeDeserializer(StateTransitionDefinitionJsonbTypeSerializer.class)
+    @YamlTypeSerializer(StateTransitionDefinitionYamlTypeSerializer.class)
+    @YamlTypeDeserializer(StateTransitionDefinitionYamlTypeSerializer.class)
     private Object transition;
 
     public CompensationTransition() {
