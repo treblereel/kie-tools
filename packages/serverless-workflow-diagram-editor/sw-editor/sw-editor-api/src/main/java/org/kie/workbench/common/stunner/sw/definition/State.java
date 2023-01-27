@@ -25,6 +25,9 @@ import jakarta.json.bind.annotation.JsonbTypeSerializer;
 import jsinterop.annotations.JsType;
 import org.jboss.errai.databinding.client.api.Bindable;
 import org.kie.workbench.common.stunner.client.json.mapper.annotation.JSONMapper;
+import org.kie.workbench.common.stunner.client.yaml.mapper.api.annotation.YAMLMapper;
+import org.kie.workbench.common.stunner.client.yaml.mapper.api.annotation.YamlTypeDeserializer;
+import org.kie.workbench.common.stunner.client.yaml.mapper.api.annotation.YamlTypeSerializer;
 import org.kie.workbench.common.stunner.core.definition.annotation.Definition;
 import org.kie.workbench.common.stunner.core.definition.annotation.Property;
 import org.kie.workbench.common.stunner.core.definition.annotation.definition.Category;
@@ -32,9 +35,12 @@ import org.kie.workbench.common.stunner.core.definition.annotation.definition.La
 import org.kie.workbench.common.stunner.core.definition.annotation.morph.MorphBase;
 import org.kie.workbench.common.stunner.core.definition.property.PropertyMetaTypes;
 import org.kie.workbench.common.stunner.core.rule.annotation.CanDock;
-import org.kie.workbench.common.stunner.sw.definition.custom.StateEndDefinitionJsonbTypeSerializer;
-import org.kie.workbench.common.stunner.sw.definition.custom.StateTransitionDefinitionJsonbTypeSerializer;
-import org.kie.workbench.common.stunner.sw.definition.custom.WorkflowTimeoutsJsonSerializer;
+import org.kie.workbench.common.stunner.sw.definition.custom.json.StateEndDefinitionJsonbTypeSerializer;
+import org.kie.workbench.common.stunner.sw.definition.custom.json.StateTransitionDefinitionJsonbTypeSerializer;
+import org.kie.workbench.common.stunner.sw.definition.custom.json.WorkflowTimeoutsJsonSerializer;
+import org.kie.workbench.common.stunner.sw.definition.custom.yaml.StateEndDefinitionYamlTypeSerializer;
+import org.kie.workbench.common.stunner.sw.definition.custom.yaml.StateTransitionDefinitionYamlTypeSerializer;
+import org.kie.workbench.common.stunner.sw.definition.custom.yaml.WorkflowTimeoutsYamlSerializer;
 
 /**
  * This class defines workflow states define building blocks of the workflow execution instructions.
@@ -48,6 +54,7 @@ import org.kie.workbench.common.stunner.sw.definition.custom.WorkflowTimeoutsJso
 @MorphBase(defaultType = InjectState.class)
 @JsType
 @JSONMapper
+@YAMLMapper
 public class State {
 
     public static final String LABEL_STATE = "state";
@@ -78,6 +85,8 @@ public class State {
     // TODO: Not all states supports this (eg: switch state)
     @JsonbTypeSerializer(StateTransitionDefinitionJsonbTypeSerializer.class)
     @JsonbTypeDeserializer(StateTransitionDefinitionJsonbTypeSerializer.class)
+    @YamlTypeSerializer(StateTransitionDefinitionYamlTypeSerializer.class)
+    @YamlTypeDeserializer(StateTransitionDefinitionYamlTypeSerializer.class)
     private Object transition;
 
     /**
@@ -86,6 +95,8 @@ public class State {
     // TODO: Not all states supports this (eg: switch state)
     @JsonbTypeSerializer(StateEndDefinitionJsonbTypeSerializer.class)
     @JsonbTypeDeserializer(StateEndDefinitionJsonbTypeSerializer.class)
+    @YamlTypeSerializer(StateEndDefinitionYamlTypeSerializer.class)
+    @YamlTypeDeserializer(StateEndDefinitionYamlTypeSerializer.class)
     private Object end;
 
     /**
@@ -102,6 +113,8 @@ public class State {
 
     @JsonbTypeSerializer(WorkflowTimeoutsJsonSerializer.class)
     @JsonbTypeDeserializer(WorkflowTimeoutsJsonSerializer.class)
+    @YamlTypeSerializer(WorkflowTimeoutsYamlSerializer.class)
+    @YamlTypeDeserializer(WorkflowTimeoutsYamlSerializer.class)
     private Object timeouts;
 
     public State() {

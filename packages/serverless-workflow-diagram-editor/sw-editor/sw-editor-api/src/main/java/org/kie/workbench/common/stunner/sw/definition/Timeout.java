@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import jakarta.json.bind.annotation.JsonbTransient;
+import org.kie.workbench.common.stunner.client.yaml.mapper.api.annotation.YamlTransient;
 import org.kie.workbench.common.stunner.core.definition.annotation.definition.Category;
 import org.kie.workbench.common.stunner.core.definition.annotation.definition.Labels;
 import org.kie.workbench.common.stunner.core.definition.annotation.morph.MorphBase;
@@ -35,6 +36,7 @@ public class Timeout {
 
     @Labels
     @JsonbTransient
+    @YamlTransient
     private final Set<String> labels = Stream.of(Workflow.LABEL_ROOT_NODE,
                                                  LABEL_TIMEOUT).collect(Collectors.toSet());
 

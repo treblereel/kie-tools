@@ -24,14 +24,18 @@ import jakarta.json.bind.annotation.JsonbTypeDeserializer;
 import jakarta.json.bind.annotation.JsonbTypeSerializer;
 import jsinterop.annotations.JsType;
 import org.jboss.errai.databinding.client.api.Bindable;
+import org.kie.workbench.common.stunner.client.yaml.mapper.api.annotation.YamlTypeDeserializer;
+import org.kie.workbench.common.stunner.client.yaml.mapper.api.annotation.YamlTypeSerializer;
 import org.kie.workbench.common.stunner.core.definition.annotation.Definition;
 import org.kie.workbench.common.stunner.core.definition.annotation.definition.Category;
 import org.kie.workbench.common.stunner.core.definition.annotation.definition.Labels;
 import org.kie.workbench.common.stunner.core.factory.graph.EdgeFactory;
 import org.kie.workbench.common.stunner.core.rule.annotation.CanConnect;
 import org.kie.workbench.common.stunner.core.rule.annotation.EdgeOccurrences;
-import org.kie.workbench.common.stunner.sw.definition.custom.StateEndDefinitionJsonbTypeSerializer;
-import org.kie.workbench.common.stunner.sw.definition.custom.StateTransitionDefinitionJsonbTypeSerializer;
+import org.kie.workbench.common.stunner.sw.definition.custom.json.StateEndDefinitionJsonbTypeSerializer;
+import org.kie.workbench.common.stunner.sw.definition.custom.json.StateTransitionDefinitionJsonbTypeSerializer;
+import org.kie.workbench.common.stunner.sw.definition.custom.yaml.StateEndDefinitionYamlTypeSerializer;
+import org.kie.workbench.common.stunner.sw.definition.custom.yaml.StateTransitionDefinitionYamlTypeSerializer;
 
 @Bindable
 @Definition(graphFactory = EdgeFactory.class)
@@ -55,10 +59,14 @@ public class DefaultConditionTransition {
 
     @JsonbTypeSerializer(StateTransitionDefinitionJsonbTypeSerializer.class)
     @JsonbTypeDeserializer(StateTransitionDefinitionJsonbTypeSerializer.class)
+    @YamlTypeSerializer(StateTransitionDefinitionYamlTypeSerializer.class)
+    @YamlTypeDeserializer(StateTransitionDefinitionYamlTypeSerializer.class)
     private Object transition;
 
     @JsonbTypeSerializer(StateEndDefinitionJsonbTypeSerializer.class)
     @JsonbTypeDeserializer(StateEndDefinitionJsonbTypeSerializer.class)
+    @YamlTypeSerializer(StateEndDefinitionYamlTypeSerializer.class)
+    @YamlTypeDeserializer(StateEndDefinitionYamlTypeSerializer.class)
     private Object end;
 
     public DefaultConditionTransition() {
