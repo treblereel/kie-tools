@@ -61,6 +61,7 @@ import org.kie.workbench.common.stunner.core.graph.Node;
 import org.kie.workbench.common.stunner.sw.client.services.ClientDiagramService;
 import org.kie.workbench.common.stunner.sw.client.services.IncrementalMarshaller;
 import org.kie.workbench.common.stunner.sw.marshall.Context;
+import org.kie.workbench.common.stunner.sw.marshall.DocType;
 import org.kie.workbench.common.stunner.sw.marshall.Marshaller;
 import org.mockito.Mock;
 import org.uberfire.client.promise.Promises;
@@ -327,12 +328,12 @@ public class DiagramEditorTest {
         when(regExpResult.getAt(2)).thenReturn("injectExample");
         when(graph.getUUID()).thenReturn("SomeOtherStuff");
 
-        doReturn(promises.create((success, failure) -> success.onInvoke((Void) null))).when(tested).setNewContent(anyString(), anyString());
+        doReturn(promises.create((success, failure) -> success.onInvoke((Void) null))).when(tested).setNewContent(anyString(), anyString(), any(DocType.class));
 
         tested.setContent("", rawJSON);
 
-        verify(tested, times(1)).setNewContent("", rawJSON);
-        verify(tested, never()).updateContent("", rawJSON);
+        verify(tested, times(1)).setNewContent("", rawJSON, DocType.JSON);
+        verify(tested, never()).updateContent("", rawJSON, DocType.JSON);
         verify(tested, never()).close();
         verify(diagramApi).setContentSuccess();
     }
@@ -343,12 +344,12 @@ public class DiagramEditorTest {
         when(regExpResult.getAt(2)).thenReturn("injectExample");
         when(graph.getUUID()).thenReturn("injectExample");
 
-        doReturn(promises.create((success, failure) -> success.onInvoke((Void) null))).when(tested).updateContent(anyString(), anyString());
+        doReturn(promises.create((success, failure) -> success.onInvoke((Void) null))).when(tested).updateContent(anyString(), anyString(), any(DocType.class));
 
         tested.setContent("", rawJSON);
 
-        verify(tested, times(1)).updateContent("", rawJSON);
-        verify(tested, never()).setNewContent("", rawJSON);
+        verify(tested, times(1)).updateContent("", rawJSON, DocType.JSON);
+        verify(tested, never()).setNewContent("", rawJSON, any(DocType.class));
         verify(diagramApi).setContentSuccess();
     }
 
