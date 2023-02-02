@@ -65,6 +65,7 @@ import org.kie.workbench.common.stunner.sw.definition.SwitchState;
 import org.kie.workbench.common.stunner.sw.definition.Transition;
 import org.kie.workbench.common.stunner.sw.definition.Workflow;
 import org.kie.workbench.common.stunner.sw.definition.Workflow_JsonMapperImpl;
+import org.kie.workbench.common.stunner.sw.definition.Workflow_YamlMapperImpl;
 import org.kie.workbench.common.stunner.sw.factory.DiagramFactory;
 import org.uberfire.client.promise.Promises;
 
@@ -113,8 +114,10 @@ public class Marshaller {
 
     private Context context;
     private Workflow workflow;
+    private DocType docType;
 
-    private final Workflow_JsonMapperImpl mapper = Workflow_JsonMapperImpl.INSTANCE;
+    private final Workflow_JsonMapperImpl jsonMapper = Workflow_JsonMapperImpl.INSTANCE;
+    private final Workflow_YamlMapperImpl yamlMapper = Workflow_YamlMapperImpl.INSTANCE;
 
     @Inject
     public Marshaller(DefinitionManager definitionManager,
@@ -126,13 +129,16 @@ public class Marshaller {
         this.parser = parser;
         this.promises = promises;
         workflow = null;
+        docType = null;
     }
 
     @SuppressWarnings("all")
-    public Promise<ParseResult> unmarshallGraph(String raw) {
+    public Promise<ParseResult> unmarshallGraph(String raw, DocType docType) {
         try {
-            workflow = parser.parse(mapper.fromJSON(raw));
-            MarshallerUtils.onPostDeserialize(raw, workflow);
+            Workflow result = docType.equals(DocType.JSON) ? jsonMapper.fromJSON(raw) : yamlMapper.read(raw);
+            this.docType = docType;
+            workflow = parser.parse(result);
+            MarshallerUtils.onPostDeserialize(raw, workflow, docType);
         } catch (Exception e) {
             return promises.create(new Promise.PromiseExecutorCallbackFn<ParseResult>() {
                 @Override
@@ -409,8 +415,8 @@ public class Marshaller {
     @SuppressWarnings("all")
     public Promise<String> marshallNode(Node node) {
         Workflow bean = marshallNode(context, node);
-        String raw = mapper.toJSON(bean);
-        String result = MarshallerUtils.onPostSerialize(raw, bean);
+        String raw = docType.equals(DocType.JSON) ? jsonMapper.toJSON(bean) : yamlMapper.write(bean);
+        String result = MarshallerUtils.onPostSerialize(raw, bean, docType);
         return promises.resolve(raw);
     }
 
