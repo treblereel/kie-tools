@@ -57,6 +57,7 @@ import org.kie.workbench.common.stunner.core.graph.Graph;
 import org.kie.workbench.common.stunner.core.graph.Node;
 import org.kie.workbench.common.stunner.sw.client.services.ClientDiagramService;
 import org.kie.workbench.common.stunner.sw.client.services.IncrementalMarshaller;
+import org.kie.workbench.common.stunner.sw.marshall.DocType;
 import org.mockito.Mock;
 import org.uberfire.client.promise.Promises;
 import org.uberfire.mvp.impl.DefaultPlaceRequest;
@@ -312,8 +313,8 @@ public class DiagramEditorTest {
 
         tested.setContent("", rawJSON);
 
-        verify(tested, times(1)).setNewContent("", rawJSON);
-        verify(tested, never()).updateContent("", rawJSON);
+        verify(tested, times(1)).setNewContent("", rawJSON, DocType.JSON);
+        verify(tested, never()).updateContent("", rawJSON, DocType.JSON);
         verify(tested, never()).close();
     }
 
@@ -325,7 +326,7 @@ public class DiagramEditorTest {
 
         final Promise<Void> promise = tested.setContent("", rawJSON);
 
-        verify(tested, times(1)).updateContent("", rawJSON);
+        verify(tested, times(1)).updateContent("", rawJSON, DocType.JSON);
         verify(tested, never()).setNewContent("", rawJSON);
     }
 
