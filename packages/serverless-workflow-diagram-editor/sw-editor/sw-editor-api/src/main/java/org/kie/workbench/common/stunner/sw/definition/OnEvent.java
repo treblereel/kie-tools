@@ -22,6 +22,7 @@ import java.util.stream.Stream;
 
 import jsinterop.annotations.JsType;
 import org.jboss.errai.databinding.client.api.Bindable;
+import org.kie.workbench.common.stunner.client.yaml.mapper.api.annotation.YamlPropertyOrder;
 import org.kie.workbench.common.stunner.core.definition.annotation.Definition;
 import org.kie.workbench.common.stunner.core.definition.annotation.definition.Category;
 import org.kie.workbench.common.stunner.core.definition.annotation.definition.Labels;
@@ -31,6 +32,7 @@ import org.kie.workbench.common.stunner.core.rule.annotation.CanContain;
 @Definition
 @CanContain(roles = {EventRef.LABEL_EVENT, ActionNode.LABEL_ACTION})
 @JsType
+@YamlPropertyOrder({"eventDataFilter", "eventRef", "actions"})
 public class OnEvent {
 
     public static final String LABEL_ONEVENTS = "on_events";
