@@ -153,7 +153,7 @@ public class ModelUtils {
 
     public static void cleanInjectState(InjectState injectState) {
         if (injectState != null) {
-            injectState.setData((Data) Js.undefined());
+            injectState.setData(Js.undefined());
             injectState.setUsedForCompensation(false);
         }
     }

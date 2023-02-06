@@ -24,6 +24,7 @@ import jakarta.json.bind.annotation.JsonbTypeDeserializer;
 import jakarta.json.bind.annotation.JsonbTypeSerializer;
 import jsinterop.annotations.JsType;
 import org.jboss.errai.databinding.client.api.Bindable;
+import org.kie.workbench.common.stunner.client.yaml.mapper.api.annotation.YamlPropertyOrder;
 import org.kie.workbench.common.stunner.client.yaml.mapper.api.annotation.YamlTypeDeserializer;
 import org.kie.workbench.common.stunner.client.yaml.mapper.api.annotation.YamlTypeSerializer;
 import org.kie.workbench.common.stunner.core.definition.annotation.Definition;
@@ -48,6 +49,7 @@ import org.kie.workbench.common.stunner.sw.definition.custom.yaml.SubFlowRefYaml
 @Definition
 @MorphBase(defaultType = CallFunctionAction.class)
 @JsType
+@YamlPropertyOrder({"name", "id", "functionRef", "eventRef", "subFlowRef", "retryRef", "sleep", "retryableErrors", "nonRetryableErrors", "actionDataFilter", "condition"})
 public class ActionNode {
 
     public static final String LABEL_ACTION = "action";

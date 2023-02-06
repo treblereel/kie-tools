@@ -18,8 +18,9 @@ public class DefinitionTypeUtils {
             return (boolean) end;
         } else if (end != null) {
             StateEnd stateEnd = (StateEnd) end;
-            if(stateEnd.getTerminate() != null)
-            return stateEnd.getTerminate();
+            if(stateEnd.getTerminate() != null) {
+                return stateEnd.getTerminate();
+            }
         }
         return false;
     }
