@@ -22,6 +22,7 @@ import jsinterop.annotations.JsType;
 import org.jboss.errai.databinding.client.api.Bindable;
 import org.kie.workbench.common.stunner.client.json.mapper.annotation.JSONMapper;
 import org.kie.workbench.common.stunner.client.yaml.mapper.api.annotation.YAMLMapper;
+import org.kie.workbench.common.stunner.client.yaml.mapper.api.annotation.YamlPropertyOrder;
 import org.kie.workbench.common.stunner.core.definition.annotation.Definition;
 import org.kie.workbench.common.stunner.core.definition.annotation.morph.Morph;
 import org.kie.workbench.common.stunner.sw.definition.custom.NumCompletedJsonTypeDeserializer;
@@ -40,6 +41,7 @@ import org.kie.workbench.common.stunner.sw.definition.custom.NumCompletedJsonTyp
 @JSONMapper
 @YAMLMapper
 @JsType
+@YamlPropertyOrder({"name", "type", "transition", "stateDataFilter", "compensatedBy", "branches", "timeouts", "eventTimeout", "onErrors", "end",  "metadata"})
 public class ParallelState extends State {
 
     public static final String TYPE_PARALLEL = "parallel";
