@@ -25,7 +25,6 @@ import java.util.stream.StreamSupport;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import elemental2.core.Global;
 import elemental2.dom.DomGlobal;
 import elemental2.promise.IThenable;
 import elemental2.promise.Promise;
@@ -292,32 +291,13 @@ public class Marshaller {
     }
 
     @SuppressWarnings("all")
-    public Promise<String> marshallGraph(Graph graph) {
+    public Promise<String> marshallGraph(Graph graph, DocType docType) {
         // TODO: Obtain the root node from the graph argument.
-        return marshallNode(context.getWorkflowRootNode());
+        return marshallNode(context.getWorkflowRootNode(), docType);
     }
 
     public Context getContext() {
         return context;
-    }
-
-    public static Object parse(String raw) {
-        return Global.JSON.parse(raw);
-    }
-
-    public static String stringify(Object jsonObj) {
-        return Global.JSON.stringify(jsonObj, (key, value) -> {
-            if (null == value) {
-                return Global.undefined;
-            }
-            if (key.contains("hashCode") ||
-                    key.contains("host") ||
-                    key.contains("labels") ||
-                    key.startsWith("$")) {
-                return Global.undefined;
-            }
-            return value;
-        }, SPACING_LEVEL);
     }
 
     /* +++++++++++++++++ UN-MARSHALLING +++++++++++++++++ */
@@ -413,7 +393,7 @@ public class Marshaller {
     /* +++++++++++++++++ MARSHALLING +++++++++++++++++ */
 
     @SuppressWarnings("all")
-    public Promise<String> marshallNode(Node node) {
+    public Promise<String> marshallNode(Node node, DocType docType) {
         Workflow bean = marshallNode(context, node);
         String raw = docType.equals(DocType.JSON) ? jsonMapper.toJSON(bean) : yamlMapper.write(bean);
         String result = MarshallerUtils.onPostSerialize(raw, bean, docType);
