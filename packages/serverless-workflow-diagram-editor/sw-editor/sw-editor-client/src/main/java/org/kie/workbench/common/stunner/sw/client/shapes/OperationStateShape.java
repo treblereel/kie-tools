@@ -25,6 +25,7 @@ import org.kie.workbench.common.stunner.sw.client.shapes.icons.IconPath;
 import org.kie.workbench.common.stunner.sw.client.shapes.icons.IconPosition;
 import org.kie.workbench.common.stunner.sw.definition.OperationState;
 import org.kie.workbench.common.stunner.sw.definition.State;
+import org.kie.workbench.common.stunner.sw.definition.WorkflowTimeouts;
 
 import static org.kie.workbench.common.stunner.sw.client.shapes.TextUtils.getStateDataFilter;
 
@@ -41,11 +42,11 @@ public class OperationStateShape extends StateShape {
     public void applyProperties(Node<View<State>, Edge> element, MutationContext mutationContext) {
         super.applyProperties(element, mutationContext);
         OperationState state = (OperationState) element.getContent().getDefinition();
-        if (state.getTimeouts() != null) {
+        if (state.getTimeouts() != null && state.getTimeouts() instanceof WorkflowTimeouts) {
             getView().addChild(new CornerIcon(IconPath.CLOCK,
                                               IconPosition.LEFT_FROM_RIGHT_TOP_CORNER,
-                                              "StateExecTimeout: " + state.getTimeouts().getStateExecTimeout() + "\r\n"
-                                                      + "ActionExecTimeout: " + state.getTimeouts().getActionExecTimeout()));
+                                              "StateExecTimeout: " + ((WorkflowTimeouts)state.getTimeouts()).getStateExecTimeout() + "\r\n"
+                                                      + "ActionExecTimeout: " + ((WorkflowTimeouts)state.getTimeouts()).getActionExecTimeout()));
         }
 
         getView().addChild(new CornerIcon(IconPath.SERVICE,

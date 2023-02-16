@@ -25,6 +25,7 @@ import org.kie.workbench.common.stunner.sw.client.shapes.icons.IconPath;
 import org.kie.workbench.common.stunner.sw.client.shapes.icons.IconPosition;
 import org.kie.workbench.common.stunner.sw.definition.EventState;
 import org.kie.workbench.common.stunner.sw.definition.State;
+import org.kie.workbench.common.stunner.sw.definition.WorkflowTimeouts;
 
 import static org.kie.workbench.common.stunner.sw.client.shapes.TextUtils.getStateDataFilter;
 
@@ -41,12 +42,12 @@ public class EventStateShape extends StateShape {
     public void applyProperties(Node<View<State>, Edge> element, MutationContext mutationContext) {
         super.applyProperties(element, mutationContext);
         EventState state = (EventState) element.getContent().getDefinition();
-        if (state.getTimeouts() != null) {
+        if (state.getTimeouts() != null && state.getTimeouts() instanceof WorkflowTimeouts) {
             getView().addChild(new CornerIcon(IconPath.CLOCK,
                                               IconPosition.RIGHT_TOP_CORNER,
-                                              "EventTimeout: " + state.getTimeouts().getEventTimeout() + "\r\n"
-                                                      + "StateExecTimeout: " + state.getTimeouts().getStateExecTimeout() + "\r\n"
-                                                      + "ActionExecTimeout: " + state.getTimeouts().getActionExecTimeout()));
+                                              "EventTimeout: " + ((WorkflowTimeouts)state.getTimeouts()).getEventTimeout() + "\r\n"
+                                                      + "StateExecTimeout: " + ((WorkflowTimeouts)state.getTimeouts()).getStateExecTimeout() + "\r\n"
+                                                      + "ActionExecTimeout: " + ((WorkflowTimeouts)state.getTimeouts()).getActionExecTimeout()));
         }
 
         if (state.getStateDataFilter() != null) {

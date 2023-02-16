@@ -25,6 +25,7 @@ import org.kie.workbench.common.stunner.sw.client.shapes.icons.IconPath;
 import org.kie.workbench.common.stunner.sw.client.shapes.icons.IconPosition;
 import org.kie.workbench.common.stunner.sw.definition.CallbackState;
 import org.kie.workbench.common.stunner.sw.definition.State;
+import org.kie.workbench.common.stunner.sw.definition.WorkflowTimeouts;
 
 import static org.kie.workbench.common.stunner.sw.client.shapes.TextUtils.getStateDataFilter;
 
@@ -41,8 +42,12 @@ public class CallbackStateShape extends StateShape {
     public void applyProperties(Node<View<State>, Edge> element, MutationContext mutationContext) {
         super.applyProperties(element, mutationContext);
         CallbackState state = (CallbackState) element.getContent().getDefinition();
-        if (state.getTimeouts() != null) {
-            getView().addChild(new CornerIcon(IconPath.CLOCK, IconPosition.LEFT_FROM_RIGHT_TOP_CORNER, "EventTimeout: " + state.getTimeouts().getEventTimeout() + "\r\n" + "StateExecTimeout: " + state.getTimeouts().getStateExecTimeout() + "\r\n" + "ActionExecTimeout: " + state.getTimeouts().getActionExecTimeout()));
+        if (state.getTimeouts() != null && state.getTimeouts() instanceof WorkflowTimeouts) {
+            getView().addChild(new CornerIcon(IconPath.CLOCK,
+                                              IconPosition.LEFT_FROM_RIGHT_TOP_CORNER,
+                                              "EventTimeout: " + ((WorkflowTimeouts)state.getTimeouts()).getEventTimeout() + "\r\n"
+                                                      + "StateExecTimeout: " + ((WorkflowTimeouts)state.getTimeouts()).getStateExecTimeout() + "\r\n"
+                                                      + "ActionExecTimeout: " + ((WorkflowTimeouts)state.getTimeouts()).getActionExecTimeout()));
         }
 
         getView().addChild(new CornerIcon(IconPath.SERVICE, IconPosition.RIGHT_TOP_CORNER, TextUtils.getActionString(state.getAction())));
