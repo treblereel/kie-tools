@@ -311,7 +311,7 @@ public class DiagramEditorTest {
         when(regExpResult.getAt(2)).thenReturn("injectExample");
         when(graph.getUUID()).thenReturn("SomeOtherStuff");
 
-        tested.setContent("", rawJSON);
+        tested.setContent("", rawJSON, DocType.JSON);
 
         verify(tested, times(1)).setNewContent("", rawJSON, DocType.JSON);
         verify(tested, never()).updateContent("", rawJSON, DocType.JSON);
@@ -324,7 +324,7 @@ public class DiagramEditorTest {
         when(regExpResult.getAt(2)).thenReturn("injectExample");
         when(graph.getUUID()).thenReturn("injectExample");
 
-        final Promise<Void> promise = tested.setContent("", rawJSON);
+        final Promise<Void> promise = tested.setContent("", rawJSON, DocType.JSON);
 
         verify(tested, times(1)).updateContent("", rawJSON, DocType.JSON);
         verify(tested, never()).setNewContent("", rawJSON);
@@ -346,7 +346,7 @@ public class DiagramEditorTest {
         when(regExpResult.getAt(2)).thenReturn("injectExample");
         when(graph.getUUID()).thenReturn("SomeOtherStuff");
 
-        tested.setContent("", rawJSON);
+        tested.setContent("", rawJSON, DocType.JSON);
         tested.close();
 
         verify(stunnerEditor2, times(1)).close();
