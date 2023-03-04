@@ -369,7 +369,7 @@ public class DiagramEditorTest {
         when(regExpResult.getAt(2)).thenReturn("injectExample");
         when(graph.getUUID()).thenReturn("SomeOtherStuff");
 
-        tested.setContent("", rawJSON);
+        tested.setContent("", rawJSON, DocType.JSON);
         tested.close();
 
         verify(stunnerEditor2, times(1)).close();
