@@ -147,10 +147,10 @@ public class DiagramEditor {
     }
 
     public Promise<Void> setContent(final String path, final String value) {
-        if(value == null || value.isEmpty()) {
+        if(value == null || value.trim().isEmpty()) {
             return setContent(path, "{}", DocType.JSON);
         }
-        if(value.charAt(0) == '{') {
+        if(value.trim().charAt(0) == '{') {
             return setContent(path, value, DocType.JSON);
         }
         return setContent(path, value, DocType.YAML);
@@ -162,10 +162,10 @@ public class DiagramEditor {
         togglePreviewEvent.fire(event);
 
         Promise<Void> setContentPromise;
-        if (stunnerEditor.isClosed() || !isSameWorkflow(value)) {
-            setContentPromise = setNewContent(path, value);
+        if (stunnerEditor.isClosed() || !isSameWorkflow(value, docType)) {
+            setContentPromise = setNewContent(path, value, docType);
         } else {
-            setContentPromise = updateContent(path, value);
+            setContentPromise = updateContent(path, value, docType);
         }
 
         return setContentPromise.then(v -> promises.create((success, failure) -> {

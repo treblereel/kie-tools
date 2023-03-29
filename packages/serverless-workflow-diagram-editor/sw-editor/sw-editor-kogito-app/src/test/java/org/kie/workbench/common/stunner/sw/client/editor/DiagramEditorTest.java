@@ -228,7 +228,7 @@ public class DiagramEditorTest {
                                        canvasFileExport,
                                        togglePreviewEvent,
                                        diagramApi));
-        tested.jsRegExp = jsRegExp;
+        tested.jsRegExpJson = jsRegExp;
         tested.jsCanvas = jsCanvas;
     }
 
