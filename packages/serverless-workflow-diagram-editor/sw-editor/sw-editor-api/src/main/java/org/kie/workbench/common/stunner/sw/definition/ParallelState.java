@@ -23,10 +23,13 @@ import org.jboss.errai.databinding.client.api.Bindable;
 import org.kie.workbench.common.stunner.client.json.mapper.annotation.JSONMapper;
 import org.kie.workbench.common.stunner.client.yaml.mapper.api.annotation.YAMLMapper;
 import org.kie.workbench.common.stunner.client.yaml.mapper.api.annotation.YamlPropertyOrder;
+import org.kie.workbench.common.stunner.client.yaml.mapper.api.annotation.YamlTypeDeserializer;
+import org.kie.workbench.common.stunner.client.yaml.mapper.api.annotation.YamlTypeSerializer;
 import org.kie.workbench.common.stunner.core.definition.annotation.Definition;
 import org.kie.workbench.common.stunner.core.definition.annotation.morph.Morph;
 import org.kie.workbench.common.stunner.sw.definition.custom.NumCompletedJsonTypeDeserializer;
 import org.kie.workbench.common.stunner.sw.definition.custom.NumCompletedJsonTypeSerializer;
+import org.kie.workbench.common.stunner.sw.definition.custom.yaml.NumCompletedYamlTypeSerializer;
 
 /**
  * Parallel state defines a collection of branches that are executed in parallel.
@@ -54,6 +57,8 @@ public class ParallelState extends State {
 
     @JsonbTypeSerializer(NumCompletedJsonTypeSerializer.class)
     @JsonbTypeDeserializer(NumCompletedJsonTypeDeserializer.class)
+    @YamlTypeSerializer(NumCompletedYamlTypeSerializer.class)
+    @YamlTypeDeserializer(NumCompletedYamlTypeSerializer.class)
     private Object numCompleted;
 
     private ParallelStateBranch[] branches;
