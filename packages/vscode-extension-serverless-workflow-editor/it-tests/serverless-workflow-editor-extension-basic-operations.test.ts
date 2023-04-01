@@ -74,6 +74,10 @@ describe("Serverless workflow editor - Basic operations tests", () => {
     await textEditor.typeTextAt(47, 7, greetInGermanStateString);
     await textEditor.typeTextAt(26, 10, germanConditionString);
 
+    const json = await textEditor.getText();
+
+    console.log("json:\n " + json);
+
     expect((await swfEditor.getAllNodeIds()).length).equal(7);
 
     if (await textEditor.isDirty()) {
