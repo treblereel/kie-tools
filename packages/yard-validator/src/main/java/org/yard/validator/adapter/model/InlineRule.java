@@ -9,23 +9,23 @@ import java.util.List;
 @YAMLMapper
 public class InlineRule implements Rule {
 
-    @YamlTypeSerializer(InlineRuleDefListSerializer.class)
-    @YamlTypeDeserializer(InlineRuleDefListSerializer.class)
-    public List<Object> def;
+    @YamlTypeSerializer(InlineRuleDefSerializer.class)
+    @YamlTypeDeserializer(InlineRuleDefSerializer.class)
+    public List def;
 
     public InlineRule() {
 
     }
 
-    public InlineRule(List<Object> data) {
+    public InlineRule(List data) {
         this.def = data;
     }
 
-    public List<Object> getDef() {
+    public List getDef() {
         return def;
     }
 
-    public void setDef(List<Object> def) {
+    public void setDef(List def) {
         this.def = def;
     }
 }

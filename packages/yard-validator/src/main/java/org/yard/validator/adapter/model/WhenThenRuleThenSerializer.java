@@ -13,7 +13,7 @@ import org.treblereel.gwt.yaml.api.stream.YAMLWriter;
 import java.util.Locale;
 
 public class WhenThenRuleThenSerializer
-        implements YAMLSerializer, YAMLDeserializer {
+        implements YAMLSerializer<Object>, YAMLDeserializer<Object> {
     @Override
     public Object deserialize(YamlMapping yamlMapping, String key, YAMLDeserializationContext yamlDeserializationContext) throws YAMLDeserializationException {
         return deserialize(yamlMapping.value(key), yamlDeserializationContext);

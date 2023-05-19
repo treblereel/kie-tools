@@ -14,6 +14,8 @@ public class HardConstraintKey extends KeyImpl {
 
     @Override
     public String toString() {
-        return String.format("%s %s",parent, value);
+        //String.format is not a part of jre emulation
+        //return String.format("%s %s",parent, value);
+        return parent + " " + value;
     }
 }
