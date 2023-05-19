@@ -9,7 +9,7 @@ import java.util.*;
 public class Parser {
     public Map<Location, Collection<Key>> parse(String yaml) {
         final HashMap<Location, Collection<Key>> result = new HashMap<>();
-        
+
         return result;
     }
 }

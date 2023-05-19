@@ -1,8 +1,11 @@
 package org.yard.validator.adapter.model;
 
 
+import org.treblereel.gwt.yaml.api.annotation.YAMLMapper;
+
 import java.util.List;
 
+@YAMLMapper
 public class YaRD {
 
     private String specVersion = "alpha";
@@ -11,6 +14,14 @@ public class YaRD {
     private String expressionLang;
     private List<Input> inputs;
     private List<Element> elements;
+
+    public void setInputs(List<Input> inputs) {
+        this.inputs = inputs;
+    }
+
+    public void setElements(List<Element> elements) {
+        this.elements = elements;
+    }
 
     public String getName() {
         return name;

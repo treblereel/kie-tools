@@ -1,6 +1,9 @@
-package org.yard.validator.adapter.model;
+package org.yard.validator.adapter.key;
 
 
+import org.treblereel.gwt.yaml.api.annotation.YAMLMapper;
+import org.treblereel.gwt.yaml.api.annotation.YamlTypeDeserializer;
+import org.treblereel.gwt.yaml.api.annotation.YamlTypeSerializer;
 import org.yard.validator.adapter.key.KeyImpl;
 import org.yard.validator.adapter.key.KeyParent;
 import org.yard.validator.adapter.key.Location;
@@ -15,6 +18,14 @@ public class ObjectKey extends KeyImpl {
         super(location,
              parent );
         this.value = value;
+    }
+
+    public void setValue(Object value) {
+        this.value = value;
+    }
+
+    public Object getValue() {
+        return value;
     }
 
     @Override
