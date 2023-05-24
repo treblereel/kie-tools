@@ -9,14 +9,14 @@ import java.util.List;
 @YAMLMapper
 public class WhenThenRule implements Rule {
 
-    @YamlTypeSerializer(WhenThenRuleObjectListSerializer.class)
-    @YamlTypeDeserializer(WhenThenRuleObjectListSerializer.class)
-    private List<Object> when;
+    @YamlTypeSerializer(WhenThenRuleThenSerializer.class)
+    @YamlTypeDeserializer(WhenThenRuleThenSerializer.class)
+    private List when;
     @YamlTypeSerializer(WhenThenRuleThenSerializer.class)
     @YamlTypeDeserializer(WhenThenRuleThenSerializer.class)
     private Object then;
 
-    public List<Object> getWhen() {
+    public List getWhen() {
         return when;
     }
 
@@ -24,7 +24,7 @@ public class WhenThenRule implements Rule {
         return then;
     }
 
-    public void setWhen(List<Object> when) {
+    public void setWhen(List when) {
         this.when = when;
     }
 

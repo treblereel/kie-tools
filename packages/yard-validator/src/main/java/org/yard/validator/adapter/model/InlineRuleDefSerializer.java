@@ -10,27 +10,27 @@ import org.treblereel.gwt.yaml.api.internal.ser.YAMLSerializationContext;
 import org.treblereel.gwt.yaml.api.stream.YAMLSequenceWriter;
 import org.treblereel.gwt.yaml.api.stream.YAMLWriter;
 
-import java.util.List;
+public class InlineRuleDefSerializer
+        implements YAMLSerializer<Object>, YAMLDeserializer<Object> {
 
-public class WhenThenRuleObjectListSerializer
-        implements YAMLSerializer<List<Object>>, YAMLDeserializer<List<Object>> {
+
     @Override
-    public List<Object> deserialize(YamlMapping yamlMapping, String s, YAMLDeserializationContext yamlDeserializationContext) throws YAMLDeserializationException {
+    public Object deserialize(YamlMapping yamlMapping, String s, YAMLDeserializationContext yamlDeserializationContext) throws YAMLDeserializationException {
         return null;
     }
 
     @Override
-    public List<Object> deserialize(YamlNode yamlNode, YAMLDeserializationContext yamlDeserializationContext) {
+    public Object deserialize(YamlNode yamlNode, YAMLDeserializationContext yamlDeserializationContext) {
         return null;
     }
 
     @Override
-    public void serialize(YAMLWriter yamlWriter, String s, List<Object> objects, YAMLSerializationContext yamlSerializationContext) {
+    public void serialize(YAMLWriter yamlWriter, String s, Object objects, YAMLSerializationContext yamlSerializationContext) {
 
     }
 
     @Override
-    public void serialize(YAMLSequenceWriter yamlSequenceWriter, List<Object> objects, YAMLSerializationContext yamlSerializationContext) {
+    public void serialize(YAMLSequenceWriter yamlSequenceWriter, Object objects, YAMLSerializationContext yamlSerializationContext) {
 
     }
 }
