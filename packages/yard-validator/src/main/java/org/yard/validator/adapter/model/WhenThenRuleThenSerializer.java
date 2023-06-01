@@ -1,14 +1,13 @@
 package org.yard.validator.adapter.model;
 
-import com.amihaiemil.eoyaml.YamlMapping;
-import com.amihaiemil.eoyaml.YamlNode;
 import org.treblereel.gwt.yaml.api.YAMLDeserializer;
 import org.treblereel.gwt.yaml.api.YAMLSerializer;
 import org.treblereel.gwt.yaml.api.exception.YAMLDeserializationException;
 import org.treblereel.gwt.yaml.api.internal.deser.YAMLDeserializationContext;
 import org.treblereel.gwt.yaml.api.internal.ser.YAMLSerializationContext;
-import org.treblereel.gwt.yaml.api.stream.YAMLSequenceWriter;
-import org.treblereel.gwt.yaml.api.stream.YAMLWriter;
+import org.treblereel.gwt.yaml.api.node.YamlMapping;
+import org.treblereel.gwt.yaml.api.node.YamlNode;
+import org.treblereel.gwt.yaml.api.node.YamlSequence;
 
 import java.util.Locale;
 
@@ -16,7 +15,7 @@ public class WhenThenRuleThenSerializer
         implements YAMLSerializer<Object>, YAMLDeserializer<Object> {
     @Override
     public Object deserialize(YamlMapping yamlMapping, String key, YAMLDeserializationContext yamlDeserializationContext) throws YAMLDeserializationException {
-        return deserialize(yamlMapping.value(key), yamlDeserializationContext);
+        return deserialize(yamlMapping.getNode(key), yamlDeserializationContext);
     }
 
     @Override
@@ -24,16 +23,16 @@ public class WhenThenRuleThenSerializer
         if (yamlNode == null || yamlNode.isEmpty()) {
             return null;
         }
-        return yamlNode.asScalar().value().toLowerCase(Locale.ROOT);
+        return yamlNode.<String>asScalar().value().toLowerCase(Locale.ROOT);
     }
 
     @Override
-    public void serialize(YAMLWriter yamlWriter, String s, Object o, YAMLSerializationContext yamlSerializationContext) {
-        yamlWriter.value(s, o.toString());
+    public void serialize(YamlMapping yamlWriter, String s, Object o, YAMLSerializationContext yamlSerializationContext) {
+        yamlWriter.addScalarNode(s, o.toString());
     }
 
     @Override
-    public void serialize(YAMLSequenceWriter yamlSequenceWriter, Object o, YAMLSerializationContext yamlSerializationContext) {
-        yamlSequenceWriter.value(o.toString());
+    public void serialize(YamlSequence yamlSequenceWriter, Object o, YAMLSerializationContext yamlSerializationContext) {
+        yamlSequenceWriter.addScalarNode(o.toString());
     }
 }

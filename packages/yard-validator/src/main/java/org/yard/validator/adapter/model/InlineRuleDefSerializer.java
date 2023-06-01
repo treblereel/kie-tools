@@ -1,14 +1,13 @@
 package org.yard.validator.adapter.model;
 
-import com.amihaiemil.eoyaml.YamlMapping;
-import com.amihaiemil.eoyaml.YamlNode;
 import org.treblereel.gwt.yaml.api.YAMLDeserializer;
 import org.treblereel.gwt.yaml.api.YAMLSerializer;
 import org.treblereel.gwt.yaml.api.exception.YAMLDeserializationException;
 import org.treblereel.gwt.yaml.api.internal.deser.YAMLDeserializationContext;
 import org.treblereel.gwt.yaml.api.internal.ser.YAMLSerializationContext;
-import org.treblereel.gwt.yaml.api.stream.YAMLSequenceWriter;
-import org.treblereel.gwt.yaml.api.stream.YAMLWriter;
+import org.treblereel.gwt.yaml.api.node.YamlMapping;
+import org.treblereel.gwt.yaml.api.node.YamlNode;
+import org.treblereel.gwt.yaml.api.node.YamlSequence;
 
 public class InlineRuleDefSerializer
         implements YAMLSerializer<Object>, YAMLDeserializer<Object> {
@@ -25,12 +24,12 @@ public class InlineRuleDefSerializer
     }
 
     @Override
-    public void serialize(YAMLWriter yamlWriter, String s, Object objects, YAMLSerializationContext yamlSerializationContext) {
+    public void serialize(YamlMapping yamlWriter, String s, Object objects, YAMLSerializationContext yamlSerializationContext) {
 
     }
 
     @Override
-    public void serialize(YAMLSequenceWriter yamlSequenceWriter, Object objects, YAMLSerializationContext yamlSerializationContext) {
+    public void serialize(YamlSequence yamlSequenceWriter, Object objects, YAMLSerializationContext yamlSerializationContext) {
 
     }
 }
