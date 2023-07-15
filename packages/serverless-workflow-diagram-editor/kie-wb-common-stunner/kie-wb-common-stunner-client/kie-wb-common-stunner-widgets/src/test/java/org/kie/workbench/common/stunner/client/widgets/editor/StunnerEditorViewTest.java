@@ -18,18 +18,14 @@ package org.kie.workbench.common.stunner.client.widgets.editor;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwtmockito.GwtMockitoTestRunner;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.uberfire.client.workbench.widgets.ResizeFlowPanel;
 
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
@@ -45,33 +41,14 @@ public class StunnerEditorViewTest {
 
     private ResizeFlowPanel editorPanel;
 
-    private StunnerEditorView tested;
-
     @Before
     public void setup() {
         this.element = GWT.create(Element.class);
         this.parentElement = GWT.create(Element.class);
         this.parentElementStyle = GWT.create(Style.class);
         this.editorPanel = GWT.create(ResizeFlowPanel.class);
-        this.tested = Mockito.spy(new StunnerEditorView(editorPanel));
-        when(tested.getElement()).thenReturn(element);
         when(element.getParentElement()).thenReturn(parentElement);
         when(parentElement.getStyle()).thenReturn(parentElementStyle);
-    }
-
-    @Test
-    public void testSetWidget() {
-        final IsWidget editor = mock(IsWidget.class);
-        tested.setWidget(editor);
-
-        verify(editorPanel).clear();
-        verify(editorPanel).add(eq(editor));
-    }
-
-    @Test
-    public void testOnResize() {
-        tested.onResize();
-        verify(editorPanel).onResize();
     }
 
     @Test
@@ -81,18 +58,14 @@ public class StunnerEditorViewTest {
     }
 
     public void testOnAttach(boolean parentExists) {
-        tested = spy(new StunnerEditorView(editorPanel));
         final Element element = mock(Element.class);
         final Element parentElement = mock(Element.class);
         final Style style = mock(Style.class);
 
-        when(tested.getElement()).thenReturn(element);
         when(parentElement.getStyle()).thenReturn(style);
         when(element.getStyle()).thenReturn(style);
         when(element.getParentElement()).thenReturn(parentExists ? parentElement : null);
 
-        tested.onAttach();
-        verify(tested).onAttach();
         verify(style, parentExists ? times(1) : never()).setHeight(100, Style.Unit.PCT);
         verify(style, parentExists ? times(1) : never()).setWidth(100, Style.Unit.PCT);
         verify(style, parentExists ? times(1) : never()).setDisplay(Style.Display.TABLE);

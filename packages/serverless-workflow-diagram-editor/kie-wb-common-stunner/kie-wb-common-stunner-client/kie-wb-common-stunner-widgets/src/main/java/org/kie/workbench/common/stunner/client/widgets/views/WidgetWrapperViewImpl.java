@@ -21,7 +21,8 @@ import javax.enterprise.context.Dependent;
 
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
+import elemental2.dom.HTMLElement;
+import jsinterop.base.Js;
 import org.uberfire.client.workbench.widgets.ResizeFlowPanel;
 
 @Dependent
@@ -43,8 +44,8 @@ public class WidgetWrapperViewImpl implements WidgetWrapperView {
     }
 
     @Override
-    public Widget asWidget() {
-        return panel;
+    public HTMLElement getElement() {
+        return Js.uncheckedCast(panel.getElement());
     }
 
     @Override

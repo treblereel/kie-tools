@@ -79,9 +79,6 @@ public class StunnerEditorTest {
     private ClientTranslationService translationService;
 
     @Mock
-    private StunnerEditorView view;
-
-    @Mock
     private ErrorPage errorPage;
 
     @Mock
@@ -136,7 +133,6 @@ public class StunnerEditorTest {
         tested = new StunnerEditor(sessionEditorPresenters,
                                    sessionViewerPresenters,
                                    translationService,
-                                   view,
                                    errorPage);
         JsWindow.editor = new JsStunnerEditor();
     }
@@ -179,7 +175,6 @@ public class StunnerEditorTest {
         verify(sessionEditorPresenter, times(1)).destroy();
         verify(sessionEditorPresenters, times(1)).destroyAll();
         verify(sessionViewerPresenters, times(1)).destroyAll();
-        verify(view).clear();
         assertNull(tested.getPresenter());
     }
 

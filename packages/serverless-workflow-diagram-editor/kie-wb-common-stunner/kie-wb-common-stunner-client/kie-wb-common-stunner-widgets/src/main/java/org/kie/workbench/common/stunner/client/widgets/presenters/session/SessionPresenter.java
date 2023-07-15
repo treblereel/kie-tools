@@ -18,9 +18,9 @@ package org.kie.workbench.common.stunner.client.widgets.presenters.session;
 
 import java.util.function.Predicate;
 
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.gwt.user.client.ui.RequiresResize;
+import org.jboss.errai.ui.client.local.api.IsElement;
 import org.kie.workbench.common.stunner.client.widgets.notification.Notification;
 import org.kie.workbench.common.stunner.client.widgets.palette.PaletteWidget;
 import org.kie.workbench.common.stunner.client.widgets.presenters.Viewer;
@@ -66,27 +66,14 @@ public interface SessionPresenter<S extends ClientSession, H extends CanvasHandl
         }
     }
 
-    interface View extends IsWidget,
+    interface View extends IsElement,
                            RequiresResize,
                            ProvidesResize {
 
-        IsWidget getCanvasWidget();
-
-        IsWidget getToolbarWidget();
-
-        IsWidget getSessionHeaderContainer();
-
-        IsWidget getPaletteWidget();
 
         ScrollType getContentScrollType();
 
-        View setCanvasWidget(final IsWidget widget);
-
-        View setToolbarWidget(final IsWidget widget);
-
-        View setSessionHeaderContainer(final IsWidget widget);
-
-        View setPaletteWidget(final PaletteWidget<PaletteDefinition> paletteWidget);
+        View setCanvasWidget(final IsElement widget);
 
         void setContentScrollType(final ScrollType handler);
 
@@ -96,9 +83,6 @@ public interface SessionPresenter<S extends ClientSession, H extends CanvasHandl
 
         View showError(final String message);
 
-        void showSessionHeaderContainer(final int sessionHeaderHeight);
-
-        void hideSessionHeaderContainer();
 
         void destroy();
 
