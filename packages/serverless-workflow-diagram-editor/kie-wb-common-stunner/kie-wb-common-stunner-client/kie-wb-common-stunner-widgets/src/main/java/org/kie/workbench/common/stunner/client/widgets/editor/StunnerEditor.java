@@ -26,7 +26,10 @@ import javax.inject.Inject;
 import com.ait.lienzo.client.core.types.JsCanvas;
 import com.ait.lienzo.client.widget.panel.LienzoBoundsPanel;
 import com.google.gwt.core.client.JavaScriptException;
-import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.Window;
+import elemental2.dom.CSSStyleDeclaration;
+import elemental2.dom.DomGlobal;
+import elemental2.dom.HTMLDivElement;
 import jsinterop.base.Js;
 import org.jboss.errai.ioc.client.api.ManagedInstance;
 import org.kie.workbench.common.stunner.client.lienzo.canvas.LienzoCanvas;
@@ -54,13 +57,16 @@ import org.kie.workbench.common.stunner.core.diagram.DiagramParsingException;
 import org.kie.workbench.common.stunner.core.i18n.CoreTranslationMessages;
 import org.kie.workbench.common.widgets.client.errorpage.ErrorPage;
 
+import static elemental2.dom.CSSProperties.HeightUnionType;
+import static elemental2.dom.CSSProperties.WidthUnionType;
+import static org.jboss.errai.common.client.dom.DOMUtil.removeAllChildren;
+
 @Dependent
 public class StunnerEditor {
 
     private final ManagedInstance<SessionEditorPresenter<EditorSession>> editorSessionPresenterInstances;
     private final ManagedInstance<SessionViewerPresenter<ViewerSession>> viewerSessionPresenterInstances;
     private final ClientTranslationService translationService;
-    private final StunnerEditorView view;
     private final ErrorPage errorPage;
     private boolean hasErrors;
 
@@ -70,22 +76,22 @@ public class StunnerEditor {
     private Consumer<Throwable> exceptionProcessor;
     private AlertsControl<AbstractCanvas> alertsControl;
 
+    final HTMLDivElement rootContainer = (HTMLDivElement) DomGlobal.document.createElement("div");
+
     // CDI proxy.
     public StunnerEditor() {
-        this(null, null, null, null, null);
+        this(null, null, null, null);
     }
 
     @Inject
     public StunnerEditor(ManagedInstance<SessionEditorPresenter<EditorSession>> editorSessionPresenterInstances,
                          ManagedInstance<SessionViewerPresenter<ViewerSession>> viewerSessionPresenterInstances,
                          ClientTranslationService translationService,
-                         StunnerEditorView view,
                          ErrorPage errorPage) {
         this.editorSessionPresenterInstances = editorSessionPresenterInstances;
         this.viewerSessionPresenterInstances = viewerSessionPresenterInstances;
         this.translationService = translationService;
         this.isReadOnly = false;
-        this.view = view;
         this.errorPage = errorPage;
         this.parsingExceptionProcessor = e -> {
         };
@@ -117,7 +123,6 @@ public class StunnerEditor {
             diagramPresenter.displayNotifications(type -> true);
             diagramPresenter.withPalette(false);
             diagramPresenter.withToolbar(false);
-            view.setWidget(diagramPresenter.getView());
         }
         diagramPresenter.open(diagram, new SessionPresenter.SessionPresenterCallback() {
             @Override
@@ -154,6 +159,26 @@ public class StunnerEditor {
                 callback.onError(error);
             }
         });
+
+        DomGlobal.document.body.appendChild(rootContainer);
+        rootContainer.appendChild(Js.uncheckedCast(diagramPresenter.getView().getElement()));
+
+        DomGlobal.window.addEventListener("resize", evt -> {
+            resizeTo(DomGlobal.window.innerWidth, DomGlobal.window.innerHeight);
+        });
+        resize();
+    }
+
+    private void resize() {
+        resizeTo(Window.getClientWidth(),
+                Window.getClientHeight());
+    }
+
+    private void resizeTo(int width,
+                          int height) {
+        CSSStyleDeclaration style = rootContainer.style;
+        style.width = WidthUnionType.of(width + "px");
+        style.height = HeightUnionType.of(height + "px");
     }
 
     @SuppressWarnings("all")
@@ -218,7 +243,8 @@ public class StunnerEditor {
                 (diagramPresenter.getView() != null)) {
             addError(message);
         } else {
-            view.setWidget(errorPage);
+            removeAllChildren(rootContainer);
+            rootContainer.appendChild(Js.uncheckedCast(errorPage.getElement()));
         }
     }
 
@@ -229,7 +255,6 @@ public class StunnerEditor {
             alertsControl = null;
             editorSessionPresenterInstances.destroyAll();
             viewerSessionPresenterInstances.destroyAll();
-            view.clear();
         }
         return this;
     }
@@ -259,10 +284,6 @@ public class StunnerEditor {
             return null;
         }
         return (ClientSession) diagramPresenter.getInstance();
-    }
-
-    public IsWidget getView() {
-        return view;
     }
 
     public boolean hasErrors() {

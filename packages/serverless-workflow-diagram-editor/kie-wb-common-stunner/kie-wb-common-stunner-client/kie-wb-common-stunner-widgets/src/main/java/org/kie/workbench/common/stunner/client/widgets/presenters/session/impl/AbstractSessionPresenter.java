@@ -230,7 +230,6 @@ public abstract class AbstractSessionPresenter<D extends Diagram, H extends Abst
     @SuppressWarnings("unchecked")
     protected void onSessionOpened(final S session) {
         destroyPalette();
-        initPalette(session);
         getView().setCanvasWidget(getDisplayer().getView());
     }
 
@@ -244,18 +243,8 @@ public abstract class AbstractSessionPresenter<D extends Diagram, H extends Abst
     }
 
     @SuppressWarnings("unchecked")
-    private void initPalette(final S session) {
-        if (hasPalette) {
-            palette = (PaletteWidget<PaletteDefinition>) buildPalette(session);
-            if (null != palette) {
-                getView().setPaletteWidget(palette);
-            }
-        }
-    }
-
     public void refresh() {
         destroyPalette();
-        getSession().ifPresent(this::initPalette);
     }
 
     private void showMessage(final String message) {

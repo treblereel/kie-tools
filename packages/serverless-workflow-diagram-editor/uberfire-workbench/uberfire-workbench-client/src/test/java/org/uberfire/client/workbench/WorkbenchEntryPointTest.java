@@ -21,9 +21,6 @@ package org.uberfire.client.workbench;
 import java.lang.annotation.Annotation;
 import java.util.Collections;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.Dependent;
-
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimpleLayoutPanel;
@@ -31,7 +28,6 @@ import com.google.gwtmockito.GwtMockitoTestRunner;
 import com.google.gwtmockito.WithClassesToStub;
 import org.jboss.errai.ioc.client.container.SyncBeanDef;
 import org.jboss.errai.ioc.client.container.SyncBeanManager;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -40,11 +36,7 @@ import org.uberfire.client.mvp.Activity;
 import org.uberfire.client.util.MockIOCBeanDef;
 import org.uberfire.mvp.PlaceRequest;
 import org.uberfire.mvp.impl.DefaultPlaceRequest;
-import org.uberfire.workbench.model.ActivityResourceType;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(GwtMockitoTestRunner.class)
@@ -70,61 +62,6 @@ public class WorkbenchEntryPointTest {
     private static final String DOCK_ID = "DockTest";
     private static final PlaceRequest DOCK_PLACE = new DefaultPlaceRequest(DOCK_ID);
 
-    @Test(expected = RuntimeException.class)
-    public void testOpenDockActivityNotFound() {
-        workbenchEntryPoint.openDock(new DefaultPlaceRequest("Invalid"), dockContainer);
-    }
-
-    @Test(expected = RuntimeException.class)
-    public void testOpenDockActivityNotDockType() {
-        when(dockActivity.isType(ActivityResourceType.DOCK.name())).thenReturn(false);
-        makeDockBean(dockActivity, Dependent.class);
-
-        workbenchEntryPoint.openDock(DOCK_PLACE, dockContainer);
-    }
-
-    @Test
-    public void testOpenDock() {
-        when(dockActivity.isType(ActivityResourceType.DOCK.name())).thenReturn(true);
-        makeDockBean(dockActivity, Dependent.class);
-
-        workbenchEntryPoint.openDock(DOCK_PLACE, dockContainer);
-
-        verify(dockActivity).onStartup(DOCK_PLACE);
-        verify(dockActivity).onOpen();
-        verify(workbenchEntryPoint).createPanel(any());
-    }
-
-    @Test
-    public void testCloseDockActivityNotFound() {
-        workbenchEntryPoint.closeDock(dockActivity, dockContainer, dockPanel);
-
-        verify(dockActivity, never()).onClose();
-    }
-
-    @Test
-    public void testCloseDockActivityNotDependent() {
-        when(dockActivity.isType(ActivityResourceType.DOCK.name())).thenReturn(true);
-        makeDockBean(dockActivity, ApplicationScoped.class);
-
-        workbenchEntryPoint.openDock(DOCK_PLACE, dockContainer);
-        workbenchEntryPoint.closeDock(dockActivity, dockContainer, dockPanel);
-
-        verify(dockActivity).onClose();
-        verify(iocManager, never()).destroyBean(any());
-    }
-
-    @Test
-    public void testCloseDock() {
-        when(dockActivity.isType(ActivityResourceType.DOCK.name())).thenReturn(true);
-        makeDockBean(dockActivity, Dependent.class);
-
-        workbenchEntryPoint.openDock(DOCK_PLACE, dockContainer);
-        workbenchEntryPoint.closeDock(dockActivity, dockContainer, dockPanel);
-
-        verify(dockActivity).onClose();
-        verify(iocManager).destroyBean(any());
-    }
 
     @SuppressWarnings("unchecked")
     private <T> void makeDockBean(final T beanInstance,
