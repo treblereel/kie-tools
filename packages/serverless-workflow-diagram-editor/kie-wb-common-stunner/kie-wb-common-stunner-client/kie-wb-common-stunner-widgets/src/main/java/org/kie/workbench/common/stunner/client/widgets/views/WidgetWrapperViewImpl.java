@@ -19,38 +19,40 @@ package org.kie.workbench.common.stunner.client.widgets.views;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.Dependent;
 
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.IsWidget;
+import elemental2.dom.DomGlobal;
+import elemental2.dom.HTMLDivElement;
 import elemental2.dom.HTMLElement;
 import jsinterop.base.Js;
-import org.uberfire.client.workbench.widgets.ResizeFlowPanel;
+
+import static org.jboss.errai.common.client.dom.DOMUtil.removeAllChildren;
 
 @Dependent
 public class WidgetWrapperViewImpl implements WidgetWrapperView {
 
-    private final ResizeFlowPanel panel = new ResizeFlowPanel();
+    private final HTMLDivElement panel = (HTMLDivElement) DomGlobal.document.createElement("div");
 
     @PostConstruct
     public void init() {
-        panel.getElement().getStyle().setWidth(100, Style.Unit.PCT);
-        panel.getElement().getStyle().setHeight(100, Style.Unit.PCT);
+        panel.style.width = Js.cast("100%");
+        panel.style.height = Js.cast("100%");
     }
 
     @Override
     public WidgetWrapperView setWidget(final IsWidget widget) {
         clear();
-        panel.add(widget);
+        panel.appendChild(Js.cast(widget.asWidget().getElement()));
         return this;
     }
 
     @Override
     public HTMLElement getElement() {
-        return Js.uncheckedCast(panel.getElement());
+        return panel;
     }
 
     @Override
     public WidgetWrapperView clear() {
-        panel.clear();
+        removeAllChildren(panel);
         return this;
     }
 }

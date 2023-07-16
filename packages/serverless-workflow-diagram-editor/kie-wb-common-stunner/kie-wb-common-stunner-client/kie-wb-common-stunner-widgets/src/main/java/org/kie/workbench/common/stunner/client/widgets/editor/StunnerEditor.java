@@ -76,7 +76,7 @@ public class StunnerEditor {
     private Consumer<Throwable> exceptionProcessor;
     private AlertsControl<AbstractCanvas> alertsControl;
 
-    final HTMLDivElement rootContainer = (HTMLDivElement) DomGlobal.document.getElementById("root_container");
+    private final HTMLDivElement rootContainer = (HTMLDivElement) DomGlobal.document.getElementById("root-container");
 
     // CDI proxy.
     public StunnerEditor() {
