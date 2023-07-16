@@ -25,7 +25,6 @@ import javax.inject.Inject;
 import org.kie.workbench.common.stunner.client.widgets.event.SessionFocusedEvent;
 import org.kie.workbench.common.stunner.client.widgets.event.SessionLostFocusEvent;
 import org.kie.workbench.common.stunner.client.widgets.notification.NotificationsObserver;
-import org.kie.workbench.common.stunner.client.widgets.palette.DefaultPaletteFactory;
 import org.kie.workbench.common.stunner.client.widgets.presenters.session.RequestSessionRefreshEvent;
 import org.kie.workbench.common.stunner.client.widgets.presenters.session.SessionDiagramEditor;
 import org.kie.workbench.common.stunner.client.widgets.presenters.session.SessionDiagramPresenter;
@@ -35,13 +34,10 @@ import org.kie.workbench.common.stunner.core.client.canvas.event.AbstractCanvasH
 import org.kie.workbench.common.stunner.core.client.canvas.event.CanvasLostFocusEvent;
 import org.kie.workbench.common.stunner.core.client.canvas.event.command.CanvasCommandExecutedEvent;
 import org.kie.workbench.common.stunner.core.client.canvas.event.command.CanvasCommandUndoneEvent;
-import org.kie.workbench.common.stunner.core.client.event.screen.ScreenMaximizedEvent;
-import org.kie.workbench.common.stunner.core.client.event.screen.ScreenMinimizedEvent;
 import org.kie.workbench.common.stunner.core.client.session.event.SessionDiagramOpenedEvent;
 import org.kie.workbench.common.stunner.core.client.session.impl.AbstractSession;
 import org.kie.workbench.common.stunner.core.client.session.impl.EditorSession;
 import org.kie.workbench.common.stunner.core.diagram.Diagram;
-import org.kie.workbench.common.stunner.core.util.DefinitionUtils;
 
 /**
  * A generic session's presenter instance for authoring purposes.
@@ -64,21 +60,17 @@ public class SessionEditorPresenter<S extends EditorSession>
 
     @Inject
     @SuppressWarnings("unchecked")
-    public SessionEditorPresenter(final DefinitionUtils definitionUtils,
-                                  final SessionManager sessionManager,
+    public SessionEditorPresenter(final SessionManager sessionManager,
                                   final SessionEditorImpl<S> editor,
                                   final SessionCardinalityStateHandler cardinalityStateHandler,
                                   final Event<SessionDiagramOpenedEvent> sessionDiagramOpenedEvent,
-                                  final DefaultPaletteFactory<AbstractCanvasHandler> paletteWidgetFactory,
                                   final NotificationsObserver notificationsObserver,
                                   final Event<SessionFocusedEvent> sessionFocusedEvent,
                                   final Event<SessionLostFocusEvent> sessionLostFocusEvent,
                                   final Event<CanvasLostFocusEvent> canvasLostFocusEventEvent,
                                   final View view) {
-        super(definitionUtils,
-              sessionManager,
+        super(sessionManager,
               view,
-              paletteWidgetFactory,
               notificationsObserver,
               sessionFocusedEvent,
               sessionLostFocusEvent,
@@ -98,14 +90,6 @@ public class SessionEditorPresenter<S extends EditorSession>
         super.onSessionOpened(session);
         cardinalityStateHandler.bind(session);
         sessionDiagramOpenedEvent.fire(new SessionDiagramOpenedEvent(session));
-    }
-
-    void onScreenMaximizedEvent(@Observes ScreenMaximizedEvent event) {
-        getPalette().onScreenMaximized(event);
-    }
-
-    void onScreenMinimizedEvent(@Observes ScreenMinimizedEvent event) {
-        getPalette().onScreenMinimized(event);
     }
 
     void commandExecutedFired(@Observes final CanvasCommandExecutedEvent event) {
