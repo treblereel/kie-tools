@@ -23,6 +23,8 @@ import java.util.Optional;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import elemental2.dom.DomGlobal;
+import elemental2.dom.HTMLDivElement;
 import org.jboss.errai.ioc.client.api.AfterInitialization;
 import org.jboss.errai.ioc.client.api.EntryPoint;
 import org.jboss.errai.ioc.client.container.SyncBeanDef;
@@ -55,6 +57,10 @@ public class WorkbenchEntryPoint {
 
 
     private void setupRootContainer() {
+        HTMLDivElement root = (HTMLDivElement) DomGlobal.document.createElement("div");
+        root.id = "root_container";
+        DomGlobal.document.body.appendChild(root);
+
         final SyncBeanDef<EditorActivity> editorBean = getBean(EditorActivity.class, null);
         JSFunctions.nativeRegisterGwtClientBean(editorBean.getName(), editorBean);
         openActivity(editorBean.getName());

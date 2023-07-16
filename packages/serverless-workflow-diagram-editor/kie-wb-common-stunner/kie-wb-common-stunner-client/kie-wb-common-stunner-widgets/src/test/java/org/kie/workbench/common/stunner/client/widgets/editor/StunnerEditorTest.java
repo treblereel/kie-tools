@@ -150,8 +150,6 @@ public class StunnerEditorTest {
         assertEquals(editorSession, tested.getSession());
         verify(sessionEditorPresenters).get();
         verify(sessionViewerPresenters, never()).get();
-        verify(sessionEditorPresenter).withPalette(eq(false));
-        verify(sessionEditorPresenter).withToolbar(eq(false));
         assertFalse(tested.isReadOnly());
     }
 
@@ -162,8 +160,6 @@ public class StunnerEditorTest {
         assertEquals(viewerSession, tested.getSession());
         verify(sessionViewerPresenters).get();
         verify(sessionEditorPresenters, never()).get();
-        verify(sessionViewerPresenter).withPalette(eq(false));
-        verify(sessionViewerPresenter).withToolbar(eq(false));
         assertTrue(tested.isReadOnly());
     }
 

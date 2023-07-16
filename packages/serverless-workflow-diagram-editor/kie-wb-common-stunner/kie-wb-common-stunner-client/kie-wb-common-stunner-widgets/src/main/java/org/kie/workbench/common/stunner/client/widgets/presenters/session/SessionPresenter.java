@@ -22,11 +22,9 @@ import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.gwt.user.client.ui.RequiresResize;
 import org.jboss.errai.ui.client.local.api.IsElement;
 import org.kie.workbench.common.stunner.client.widgets.notification.Notification;
-import org.kie.workbench.common.stunner.client.widgets.palette.PaletteWidget;
 import org.kie.workbench.common.stunner.client.widgets.presenters.Viewer;
 import org.kie.workbench.common.stunner.client.widgets.presenters.diagram.DiagramViewer;
 import org.kie.workbench.common.stunner.core.client.canvas.CanvasHandler;
-import org.kie.workbench.common.stunner.core.client.components.palette.PaletteDefinition;
 import org.kie.workbench.common.stunner.core.client.session.ClientSession;
 import org.kie.workbench.common.stunner.core.diagram.Diagram;
 
@@ -95,10 +93,6 @@ public interface SessionPresenter<S extends ClientSession, H extends CanvasHandl
     @Override
     View getView();
 
-    SessionPresenter<S, H, D> withToolbar(final boolean hasToolbar);
-
-    SessionPresenter<S, H, D> withPalette(final boolean hasPalette);
-
     SessionPresenter<S, H, D> displayNotifications(final Predicate<Notification.Type> typePredicate);
 
     SessionPresenter<S, H, D> hideNotifications();
@@ -110,5 +104,4 @@ public interface SessionPresenter<S extends ClientSession, H extends CanvasHandl
 
     void lostFocus();
 
-    PaletteWidget<PaletteDefinition> getPalette();
 }

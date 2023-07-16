@@ -76,7 +76,7 @@ public class StunnerEditor {
     private Consumer<Throwable> exceptionProcessor;
     private AlertsControl<AbstractCanvas> alertsControl;
 
-    final HTMLDivElement rootContainer = (HTMLDivElement) DomGlobal.document.createElement("div");
+    final HTMLDivElement rootContainer = (HTMLDivElement) DomGlobal.document.getElementById("root_container");
 
     // CDI proxy.
     public StunnerEditor() {
@@ -121,8 +121,6 @@ public class StunnerEditor {
                 diagramPresenter = viewerSessionPresenterInstances.get();
             }
             diagramPresenter.displayNotifications(type -> true);
-            diagramPresenter.withPalette(false);
-            diagramPresenter.withToolbar(false);
         }
         diagramPresenter.open(diagram, new SessionPresenter.SessionPresenterCallback() {
             @Override
@@ -160,7 +158,7 @@ public class StunnerEditor {
             }
         });
 
-        DomGlobal.document.body.appendChild(rootContainer);
+        removeAllChildren(rootContainer);
         rootContainer.appendChild(Js.uncheckedCast(diagramPresenter.getView().getElement()));
 
         DomGlobal.window.addEventListener("resize", evt -> {
