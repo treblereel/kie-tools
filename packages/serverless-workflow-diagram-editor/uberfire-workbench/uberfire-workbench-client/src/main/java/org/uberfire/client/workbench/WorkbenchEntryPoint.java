@@ -58,7 +58,7 @@ public class WorkbenchEntryPoint {
 
     private void setupRootContainer() {
         HTMLDivElement root = (HTMLDivElement) DomGlobal.document.createElement("div");
-        root.id = "root_container";
+        root.id = "root-container";
         DomGlobal.document.body.appendChild(root);
 
         final SyncBeanDef<EditorActivity> editorBean = getBean(EditorActivity.class, null);
