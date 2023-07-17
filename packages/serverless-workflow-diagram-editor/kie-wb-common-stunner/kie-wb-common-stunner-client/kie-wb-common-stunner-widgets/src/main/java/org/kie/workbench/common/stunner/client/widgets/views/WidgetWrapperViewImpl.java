@@ -24,6 +24,7 @@ import elemental2.dom.DomGlobal;
 import elemental2.dom.HTMLDivElement;
 import elemental2.dom.HTMLElement;
 import jsinterop.base.Js;
+import org.jboss.errai.ui.client.local.api.IsElement;
 
 import static org.jboss.errai.common.client.dom.DOMUtil.removeAllChildren;
 
@@ -36,6 +37,13 @@ public class WidgetWrapperViewImpl implements WidgetWrapperView {
     public void init() {
         panel.style.width = Js.cast("100%");
         panel.style.height = Js.cast("100%");
+    }
+
+    @Override
+    public WidgetWrapperView setWidget(final IsElement widget) {
+        clear();
+        panel.appendChild(Js.cast(widget.getElement()));
+        return this;
     }
 
     @Override
