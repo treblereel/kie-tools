@@ -19,7 +19,6 @@ package org.kie.workbench.common.stunner.client.widgets.views;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.Dependent;
 
-import com.google.gwt.user.client.ui.IsWidget;
 import elemental2.dom.DomGlobal;
 import elemental2.dom.HTMLDivElement;
 import elemental2.dom.HTMLElement;
@@ -43,13 +42,6 @@ public class WidgetWrapperViewImpl implements WidgetWrapperView {
     public WidgetWrapperView setWidget(final IsElement widget) {
         clear();
         panel.appendChild(Js.cast(widget.getElement()));
-        return this;
-    }
-
-    @Override
-    public WidgetWrapperView setWidget(final IsWidget widget) {
-        clear();
-        panel.appendChild(Js.cast(widget.asWidget().getElement()));
         return this;
     }
 
