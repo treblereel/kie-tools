@@ -29,6 +29,8 @@ public interface WidgetWrapperView extends IsElement {
      */
     WidgetWrapperView setWidget(final IsWidget widget);
 
+    WidgetWrapperView setWidget(final IsElement widget);
+
     /**
      * Clears the wrapped widget.
      */
