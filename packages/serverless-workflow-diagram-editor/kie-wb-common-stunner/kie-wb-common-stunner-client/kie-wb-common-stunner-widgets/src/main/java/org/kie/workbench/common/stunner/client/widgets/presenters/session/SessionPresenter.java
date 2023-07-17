@@ -18,8 +18,6 @@ package org.kie.workbench.common.stunner.client.widgets.presenters.session;
 
 import java.util.function.Predicate;
 
-import com.google.gwt.user.client.ui.ProvidesResize;
-import com.google.gwt.user.client.ui.RequiresResize;
 import org.jboss.errai.ui.client.local.api.IsElement;
 import org.kie.workbench.common.stunner.client.widgets.notification.Notification;
 import org.kie.workbench.common.stunner.client.widgets.presenters.Viewer;
@@ -64,9 +62,7 @@ public interface SessionPresenter<S extends ClientSession, H extends CanvasHandl
         }
     }
 
-    interface View extends IsElement,
-                           RequiresResize,
-                           ProvidesResize {
+    interface View extends IsElement {
 
 
         ScrollType getContentScrollType();

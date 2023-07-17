@@ -21,17 +21,14 @@ import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.user.client.ui.Panel;
 import elemental2.dom.CSSStyleDeclaration;
 import elemental2.dom.HTMLDivElement;
 import elemental2.dom.HTMLElement;
-import jsinterop.base.Js;
 import org.jboss.errai.ui.client.local.api.IsElement;
 import org.jboss.errai.ui.shared.api.annotations.DataField;
 import org.jboss.errai.ui.shared.api.annotations.Templated;
 import org.kie.workbench.common.stunner.client.widgets.presenters.session.SessionPresenter;
 import org.kie.workbench.common.stunner.core.client.canvas.event.selection.CanvasFocusedShapeEvent;
-import org.uberfire.client.workbench.widgets.ResizeFlowPanel;
 
 import static org.jboss.errai.common.client.dom.DOMUtil.removeAllChildren;
 import static org.jboss.errai.common.client.dom.DOMUtil.removeFromParent;
@@ -44,7 +41,7 @@ public class SessionPresenterView
 
     @Inject
     @DataField
-    private ResizeFlowPanel canvasPanel;
+    private HTMLDivElement canvasPanel;
 
     @Inject
     @DataField
@@ -63,8 +60,7 @@ public class SessionPresenterView
 
     @Override
     public SessionPresenterView setCanvasWidget(final IsElement widget) {
-        setWidgetForPanel(canvasPanel,
-                          widget);
+        canvasPanel.appendChild(widget.getElement());
         return this;
     }
 
@@ -95,24 +91,13 @@ public class SessionPresenterView
         return this;
     }
 
-    @Override
-    public void onResize() {
-        canvasPanel.onResize();
-    }
-
-    protected void setWidgetForPanel(final Panel panel,
-                                     final IsElement widget) {
-        panel.clear();
-        panel.getElement().appendChild(Js.uncheckedCast(widget.getElement())); //TODO
-    }
-
     public HTMLElement getElement() {
         return sessionContainer;
     }
 
     public void destroy() {
-        canvasPanel.clear();
-        canvasPanel.removeFromParent();
+        removeAllChildren(getElement());
+        removeFromParent(getElement());
         removeAllChildren(getElement());
         removeFromParent(getElement());
     }
