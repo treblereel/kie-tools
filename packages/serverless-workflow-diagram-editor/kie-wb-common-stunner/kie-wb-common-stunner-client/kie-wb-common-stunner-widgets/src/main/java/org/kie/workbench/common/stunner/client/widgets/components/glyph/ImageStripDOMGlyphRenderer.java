@@ -23,6 +23,7 @@ import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 import com.google.gwt.user.client.ui.FlowPanel;
+import jsinterop.base.Js;
 import org.jboss.errai.common.client.api.IsElement;
 import org.jboss.errai.ioc.client.api.ManagedInstance;
 import org.kie.workbench.common.stunner.core.client.components.glyph.DOMGlyphRenderer;
@@ -72,8 +73,8 @@ public class ImageStripDOMGlyphRenderer implements DOMGlyphRenderer<ImageStripGl
         final int clipY = !isHorizontal ? (strip.getHigh() + strip.getPadding()) * index : 0;
         final WidgetElementRendererView view = views.get();
         strip.getCss().getCssResource().ensureInjected();
-        view.setWidget(panelBuilder.apply(strip.getCss().getClassName(),
-                                          new Integer[]{clipX, clipY * -1}));
+        view.setWidget(Js.cast(panelBuilder.apply(strip.getCss().getClassName(),
+                                          new Integer[]{clipX, clipY * -1}).getElement()));
         return view;
     }
 
