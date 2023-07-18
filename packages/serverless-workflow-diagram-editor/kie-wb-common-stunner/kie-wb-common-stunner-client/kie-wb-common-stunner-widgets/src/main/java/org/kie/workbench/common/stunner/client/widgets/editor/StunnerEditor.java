@@ -26,7 +26,6 @@ import javax.inject.Inject;
 import com.ait.lienzo.client.core.types.JsCanvas;
 import com.ait.lienzo.client.widget.panel.LienzoBoundsPanel;
 import com.google.gwt.core.client.JavaScriptException;
-import com.google.gwt.user.client.Window;
 import elemental2.dom.CSSStyleDeclaration;
 import elemental2.dom.DomGlobal;
 import elemental2.dom.HTMLDivElement;
@@ -168,8 +167,8 @@ public class StunnerEditor {
     }
 
     private void resize() {
-        resizeTo(Window.getClientWidth(),
-                Window.getClientHeight());
+        resizeTo(DomGlobal.document.body.clientWidth,
+                DomGlobal.document.body.clientHeight);
     }
 
     private void resizeTo(int width,
