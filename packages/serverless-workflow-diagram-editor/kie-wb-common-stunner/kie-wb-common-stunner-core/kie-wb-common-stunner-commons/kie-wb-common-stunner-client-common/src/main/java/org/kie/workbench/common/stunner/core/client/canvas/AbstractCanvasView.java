@@ -19,6 +19,7 @@ package org.kie.workbench.common.stunner.core.client.canvas;
 import javax.annotation.PostConstruct;
 
 import com.google.gwt.dom.client.Style;
+import elemental2.dom.CSSProperties;
 import elemental2.dom.DomGlobal;
 import elemental2.dom.HTMLDivElement;
 import elemental2.dom.HTMLElement;
@@ -41,8 +42,8 @@ public abstract class AbstractCanvasView<V extends AbstractCanvasView>
 
     @PostConstruct
     public void init() {
-        mainPanel.style.width = Js.cast("100%");
-        mainPanel.style.height = Js.cast("100%");
+        mainPanel.style.width = CSSProperties.WidthUnionType.of("100%");
+        mainPanel.style.height = CSSProperties.HeightUnionType.of("100%");
     }
 
     @Override
@@ -50,7 +51,7 @@ public abstract class AbstractCanvasView<V extends AbstractCanvasView>
                               final CanvasSettings canvasSettings) {
         this.canvasPanel = canvasPanel;
         doInitialize(canvasSettings);
-        mainPanel.appendChild(Js.cast(canvasPanel.asWidget().getElement()));
+        mainPanel.appendChild(Js.uncheckedCast(canvasPanel.asWidget().getElement()));
         return cast();
     }
 

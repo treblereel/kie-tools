@@ -18,6 +18,7 @@ package org.kie.workbench.common.stunner.client.widgets.presenters.session.impl;
 
 import com.ait.lienzo.client.widget.panel.impl.ScrollablePanel;
 import com.google.gwtmockito.GwtMockitoTestRunner;
+import org.jboss.errai.ui.client.local.api.IsElement;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -110,8 +111,8 @@ public class SessionViewerTest extends AbstractCanvasHandlerViewerTest {
         verify(canvasHandler,
                times(1)).draw(eq(diagram),
                               any(ParameterizedCommand.class));
-        //verify(view, //TODO
-        //       times(1)).setWidget(any(Widget.class));
+        verify(view, //TODO
+               times(1)).setWidget(any(IsElement.class));
         verify(canvasPanelView, times(1)).onResize();
     }
 
