@@ -22,7 +22,6 @@ import com.google.gwtmockito.GwtMockitoTestRunner;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.uberfire.client.workbench.widgets.ResizeFlowPanel;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -39,14 +38,12 @@ public class StunnerEditorViewTest {
 
     private Style parentElementStyle;
 
-    private ResizeFlowPanel editorPanel;
 
     @Before
     public void setup() {
         this.element = GWT.create(Element.class);
         this.parentElement = GWT.create(Element.class);
         this.parentElementStyle = GWT.create(Style.class);
-        this.editorPanel = GWT.create(ResizeFlowPanel.class);
         when(element.getParentElement()).thenReturn(parentElement);
         when(parentElement.getStyle()).thenReturn(parentElementStyle);
     }
