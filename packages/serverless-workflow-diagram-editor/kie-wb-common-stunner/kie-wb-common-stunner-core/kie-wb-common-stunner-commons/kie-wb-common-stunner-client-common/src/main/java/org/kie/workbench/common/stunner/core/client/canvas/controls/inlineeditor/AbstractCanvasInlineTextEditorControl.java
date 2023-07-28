@@ -22,10 +22,8 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.MouseWheelEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.touch.client.Point;
-import com.google.gwt.user.client.ui.IsWidget;
 import elemental2.dom.DomGlobal;
-import elemental2.dom.HTMLElement;
-import org.jboss.errai.common.client.ui.ElementWrapperWidget;
+import org.jboss.errai.ui.client.local.api.IsElement;
 import org.kie.workbench.common.stunner.core.client.canvas.AbstractCanvas;
 import org.kie.workbench.common.stunner.core.client.canvas.AbstractCanvasHandler;
 import org.kie.workbench.common.stunner.core.client.canvas.Canvas;
@@ -102,7 +100,7 @@ public abstract class AbstractCanvasInlineTextEditorControl
     protected double innerBoxOffsetY;
     protected EditorSession session;
 
-    protected abstract FloatingView<IsWidget> getFloatingView();
+    protected abstract FloatingView<IsElement> getFloatingView();
 
     protected abstract TextEditorBox<AbstractCanvasHandler, Element> getTextEditorBox();
 
@@ -128,14 +126,10 @@ public abstract class AbstractCanvasInlineTextEditorControl
 
         getFloatingView()
                 .hide()
-                .add(wrapTextEditorBoxElement(getTextEditorBox().getElement()));
+                .add(getTextEditorBox());
 
         // if the user tries to scroll the editor must be closed
         setMouseWheelHandler();
-    }
-
-    protected IsWidget wrapTextEditorBoxElement(final HTMLElement element) {
-        return ElementWrapperWidget.getWidget(element);
     }
 
     @Override
