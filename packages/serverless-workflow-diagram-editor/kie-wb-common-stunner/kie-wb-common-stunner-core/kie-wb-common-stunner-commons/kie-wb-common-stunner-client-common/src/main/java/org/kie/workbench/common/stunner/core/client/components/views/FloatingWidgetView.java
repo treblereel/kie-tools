@@ -21,13 +21,14 @@ import java.util.Objects;
 import javax.enterprise.context.Dependent;
 
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.event.dom.client.MouseOutEvent;
-import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.RootPanel;
-import org.kie.workbench.common.stunner.core.client.shape.view.event.GWTHandlerRegistration;
+import elemental2.dom.HTMLElement;
+import jsinterop.base.Js;
+import org.kie.workbench.common.stunner.core.client.shape.view.event.NativeHandler;
+import org.kie.workbench.common.stunner.core.client.shape.view.event.NativeHandlerRegistration;
 import org.uberfire.mvp.Command;
 
 /**
@@ -46,7 +47,10 @@ public class FloatingWidgetView implements FloatingView<IsWidget> {
     private boolean visible;
     private Command hideCallback;
     private final FlowPanel panel = new FlowPanel();
-    private final GWTHandlerRegistration handlerRegistrationManager = new GWTHandlerRegistration();
+    private final NativeHandlerRegistration handlerRegistrationManager = new NativeHandlerRegistration();
+
+    private static final String MOUSE_OVER = "mouseover";
+    private static final String MOUSE_OUT = "mouseout";
 
     public FloatingWidgetView() {
         this.attached = false;
@@ -207,13 +211,18 @@ public class FloatingWidgetView implements FloatingView<IsWidget> {
     }
 
     private void registerHoverEventHandlers() {
-        handlerRegistrationManager.register(
-                panel.addDomHandler(mouseOverEvent -> stopTimeout(),
-                                    MouseOverEvent.getType())
-        );
-        handlerRegistrationManager.register(
-                panel.addDomHandler(mouseOutEvent -> startTimeout(),
-                                    MouseOutEvent.getType())
-        );
+        //TODO: Remove Js.uncheckedCast() when j2cl migration is complete
+        HTMLElement panelElement = Js.uncheckedCast(panel.getElement());
+
+        final NativeHandler mouseOverHandler = new NativeHandler(MOUSE_OVER,
+                                                                 mouseOverEvent -> stopTimeout(),
+                                                                 panelElement).add();
+
+        final NativeHandler mouseOutHandler = new NativeHandler(MOUSE_OUT,
+                                                                mouseOutEvent -> startTimeout(),
+                                                                panelElement).add();
+
+        handlerRegistrationManager.register(mouseOverHandler);
+        handlerRegistrationManager.register(mouseOutHandler);
     }
 }
