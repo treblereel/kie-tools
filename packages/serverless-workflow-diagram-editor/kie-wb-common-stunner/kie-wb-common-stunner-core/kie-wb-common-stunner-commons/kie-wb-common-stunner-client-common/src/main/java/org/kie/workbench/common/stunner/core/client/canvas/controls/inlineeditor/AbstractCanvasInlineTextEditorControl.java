@@ -19,10 +19,9 @@ package org.kie.workbench.common.stunner.core.client.canvas.controls.inlineedito
 import javax.enterprise.event.Observes;
 
 import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.event.dom.client.MouseWheelEvent;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.touch.client.Point;
 import elemental2.dom.DomGlobal;
+import elemental2.dom.EventListener;
 import org.jboss.errai.ui.client.local.api.IsElement;
 import org.kie.workbench.common.stunner.core.client.canvas.AbstractCanvas;
 import org.kie.workbench.common.stunner.core.client.canvas.AbstractCanvasHandler;
@@ -65,7 +64,7 @@ public abstract class AbstractCanvasInlineTextEditorControl
     private Point2D canvasPosition;
     private Point scrollBarsPosition;
     private double zoomFactor;
-    private HandlerRegistration mouseWheelHandler;
+    private EventListener mouseWheelHandler;
 
     // Configurable parameters
     protected boolean isMultiline;
@@ -281,9 +280,8 @@ public abstract class AbstractCanvasInlineTextEditorControl
         getTextEditorBox().hide();
         disableShapeEdit();
         getFloatingView().destroy();
+        getAbstractCanvas().getView().getPanel().getElement().removeEventListener("mousewheel", mouseWheelHandler);
         uuid = null;
-
-        mouseWheelHandler.removeHandler();
     }
 
     private void enableShapeEdit() {
@@ -357,13 +355,15 @@ public abstract class AbstractCanvasInlineTextEditorControl
     }
 
     double getCanvasAbsoluteWidth() {
-        return getAbstractCanvas().getView().getPanel().asWidget().getOffsetWidth() +
+        String offsetWidth = getAbstractCanvas().getView().getPanel().getElement().style.getPropertyValue("offsetWidth");
+        return Integer.parseInt(offsetWidth) +
                 canvasPosition.getX() -
                 scrollBarOffset;
     }
 
     double getCanvasAbsoluteHeight() {
-        return getAbstractCanvas().getView().getPanel().asWidget().getOffsetHeight() +
+        String offsetHeight = getAbstractCanvas().getView().getPanel().getElement().style.getPropertyValue("offsetHeight");
+        return Integer.parseInt(offsetHeight) +
                 canvasPosition.getY() -
                 scrollBarOffset;
     }
@@ -411,15 +411,11 @@ public abstract class AbstractCanvasInlineTextEditorControl
     }
 
     void setMouseWheelHandler() {
-        mouseWheelHandler = getAbstractCanvas()
-                .getView()
-                .getPanel()
-                .asWidget()
-                .addDomHandler(this::onMouseWheel,
-                               MouseWheelEvent.getType());
+        mouseWheelHandler = e -> onMouseWheel();
+        getAbstractCanvas().getView().getPanel().getElement().addEventListener("mousewheel", mouseWheelHandler);
     }
 
-    void onMouseWheel(final MouseWheelEvent event) {
+    void onMouseWheel() {
         rollback();
     }
 

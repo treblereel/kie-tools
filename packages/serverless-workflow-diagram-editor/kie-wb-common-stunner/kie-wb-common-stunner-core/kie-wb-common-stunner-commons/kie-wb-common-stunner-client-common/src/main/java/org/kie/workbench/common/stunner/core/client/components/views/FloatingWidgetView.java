@@ -20,7 +20,6 @@ import java.util.Objects;
 
 import javax.enterprise.context.Dependent;
 
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.Timer;
 import elemental2.dom.DomGlobal;
 import elemental2.dom.HTMLDivElement;
@@ -137,11 +136,11 @@ public class FloatingWidgetView implements FloatingView<IsElement> {
     }
 
     protected void doShow() {
-        panel.style.display = Style.Display.INLINE.getCssName();
+        panel.style.display = "inline";
     }
 
     protected void doHide() {
-        panel.style.display = Style.Display.NONE.getCssName();
+        panel.style.display = "none";
         hideCallback.execute();
     }
 
@@ -150,7 +149,7 @@ public class FloatingWidgetView implements FloatingView<IsElement> {
             getRootPanel().appendChild(panel);
             //RootPanel.get().add(panel);
             registerHoverEventHandlers();
-            panel.style.position = Style.Position.FIXED.getCssName();
+            panel.style.position = "fixed";
             panel.style.zIndex = ZIndexUnionType.of(Integer.MAX_VALUE);
             doHide();
             attached = true;
