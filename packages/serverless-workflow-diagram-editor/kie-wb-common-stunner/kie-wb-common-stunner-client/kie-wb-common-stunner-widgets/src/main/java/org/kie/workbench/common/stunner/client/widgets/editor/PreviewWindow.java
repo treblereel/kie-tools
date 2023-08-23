@@ -65,7 +65,7 @@ public class PreviewWindow {
 
         previewRoot = new FlowPanel();
         RootPanel.get().add(previewRoot);
-        previewRoot.add(Js.uncheckedCast(previewWidget.getView().getElement()));
+        previewRoot.getElement().appendChild(Js.uncheckedCast(previewWidget.getView().getElement()));
 
         AbstractCanvasHandler abstractCanvasHandler = previewWidget.getHandler();
         AbstractCanvas abstractCanvas = abstractCanvasHandler.getAbstractCanvas();
