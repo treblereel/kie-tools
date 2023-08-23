@@ -24,14 +24,14 @@ import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.event.dom.client.ContextMenuEvent;
 import com.google.gwt.event.dom.client.ScrollEvent;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Panel;
+import elemental2.dom.HTMLElement;
+import jsinterop.base.Js;
 import org.jboss.errai.common.client.ui.ElementWrapperWidget;
 import org.jboss.errai.ui.client.local.spi.TranslationService;
 import org.jboss.errai.ui.shared.api.annotations.DataField;
@@ -42,6 +42,7 @@ import org.kie.workbench.common.stunner.client.widgets.palette.PaletteWidget;
 import org.kie.workbench.common.stunner.client.widgets.presenters.session.SessionPresenter;
 import org.kie.workbench.common.stunner.core.client.canvas.event.selection.CanvasFocusedShapeEvent;
 import org.kie.workbench.common.stunner.core.client.components.palette.PaletteDefinition;
+import org.kie.workbench.common.stunner.core.client.shape.view.event.NativeHandler;
 import org.uberfire.client.workbench.widgets.ResizeFlowPanel;
 
 import static com.google.gwt.dom.client.Style.Display.BLOCK;
@@ -85,16 +86,21 @@ public class SessionPresenterView extends Composite
     private double headerInitialTop;
     private double headerInitialLeft;
     private double sessionHeaderHeight;
-    private HandlerRegistration handlerRegistration;
+    private NativeHandler handlerRegistration;
     private final AtomicBoolean notifying = new AtomicBoolean(false);
+    private static final String CONTEXT_MENU = "contextmenu";
 
     @PostConstruct
     public void init() {
-        handlerRegistration = addDomHandler((e) -> {
-                                                e.preventDefault();
-                                                e.stopPropagation();
-                                            },
-                                            ContextMenuEvent.getType());
+        //TODO: Remove Js.uncheckedCast() when j2cl migration is complete
+        HTMLElement element = Js.uncheckedCast(getElement());
+
+        handlerRegistration = new NativeHandler(CONTEXT_MENU,
+                                                 event -> {
+                                                     event.preventDefault();
+                                                     event.stopPropagation();
+                                                 },
+                                                element).add();
 
         addAttachHandler(event -> {
             if (event.isAttached()) {
@@ -294,5 +300,4 @@ public class SessionPresenterView extends Composite
     private static String buildHtmlEscapedText(final String message) {
         return new SafeHtmlBuilder().appendEscapedLines(message).toSafeHtml().asString();
     }
-
 }
