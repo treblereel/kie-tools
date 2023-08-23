@@ -47,10 +47,9 @@ public abstract class LienzoCanvasView<L extends LienzoLayer>
     protected LienzoCanvasView<L> doInitialize(final CanvasSettings canvasSettings) {
         getLienzoPanel()
                 .show(getLayer())
-                .asWidget()
                 .getElement()
-                .getStyle()
-                .setBackgroundColor(BG_COLOR);
+                .style
+                .backgroundColor = BG_COLOR;
         getLayer()
                 .getTopLayer()
                 .add(decoratorFactory.apply(1200, 800));

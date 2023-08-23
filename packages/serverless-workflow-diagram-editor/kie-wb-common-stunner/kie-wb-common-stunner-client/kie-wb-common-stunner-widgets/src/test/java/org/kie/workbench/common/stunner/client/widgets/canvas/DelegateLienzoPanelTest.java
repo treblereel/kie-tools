@@ -17,8 +17,8 @@
 package org.kie.workbench.common.stunner.client.widgets.canvas;
 
 import com.ait.lienzo.client.core.shape.Layer;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.gwtmockito.GwtMockitoTestRunner;
+import elemental2.dom.HTMLElement;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -86,9 +86,9 @@ public class DelegateLienzoPanelTest {
     }
 
     @Test
-    public void testAsWidget() {
-        Widget widget = mock(Widget.class);
-        when(delegate.asWidget()).thenReturn(widget);
-        assertEquals(widget, tested.asWidget());
+    public void testIsElement() {
+        HTMLElement e = (HTMLElement) mock(HTMLElement.class);
+        when(delegate.getElement()).thenReturn(e);
+        assertEquals(e, tested.getElement());
     }
 }
