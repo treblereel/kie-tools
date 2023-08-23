@@ -125,7 +125,7 @@ public class ShapeGlyphDragHandler {
 
         // Handle the proxy panel instance.
         moveProxyTo(x, y);
-        rootPanelSupplier.get().add(dragProxyPanel);
+        rootPanelSupplier.get().getElement().appendChild(Js.cast(dragProxyPanel.getElement()));
 
         return this;
     }
@@ -188,7 +188,7 @@ public class ShapeGlyphDragHandler {
         if (event.type.equals(MOUSE_UP)) {
             MouseEvent mouseEvent = (MouseEvent) event;
             clearHandlers();
-            rootPanelSupplier.get().remove(dragProxyPanel);
+            rootPanelSupplier.get().getElement().removeChild(Js.cast(dragProxyPanel.getElement()));
             callback.onComplete((int) mouseEvent.clientX,
                                 (int) mouseEvent.clientY);
         }
@@ -214,7 +214,7 @@ public class ShapeGlyphDragHandler {
     private void clearState(final Command proxyDestroyCommand) {
         clearHandlers();
         if (Objects.nonNull(dragProxyPanel)) {
-            rootPanelSupplier.get().remove(dragProxyPanel);
+            rootPanelSupplier.get().getElement().removeChild(Js.cast(dragProxyPanel.getElement()));
             if (null != proxyDestroyCommand) {
                 proxyDestroyCommand.execute();
             }
