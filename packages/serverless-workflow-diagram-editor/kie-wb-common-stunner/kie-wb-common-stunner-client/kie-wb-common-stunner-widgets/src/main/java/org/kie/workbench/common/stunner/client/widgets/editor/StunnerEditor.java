@@ -67,10 +67,10 @@ import static org.jboss.errai.common.client.dom.DOMUtil.removeAllChildren;
 @Dependent
 public class StunnerEditor {
 
-    private final ManagedInstance<SessionEditorPresenter<EditorSession>> editorSessionPresenterInstances;
-    private final ManagedInstance<SessionViewerPresenter<ViewerSession>> viewerSessionPresenterInstances;
-    private final ClientTranslationService translationService;
-    private final ErrorPage errorPage;
+    ManagedInstance<SessionEditorPresenter<EditorSession>> editorSessionPresenterInstances;
+    ManagedInstance<SessionViewerPresenter<ViewerSession>> viewerSessionPresenterInstances;
+    ClientTranslationService translationService;
+    ErrorPage errorPage;
     private boolean hasErrors;
 
     private SessionDiagramPresenter diagramPresenter;
@@ -78,8 +78,6 @@ public class StunnerEditor {
     private Consumer<DiagramParsingException> parsingExceptionProcessor;
     private Consumer<Throwable> exceptionProcessor;
     private AlertsControl<AbstractCanvas> alertsControl;
-
-    private final HTMLDivElement rootContainer = (HTMLDivElement) DomGlobal.document.getElementById("root-container");
 
     // CDI proxy.
     public StunnerEditor() {
@@ -100,6 +98,10 @@ public class StunnerEditor {
         };
         this.exceptionProcessor = e -> {
         };
+    }
+
+    HTMLDivElement getRootContainer() {
+        return (HTMLDivElement) DomGlobal.document.getElementById("root-container");
     }
 
     public void setReadOnly(boolean readOnly) {
@@ -160,23 +162,29 @@ public class StunnerEditor {
                 callback.onError(error);
             }
         });
-        removeAllChildren(rootContainer);
+        removeAllChildren(getRootContainer());
 
-        rootContainer.appendChild(diagramPresenter.getView().getElement());
-        DomGlobal.window.addEventListener("resize", evt -> {
-            resizeTo(DomGlobal.window.innerWidth, DomGlobal.window.innerHeight);
-        });
+        getRootContainer().appendChild(diagramPresenter.getView().getElement());
+
+        addResizeListener();
+
         resize();
     }
 
-    private void resize() {
+    void addResizeListener() {
+        DomGlobal.window.addEventListener("resize", evt -> {
+            resizeTo(DomGlobal.window.innerWidth, DomGlobal.window.innerHeight);
+        });
+    }
+
+    void resize() {
         resizeTo(DomGlobal.document.body.clientWidth,
-                DomGlobal.document.body.clientHeight);
+                 DomGlobal.document.body.clientHeight);
     }
 
     private void resizeTo(int width,
                           int height) {
-        CSSStyleDeclaration style = rootContainer.style;
+        CSSStyleDeclaration style = getRootContainer().style;
         style.width = WidthUnionType.of(width + "px");
         style.height = HeightUnionType.of(height + "px");
     }
@@ -243,8 +251,8 @@ public class StunnerEditor {
                 (diagramPresenter.getView() != null)) {
             addError(message);
         } else {
-            removeAllChildren(rootContainer);
-            rootContainer.appendChild(Js.uncheckedCast(errorPage.getElement()));
+            removeAllChildren(getRootContainer());
+            getRootContainer().appendChild(Js.uncheckedCast(errorPage.getElement()));
         }
     }
 
