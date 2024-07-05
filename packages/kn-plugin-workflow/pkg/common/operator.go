@@ -20,83 +20,43 @@
 package common
 
 import (
-	"bufio"
-	"bytes"
+	"context"
 	"fmt"
-	"github.com/apache/incubator-kie-tools/packages/kn-plugin-workflow/pkg/metadata"
-	"gopkg.in/yaml.v2"
 	"io"
 	"os"
-	"os/exec"
 	"path/filepath"
-	"strings"
+
+	"github.com/apache/incubator-kie-tools/packages/kn-plugin-workflow/pkg/metadata"
+	v1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/util/yaml"
+	"k8s.io/client-go/kubernetes"
 )
 
 type Document struct {
-	Kind string `yaml:"kind"`
-}
-
-func ExecuteKubectlApply(crd, namespace string) error {
-
-	cmd := exec.Command("kubectl",
-		"apply",
-		"-f", crd,
-		"-n", namespace,
-		"--validate=false")
-
-	var stderror bytes.Buffer
-
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = &stderror //os.Stderr
-
-	err := cmd.Run()
-	scanner := bufio.NewScanner(&stderror)
-	for scanner.Scan() {
-		line := scanner.Text()
-		//Temporarily removing the following warning:
-		//In this context, using apply or create are interchangeable, but generates a warning.
-		//Warning: resource configmaps/service-props is missing the kubectl.kubernetes.io/last-applied-configuration annotation which is required by kubectl apply. kubectl apply should only be used on resources created declaratively by either kubectl create --save-config or kubectl apply. The missing annotation will be patched automatically.
-		//This is tracked here: https://issues.redhat.com/browse/KOGITO-9391 and it will be fixed by
-		//https://issues.redhat.com/browse/KOGITO-9381
-		if !strings.Contains(line, "kubectl.kubernetes.io/last-applied-configuration") {
-			fmt.Fprintln(os.Stderr, line)
-		}
-	}
-	if err != nil {
-		fmt.Printf("has a error")
-		return fmt.Errorf("❌ ERROR: failed to execute kubectl apply command for %s: %s", crd, err)
-	}
-
-	return nil
-}
-
-func ExecuteKubectlDelete(crd, namespace string) error {
-
-	cmd := exec.Command("kubectl",
-		"delete",
-		"-f", crd,
-		"-n", namespace)
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-
-	err := cmd.Run()
-	if err != nil {
-		return fmt.Errorf("❌ ERROR: failed to execute kubectl delete command for %s: %s", crd, err)
-	}
-
-	return nil
+	Kind     string `yaml:"kind"`
+	Metadata struct {
+		Name string `yaml:"name"`
+	} `yaml:"metadata"`
 }
 
 func CheckOperatorInstalled() error {
-	cmd := exec.Command("kubectl", "get", "pods", "-n", metadata.OperatorName)
-
-	output, err := cmd.Output()
+	config, err := KubeRestConfig()
 	if err != nil {
-		return fmt.Errorf("❌ ERROR: SonataFlow Operator not found %w", err)
+		return fmt.Errorf("❌ ERROR: Unable to get Kubernetes config %w", err)
 	}
 
-	// Check if the pod is running
-	operatorRunning := checkOperatorRunning(string(output))
+	clientset, err := kubernetes.NewForConfig(config)
+	if err != nil {
+		return fmt.Errorf("❌ ERROR: Unable to create Kubernetes client %w", err)
+	}
+
+	pods, err := clientset.CoreV1().Pods(metadata.OperatorName).List(context.TODO(), metav1.ListOptions{})
+	if err != nil {
+		return fmt.Errorf("❌ ERROR: Unable to get pods %w", err)
+	}
+
+	operatorRunning := checkOperatorRunning(pods)
 	if !operatorRunning {
 		return fmt.Errorf("❌ ERROR: SonataFlow Operator not found")
 	}
@@ -105,14 +65,9 @@ func CheckOperatorInstalled() error {
 	return nil
 }
 
-func checkOperatorRunning(getPodsOutPut string) bool {
-	pods := strings.Split(getPodsOutPut, "\n")
-	for _, pod := range pods {
-		// Split each line into fields (NAME, READY, STATUS, RESTARTS, AGE)
-		fields := strings.Fields(pod)
-
-		// Check if this line contains information about the desired operator manager pod
-		if len(fields) > 2 && strings.HasPrefix(fields[0], metadata.OperatorManagerPod) && fields[2] == "Running" {
+func checkOperatorRunning(pods *v1.PodList) bool {
+	for _, pod := range pods.Items {
+		if pod.Status.Phase == v1.PodRunning {
 			return true
 		}
 	}

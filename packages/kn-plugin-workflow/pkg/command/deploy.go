@@ -139,7 +139,7 @@ func deploy(cfg *DeployUndeployCmdConfig) error {
 	}
 	for _, file := range files {
 		if err = common.ExecuteKubectlApply(file, cfg.NameSpace); err != nil {
-			return fmt.Errorf("❌ ERROR: failed to deploy manifest %s,  %w", file, err)
+			return fmt.Errorf("❌ ERROR: failed to deploy manifest %s, %w", file, err)
 		}
 		fmt.Printf(" - ✅ Manifest %s successfully deployed in namespace %s\n", path.Base(file), cfg.NameSpace)
 
