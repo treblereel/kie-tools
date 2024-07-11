@@ -39,11 +39,11 @@ import (
 )
 
 func KubeApiConfig() (*api.Config, error) {
-	homeDir, err := os.UserHomeDir()
+	kubeConfigPath, err := configLocation()
 	if err != nil {
-		return nil, fmt.Errorf("error getting user home dir: %w", err)
+		return nil, err
 	}
-	kubeConfigPath := filepath.Join(homeDir, ".kube", "config")
+
 	fmt.Printf("🔎 Using kubeconfig: %s\n", kubeConfigPath)
 	config, err := clientcmd.LoadFromFile(kubeConfigPath)
 	if err != nil {
@@ -55,18 +55,32 @@ func KubeApiConfig() (*api.Config, error) {
 func KubeRestConfig() (*rest.Config, error) {
 	config, err := rest.InClusterConfig()
 	if err != nil {
-		homeDir, err := os.UserHomeDir()
+		kubeConfigPath, err := configLocation()
 		if err != nil {
-			return nil, fmt.Errorf("error getting user home dir: %w", err)
+			return nil, err
 		}
-		kubeConfigPath := filepath.Join(homeDir, ".kube", "config")
-		fmt.Printf("🔎 Using kubeconfig: %s\n", kubeConfigPath)
 		config, err = clientcmd.BuildConfigFromFlags("", kubeConfigPath)
 		if err != nil {
 			return nil, fmt.Errorf("❌ ERROR: Failed to load kubeconfig: %w", err)
 		}
 	}
 	return config, nil
+}
+
+func configLocation() (string, error) {
+	if kubeconfig := os.Getenv("KUBECONFIG"); kubeconfig != "" {
+		if _, err := os.Stat(kubeconfig); err == nil {
+			return kubeconfig, nil
+		}
+	}
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		kubeConfigPath := filepath.Join(homeDir, ".kube", "config")
+		if _, err := os.Stat(kubeConfigPath); err == nil {
+			return kubeConfigPath, nil
+		}
+	}
+	return "", fmt.Errorf("❌ ERROR: Failed to get kubeconfig location")
 }
 
 func GetKubectlNamespace() (string, error) {
