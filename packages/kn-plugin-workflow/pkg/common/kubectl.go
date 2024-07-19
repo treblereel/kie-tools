@@ -20,53 +20,32 @@
 package common
 
 import (
-	"fmt"
-	"os/exec"
-	"strings"
+	"github.com/apache/incubator-kie-tools/packages/kn-plugin-workflow/pkg/common/k8sclient"
 )
 
-func GetKubectlNamespace() (string, error) {
-	fmt.Println("🔎 Checking current namespace in kubectl...")
-	cmd := ExecCommand("kubectl", "config", "view", "--minify", "--output", "jsonpath={..namespace}")
-	output, err := cmd.Output()
-	if err != nil {
-		return "", fmt.Errorf("❌ ERROR: Failed to get current kubectl namespace: %w", err)
-	}
-	namespace := strings.TrimSpace(string(output))
-	if namespace == "" {
-		return "", fmt.Errorf("❌ ERROR: No current kubectl namespace found")
-	}
-	fmt.Printf(" - ✅  kubectl current namespace: %s\n", namespace)
-	return namespace, nil
+type K8sApi interface {
+	GetKubectlNamespace() (string, error)
+	CheckKubectlContext() (string, error)
+	ExecuteKubectlApply(crd, namespace string) error
+	ExecuteKubectlDelete(crd, namespace string) error
 }
+
+var Current K8sApi = k8sclient.GoAPI{}
 
 func CheckKubectlContext() (string, error) {
-	fmt.Println("🔎 Checking if kubectl has a context configured...")
-	cmd := ExecCommand("kubectl", "config", "current-context")
-	output, err := cmd.Output()
-	if err != nil {
-		return "", fmt.Errorf("❌ ERROR: No current kubectl context found %w", err)
-	}
-	context := strings.TrimSpace(string(output))
-	if context == "" {
-		return "", fmt.Errorf("❌ ERROR: No current kubectl context found")
-	}
-	fmt.Printf(" - ✅ kubectl current context: %s \n", context)
-	return context, nil
+	return Current.GetKubectlNamespace()
 }
 
-func CheckKubectl() error {
-	fmt.Println("🔎 Checking if kubectl is available...")
-	_, kubectlCheck := exec.LookPath("kubectl")
-	if err := kubectlCheck; err != nil {
-		fmt.Println("ERROR: kubectl not found")
-		fmt.Println("kubectl is required for deploy")
-		fmt.Println("Download it from https://kubectl.docs.kubernetes.io/installation/kubectl/")
-		return fmt.Errorf("❌ ERROR: kubectl not found %w", err)
-	}
+func GetKubectlNamespace() (string, error) {
+	return Current.GetKubectlNamespace()
+}
 
-	fmt.Println(" - ✅ kubectl is available")
-	return nil
+func ExecuteKubectlApply(crd, namespace string) error {
+	return Current.ExecuteKubectlApply(crd, namespace)
+}
+
+func ExecuteKubectlDelete(crd, namespace string) error {
+	return Current.ExecuteKubectlDelete(crd, namespace)
 }
 
 func CheckKubectlCrdExists(crd string) bool {
