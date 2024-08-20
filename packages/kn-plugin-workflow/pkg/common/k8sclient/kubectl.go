@@ -29,7 +29,7 @@ import (
 	"strings"
 )
 
-type KubeCtl struct {}
+type KubeCtl struct{}
 
 func (m KubeCtl) GetKubectlNamespace() (string, error) {
 	if err := CheckKubectl(); err != nil {
@@ -118,7 +118,7 @@ func (m KubeCtl) ExecuteKubectlApply(crd, namespace string) error {
 	return nil
 }
 
-func (m KubeCtl)  ExecuteKubectlDelete(crd, namespace string) error {
+func (m KubeCtl) ExecuteKubectlDelete(crd, namespace string) error {
 	if err := CheckKubectl(); err != nil {
 		return err
 	}
@@ -135,6 +135,15 @@ func (m KubeCtl)  ExecuteKubectlDelete(crd, namespace string) error {
 	}
 
 	return nil
+}
+
+func (m KubeCtl) CheckKubectlCrdExists(crd string) (bool, error) {
+	cmd := exec.Command("kubectl", "get", "crd", crd)
+	_, err := cmd.Output()
+	if err != nil {
+		return false, err
+	}
+	return true, nil
 }
 
 func CheckOperatorInstalled() error {

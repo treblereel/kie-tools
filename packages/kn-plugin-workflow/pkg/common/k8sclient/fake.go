@@ -17,3 +17,7 @@ func (m Fake) ExecuteKubectlApply(crd, namespace string) error {
 func (m Fake) ExecuteKubectlDelete(crd, namespace string) error {
 	return nil
 }
+
+func (m Fake) CheckKubectlCrdExists(crd string) (bool, error) {
+	return true, nil
+}

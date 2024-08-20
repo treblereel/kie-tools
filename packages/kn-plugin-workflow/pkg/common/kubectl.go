@@ -28,6 +28,7 @@ type K8sApi interface {
 	CheckKubectlContext() (string, error)
 	ExecuteKubectlApply(crd, namespace string) error
 	ExecuteKubectlDelete(crd, namespace string) error
+	CheckKubectlCrdExists(crd string) (bool, error)
 }
 
 var Current K8sApi = k8sclient.GoAPI{}
@@ -48,11 +49,6 @@ func ExecuteKubectlDelete(crd, namespace string) error {
 	return Current.ExecuteKubectlDelete(crd, namespace)
 }
 
-func CheckKubectlCrdExists(crd string) bool {
-	cmd := exec.Command("kubectl", "get", "crd", crd)
-	_, err := cmd.Output()
-	if err != nil {
-		return false
-	}
-	return true
+func CheckKubectlCrdExists(crd string) (bool, error) {
+	return Current.CheckKubectlCrdExists(crd)
 }

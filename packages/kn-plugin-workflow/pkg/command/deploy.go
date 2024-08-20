@@ -190,7 +190,11 @@ func runDeployCmdConfig(cmd *cobra.Command) (cfg DeployUndeployCmdConfig, err er
 
 	// check if sonataflow operator CRDs are installed
 	for _, crd := range metadata.SonataflowCRDs {
-		if !common.CheckKubectlCrdExists(crd) {
+		exists, err := common.CheckKubectlCrdExists(crd)
+		if err != nil {
+			return cfg, fmt.Errorf("❌ ERROR: failed to check if CRD %s exists: %w", crd, err)
+		}
+		if !exists {
 			return cfg, fmt.Errorf("❌ ERROR: the required CRDs are not installed.. Install the SonataFlow Operator CRD first")
 		}
 	}

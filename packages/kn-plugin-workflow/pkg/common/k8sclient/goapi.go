@@ -3,6 +3,7 @@ package k8sclient
 import (
 	"context"
 	"fmt"
+	"k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 	"os"
 	"path/filepath"
 
@@ -20,7 +21,6 @@ import (
 )
 
 type GoAPI struct{}
-
 
 func KubeApiConfig() (*api.Config, error) {
 	homeDir, err := os.UserHomeDir()
@@ -167,4 +167,26 @@ func (m GoAPI) ExecuteKubectlDelete(path, namespace string) error {
 		return fmt.Errorf("❌ ERROR: Failed to delete Resource: %w", err)
 	}
 	return nil
+}
+
+func (m GoAPI) CheckKubectlCrdExists(crd string) (bool, error) {
+	config, err := KubeRestConfig()
+	if err != nil {
+		return false, fmt.Errorf("❌ ERROR: Failed to create rest config for Kubernetes client: %v", err)
+	}
+
+	crdClientSet, err := clientset.NewForConfig(config)
+	if err != nil {
+		return false, fmt.Errorf("❌ ERROR: Failed to create CRD client: %v", err)
+	}
+
+	crdList, err := crdClientSet.ApiextensionsV1().CustomResourceDefinitions().Get(context.Background(), crd, metav1.GetOptions{})
+	if err != nil {
+		return false, fmt.Errorf("❌ ERROR: Failed to list CRDs: %v", err)
+	}
+	if crdList == nil {
+		return false, nil
+	}
+
+	return true, nil
 }
