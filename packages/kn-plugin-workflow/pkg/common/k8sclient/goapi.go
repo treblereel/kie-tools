@@ -112,12 +112,15 @@ func (m GoAPI) ExecuteKubectlApply(path, namespace string) error {
 	gvk := unstructuredMap.GroupVersionKind()
 	gvr, _ := meta.UnsafeGuessKindToResource(gvk)
 
-	var res dynamic.ResourceInterface
 	if namespace == "" {
-		res = client.Resource(gvr)
-	} else {
-		res = client.Resource(gvr).Namespace(namespace)
+		currentNamespace, err := m.GetKubectlNamespace()
+		if err != nil {
+			return fmt.Errorf("❌ ERROR: Failed to get current namespace: %w", err)
+		}
+		namespace = currentNamespace
 	}
+
+	res := client.Resource(gvr).Namespace(namespace)
 
 	_, err = res.Create(context.Background(), unstructuredMap, metav1.CreateOptions{})
 	if err != nil {
@@ -155,10 +158,14 @@ func (m GoAPI) ExecuteKubectlDelete(path, namespace string) error {
 	var res dynamic.ResourceInterface
 
 	if namespace == "" {
-		res = dynamicClient.Resource(gvr)
-	} else {
-		res = dynamicClient.Resource(gvr).Namespace(namespace)
+		currentNamespace, err := m.GetKubectlNamespace()
+		if err != nil {
+			return fmt.Errorf("❌ ERROR: Failed to get current namespace: %w", err)
+		}
+		namespace = currentNamespace
 	}
+
+	res = dynamicClient.Resource(gvr).Namespace(namespace)
 
 	err = res.Delete(context.Background(), obj.GetName(), metav1.DeleteOptions{
 		PropagationPolicy: &deletePolicy,
