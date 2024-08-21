@@ -25,7 +25,6 @@ import (
 	"gopkg.in/yaml.v2"
 	"io"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"strings"
 )
@@ -35,24 +34,6 @@ type Document struct {
 	Metadata struct {
 		Name string `yaml:"name"`
 	} `yaml:"metadata"`
-}
-
-func CheckOperatorInstalled() error {
-	cmd := exec.Command("kubectl", "get", "pods", "-n", metadata.OperatorName)
-
-	output, err := cmd.Output()
-	if err != nil {
-		return fmt.Errorf("❌ ERROR: SonataFlow Operator not found %w", err)
-	}
-
-	// Check if the pod is running
-	operatorRunning := checkOperatorRunning(string(output))
-	if !operatorRunning {
-		return fmt.Errorf("❌ ERROR: SonataFlow Operator not found")
-	}
-
-	fmt.Println(" - ✅ SonataFlow Operator is available")
-	return nil
 }
 
 func checkOperatorRunning(getPodsOutPut string) bool {

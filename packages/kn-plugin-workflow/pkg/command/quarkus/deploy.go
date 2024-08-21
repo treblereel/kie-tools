@@ -91,7 +91,7 @@ func runDeploy(cmd *cobra.Command, args []string) error {
 func deployKnativeServiceAndEventingBindings(cfg DeployCmdConfig) (bool, error) {
 	isKnativeEventingBindingsCreated := false
 
-	err := common.ExecuteKubectlApply(fmt.Sprintf("%s/knative.yml", cfg.Path), cfg.Namespace)
+	err := common.ExecuteApply(fmt.Sprintf("%s/knative.yml", cfg.Path), cfg.Namespace)
 	if err != nil {
 		fmt.Println("❌ ERROR: Deploy failed, Knative service was not created.")
 		return isKnativeEventingBindingsCreated, err
@@ -99,7 +99,7 @@ func deployKnativeServiceAndEventingBindings(cfg DeployCmdConfig) (bool, error) 
 	fmt.Println("🎉 Knative service successfully created")
 
 	if exists, err := checkIfKogitoFileExists(cfg); exists && err == nil {
-		if err := common.ExecuteKubectlApply(fmt.Sprintf("%s/kogito.yml", cfg.Path), cfg.Namespace); err != nil {
+		if err := common.ExecuteApply(fmt.Sprintf("%s/kogito.yml", cfg.Path), cfg.Namespace); err != nil {
 			fmt.Println("❌ ERROR:Deploy failed, Knative Eventing binding was not created.")
 			return isKnativeEventingBindingsCreated, err
 		}

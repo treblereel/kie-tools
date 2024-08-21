@@ -53,42 +53,37 @@ func KubeRestConfig() (*rest.Config, error) {
 	return config, nil
 }
 
-func (m GoAPI) GetKubectlNamespace() (string, error) {
-	fmt.Println("🔎 Checking current namespace in kubectl...")
+func (m GoAPI) GetNamespace() (string, error) {
+	fmt.Println("🔎 Checking current namespace in k8s...")
 
 	config, err := KubeApiConfig()
 	if err != nil {
-		return "", fmt.Errorf("❌ ERROR: Failed to get current kubectl namespace: %w", err)
+		return "", fmt.Errorf("❌ ERROR: Failed to get current k8s namespace: %w", err)
 	}
 	namespace := config.Contexts[config.CurrentContext].Namespace
 
 	if len(namespace) == 0 {
 		namespace = "default"
 	}
-	fmt.Printf(" - ✅  kubectl current namespace: %s\n", namespace)
+	fmt.Printf(" - ✅  k8s current namespace: %s\n", namespace)
 	return namespace, nil
 }
 
-func (m GoAPI) CheckKubectlContext() (string, error) {
+func (m GoAPI) CheckContext() (string, error) {
 	config, err := KubeApiConfig()
 	if err != nil {
-		return "", fmt.Errorf("❌ ERROR: No current kubectl context found %w", err)
+		return "", fmt.Errorf("❌ ERROR: No current k8s context found %w", err)
 	}
 	context := config.CurrentContext
 	if context == "" {
-		return "", fmt.Errorf("❌ ERROR: No current kubectl context found")
+		return "", fmt.Errorf("❌ ERROR: No current k8s context found")
 	}
-	fmt.Printf(" - ✅ kubectl current context: %s\n", context)
+	fmt.Printf(" - ✅ k8s current context: %s\n", context)
 	return context, nil
 }
 
-func (m GoAPI) ExecuteKubectlApply(path, namespace string) error {
-	config, err := KubeRestConfig()
-	if err != nil {
-		return fmt.Errorf("❌ ERROR: Failed to create rest config for Kubernetes client: %v", err)
-	}
-
-	client, err := dynamic.NewForConfig(config)
+func (m GoAPI) ExecuteApply(path, namespace string) error {
+	client, err := getDynamicClient()
 	if err != nil {
 		return fmt.Errorf("❌ ERROR: Failed to create dynamic Kubernetes client: %v", err)
 	}
@@ -113,7 +108,7 @@ func (m GoAPI) ExecuteKubectlApply(path, namespace string) error {
 	gvr, _ := meta.UnsafeGuessKindToResource(gvk)
 
 	if namespace == "" {
-		currentNamespace, err := m.GetKubectlNamespace()
+		currentNamespace, err := m.GetNamespace()
 		if err != nil {
 			return fmt.Errorf("❌ ERROR: Failed to get current namespace: %w", err)
 		}
@@ -129,13 +124,8 @@ func (m GoAPI) ExecuteKubectlApply(path, namespace string) error {
 	return nil
 }
 
-func (m GoAPI) ExecuteKubectlDelete(path, namespace string) error {
-	config, err := KubeRestConfig()
-	if err != nil {
-		return fmt.Errorf("❌ ERROR: Failed to create rest config for Kubernetes client: %v", err)
-	}
-
-	dynamicClient, err := dynamic.NewForConfig(config)
+func (m GoAPI) ExecuteDelete(path, namespace string) error {
+	dynamicClient, err := getDynamicClient()
 	if err != nil {
 		return fmt.Errorf("❌ ERROR: Failed to create dynamic Kubernetes client: %v", err)
 	}
@@ -158,7 +148,7 @@ func (m GoAPI) ExecuteKubectlDelete(path, namespace string) error {
 	var res dynamic.ResourceInterface
 
 	if namespace == "" {
-		currentNamespace, err := m.GetKubectlNamespace()
+		currentNamespace, err := m.GetNamespace()
 		if err != nil {
 			return fmt.Errorf("❌ ERROR: Failed to get current namespace: %w", err)
 		}
@@ -176,7 +166,7 @@ func (m GoAPI) ExecuteKubectlDelete(path, namespace string) error {
 	return nil
 }
 
-func (m GoAPI) CheckKubectlCrdExists(crd string) (bool, error) {
+func (m GoAPI) CheckCrdExists(crd string) (bool, error) {
 	config, err := KubeRestConfig()
 	if err != nil {
 		return false, fmt.Errorf("❌ ERROR: Failed to create rest config for Kubernetes client: %v", err)
@@ -196,4 +186,18 @@ func (m GoAPI) CheckKubectlCrdExists(crd string) (bool, error) {
 	}
 
 	return true, nil
+}
+
+func getDynamicClient() (*dynamic.DynamicClient, error) {
+	config, err := KubeRestConfig()
+	if err != nil {
+		return nil, fmt.Errorf("❌ ERROR: Failed to create rest config for Kubernetes client: %v", err)
+	}
+
+	dynamicClient, err := dynamic.NewForConfig(config)
+	if err != nil {
+		return nil, fmt.Errorf("❌ ERROR: Failed to create dynamic Kubernetes client: %v", err)
+	}
+
+	return dynamicClient, nil
 }

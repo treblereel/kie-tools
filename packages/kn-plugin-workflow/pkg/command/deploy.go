@@ -138,7 +138,7 @@ func deploy(cfg *DeployUndeployCmdConfig) error {
 		return fmt.Errorf("❌ ERROR: failed to get manifest directory and files: %w", err)
 	}
 	for _, file := range files {
-		if err = common.ExecuteKubectlApply(file, cfg.NameSpace); err != nil {
+		if err = common.ExecuteApply(file, cfg.NameSpace); err != nil {
 			return fmt.Errorf("❌ ERROR: failed to deploy manifest %s,  %w", file, err)
 		}
 		fmt.Printf(" - ✅ Manifest %s successfully deployed in namespace %s\n", path.Base(file), cfg.NameSpace)
@@ -190,7 +190,7 @@ func runDeployCmdConfig(cmd *cobra.Command) (cfg DeployUndeployCmdConfig, err er
 
 	// check if sonataflow operator CRDs are installed
 	for _, crd := range metadata.SonataflowCRDs {
-		exists, err := common.CheckKubectlCrdExists(crd)
+		exists, err := common.CheckCrdExists(crd)
 		if err != nil {
 			return cfg, fmt.Errorf("❌ ERROR: failed to check if CRD %s exists: %w", crd, err)
 		}

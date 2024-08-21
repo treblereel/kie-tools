@@ -24,31 +24,31 @@ import (
 )
 
 type K8sApi interface {
-	GetKubectlNamespace() (string, error)
-	CheckKubectlContext() (string, error)
-	ExecuteKubectlApply(crd, namespace string) error
-	ExecuteKubectlDelete(crd, namespace string) error
-	CheckKubectlCrdExists(crd string) (bool, error)
+	GetNamespace() (string, error)
+	CheckContext() (string, error)
+	ExecuteApply(crd, namespace string) error
+	ExecuteDelete(crd, namespace string) error
+	CheckCrdExists(crd string) (bool, error)
 }
 
 var Current K8sApi = k8sclient.GoAPI{}
 
-func CheckKubectlContext() (string, error) {
-	return Current.GetKubectlNamespace()
+func CheckContext() (string, error) {
+	return Current.GetNamespace()
 }
 
-func GetKubectlNamespace() (string, error) {
-	return Current.GetKubectlNamespace()
+func GetNamespace() (string, error) {
+	return Current.GetNamespace()
 }
 
-func ExecuteKubectlApply(crd, namespace string) error {
-	return Current.ExecuteKubectlApply(crd, namespace)
+func ExecuteApply(crd, namespace string) error {
+	return Current.ExecuteApply(crd, namespace)
 }
 
-func ExecuteKubectlDelete(crd, namespace string) error {
-	return Current.ExecuteKubectlDelete(crd, namespace)
+func ExecuteDelete(crd, namespace string) error {
+	return Current.ExecuteDelete(crd, namespace)
 }
 
-func CheckKubectlCrdExists(crd string) (bool, error) {
-	return Current.CheckKubectlCrdExists(crd)
+func CheckCrdExists(crd string) (bool, error) {
+	return Current.CheckCrdExists(crd)
 }
