@@ -24,6 +24,7 @@ import (
 	"github.com/apache/incubator-kie-tools/packages/kn-plugin-workflow/pkg/common"
 	"github.com/ory/viper"
 	"github.com/spf13/cobra"
+	"path/filepath"
 )
 
 type DeployCmdConfig struct {
@@ -91,7 +92,7 @@ func runDeploy(cmd *cobra.Command, args []string) error {
 func deployKnativeServiceAndEventingBindings(cfg DeployCmdConfig) (bool, error) {
 	isKnativeEventingBindingsCreated := false
 
-	err := common.ExecuteApply(fmt.Sprintf("%s/knative.yml", cfg.Path), cfg.Namespace)
+	err := common.ExecuteApply(filepath.Join(cfg.Path, "knative.yml"), cfg.Namespace)
 	if err != nil {
 		fmt.Println("❌ ERROR: Deploy failed, Knative service was not created.")
 		return isKnativeEventingBindingsCreated, err
@@ -99,7 +100,7 @@ func deployKnativeServiceAndEventingBindings(cfg DeployCmdConfig) (bool, error) 
 	fmt.Println("🎉 Knative service successfully created")
 
 	if exists, err := checkIfKogitoFileExists(cfg); exists && err == nil {
-		if err := common.ExecuteApply(fmt.Sprintf("%s/kogito.yml", cfg.Path), cfg.Namespace); err != nil {
+		if err := common.ExecuteApply(filepath.Join(cfg.Path, "knative.yml"), cfg.Namespace); err != nil {
 			fmt.Println("❌ ERROR:Deploy failed, Knative Eventing binding was not created.")
 			return isKnativeEventingBindingsCreated, err
 		}
@@ -118,7 +119,7 @@ func runDeployCmdConfig(cmd *cobra.Command) (cfg DeployCmdConfig, err error) {
 }
 
 func checkIfKogitoFileExists(cfg DeployCmdConfig) (bool, error) {
-	if _, err := common.FS.Stat(fmt.Sprintf("%s/kogito.yml", cfg.Path)); err == nil {
+	if _, err := common.FS.Stat(filepath.Join(cfg.Path, "knative.yml")); err == nil {
 		return true, nil
 	} else {
 		return false, err

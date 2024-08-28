@@ -115,9 +115,7 @@ func (m GoAPI) ExecuteApply(path, namespace string) error {
 		namespace = currentNamespace
 	}
 
-	res := client.Resource(gvr).Namespace(namespace)
-
-	_, err = res.Create(context.Background(), unstructuredMap, metav1.CreateOptions{})
+	_, err = client.Resource(gvr).Namespace(namespace).Create(context.Background(), unstructuredMap, metav1.CreateOptions{})
 	if err != nil {
 		return fmt.Errorf("❌ ERROR: Failed to apply CRD: %w", err)
 	}

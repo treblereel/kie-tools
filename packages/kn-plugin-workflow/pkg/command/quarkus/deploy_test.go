@@ -24,6 +24,7 @@ import (
 	"github.com/apache/incubator-kie-tools/packages/kn-plugin-workflow/pkg/common/k8sclient"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strconv"
 	"testing"
 
@@ -73,7 +74,7 @@ func TestHelperRunDeploy(t *testing.T) {
 func TestRunDeploy(t *testing.T) {
 	common.FS = afero.NewMemMapFs()
 	for _, test := range testRunDeploy {
-		common.Current = k8sclient.Fake{}
+		common.Current = k8sclient.Fake{} // //FIXME: Run this only one for all cases ?
 		defer func() {
 			common.Current = k8sclient.GoAPI{}
 		}()
@@ -84,8 +85,8 @@ func TestRunDeploy(t *testing.T) {
 			}
 			common.CreateFolderStructure(t, test.input.Path)
 			common.CreateFileInFolderStructure(t, test.input.Path, test.createFile)
+			CopyKnativeYaml(t, test.input.Path) //FIXME: This is not a good way to test this
 		}
-
 		out, err := deployKnativeServiceAndEventingBindings(test.input)
 		if err != nil {
 			t.Errorf("Expected nil error, got %#v", err)
@@ -98,5 +99,18 @@ func TestRunDeploy(t *testing.T) {
 		if test.createFile != "" {
 			common.DeleteFolderStructure(t, test.input.Path)
 		}
+	}
+}
+
+func CopyKnativeYaml(t *testing.T, path string) {
+	r, err := os.Open(filepath.Join("testdata", "knative.yml"))
+	if err != nil {
+		t.Errorf("Unable to open %s", filepath.Join("testdata", "knative.yml"))
+
+	}
+	defer r.Close()
+
+	if err := afero.WriteReader(common.FS, filepath.Join(path, "knative.yml"), r); err != nil {
+		t.Errorf("Error writing to file: %s", filepath.Join(path, "knative.yml"))
 	}
 }
