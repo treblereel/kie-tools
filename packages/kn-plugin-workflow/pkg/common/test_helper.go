@@ -20,6 +20,8 @@
 package common
 
 import (
+	"github.com/spf13/afero"
+	"os"
 	"path/filepath"
 	"testing"
 )
@@ -43,5 +45,22 @@ func CreateFileInFolderStructure(t *testing.T, path string, fileName string) {
 	//defer file.Close()
 	if err != nil {
 		t.Error("Unable to create" + fileName + "file in" + path)
+	}
+}
+
+func CopyKnativeYaml(t *testing.T, path string, knativeFileName string) {
+	if knativeFileName == "" {
+		return
+	}
+
+	r, err := os.Open(filepath.Join("testdata", knativeFileName))
+	if err != nil {
+		t.Errorf("Unable to open %s", filepath.Join("testdata", knativeFileName))
+
+	}
+	defer r.Close()
+
+	if err := afero.WriteReader(FS, filepath.Join(path, "knative.yml"), r); err != nil {
+		t.Errorf("Error writing to file: %s", filepath.Join(path, knativeFileName))
 	}
 }

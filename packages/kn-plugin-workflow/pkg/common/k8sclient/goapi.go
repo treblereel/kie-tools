@@ -142,9 +142,6 @@ func (m GoAPI) ExecuteDelete(path, namespace string) error {
 	gvk := obj.GroupVersionKind()
 	gvr, _ := meta.UnsafeGuessKindToResource(gvk)
 
-	deletePolicy := metav1.DeletePropagationForeground
-	var res dynamic.ResourceInterface
-
 	if namespace == "" {
 		currentNamespace, err := m.GetNamespace()
 		if err != nil {
@@ -153,9 +150,9 @@ func (m GoAPI) ExecuteDelete(path, namespace string) error {
 		namespace = currentNamespace
 	}
 
-	res = dynamicClient.Resource(gvr).Namespace(namespace)
+	deletePolicy := metav1.DeletePropagationForeground
 
-	err = res.Delete(context.Background(), obj.GetName(), metav1.DeleteOptions{
+	err = dynamicClient.Resource(gvr).Namespace(namespace).Delete(context.Background(), obj.GetName(), metav1.DeleteOptions{
 		PropagationPolicy: &deletePolicy,
 	})
 	if err != nil {

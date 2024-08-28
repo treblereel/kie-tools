@@ -3,6 +3,7 @@ package k8sclient
 import (
 	"context"
 	"fmt"
+	"github.com/spf13/afero"
 	clientsetfake "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset/fake"
 	"k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -11,10 +12,11 @@ import (
 	"k8s.io/client-go/dynamic"
 	"k8s.io/client-go/dynamic/fake"
 	"k8s.io/client-go/kubernetes/scheme"
-	"os"
 )
 
-type Fake struct{}
+type Fake struct {
+	FS afero.Fs
+}
 
 func (m Fake) GetNamespace() (string, error) {
 	return "default", nil
@@ -25,7 +27,7 @@ func (m Fake) CheckContext() (string, error) {
 }
 
 func (m Fake) ExecuteApply(path, namespace string) error {
-	data, err := os.ReadFile(path)
+	data, err := afero.ReadFile(m.FS, path)
 	if err != nil {
 		return fmt.Errorf("❌ ERROR: Failed to read YAML file: %w", err)
 	}
@@ -56,7 +58,36 @@ func (m Fake) ExecuteApply(path, namespace string) error {
 	return nil
 }
 
-func (m Fake) ExecuteDelete(crd, namespace string) error {
+func (m Fake) ExecuteDelete(path, namespace string) error {
+	data, err := afero.ReadFile(m.FS, path)
+	if err != nil {
+		return fmt.Errorf("❌ ERROR: Failed to read YAML file: %w", err)
+	}
+
+	obj, _, err := scheme.Codecs.UniversalDeserializer().Decode(data, nil, nil)
+	if err != nil {
+		return fmt.Errorf("❌ ERROR: Failed to decode YAML: %w", err)
+	}
+
+	unstructuredObj, err := runtime.DefaultUnstructuredConverter.ToUnstructured(obj)
+	if err != nil {
+		return fmt.Errorf("❌ ERROR: Failed to decode YAML: %w", err)
+	}
+
+	unstructuredMap := &unstructured.Unstructured{Object: unstructuredObj}
+	gvk := unstructuredMap.GroupVersionKind()
+	gvr, _ := meta.UnsafeGuessKindToResource(gvk)
+
+	fakeDynamic, err := getFakeDynamicClient()
+	if err != nil {
+		return fmt.Errorf("❌ ERROR: Failed to create dynamic fake Kubernetes client: %v", err)
+	}
+
+	deletePolicy := metav1.DeletePropagationForeground
+
+	err = fakeDynamic.Resource(gvr).Namespace(namespace).Delete(context.Background(), unstructuredMap.GetName(), metav1.DeleteOptions{
+		PropagationPolicy: &deletePolicy,
+	})
 
 	return nil
 }

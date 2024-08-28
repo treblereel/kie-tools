@@ -1,0 +1,143 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    app.quarkus.io/quarkus-version: 3.8.4
+    app.quarkus.io/build-timestamp: 2024-08-22 - 19:48:58 +0000
+  labels:
+    app.kubernetes.io/version: 1.0.0-SNAPSHOT
+    app.kubernetes.io/name: incubator-kie-sonataflow-builder
+  name: incubator-kie-sonataflow-builder
+---
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  annotations:
+    app.quarkus.io/quarkus-version: 3.8.4
+    app.quarkus.io/build-timestamp: 2024-08-22 - 19:48:58 +0000
+  labels:
+    app.kubernetes.io/version: 1.0.0-SNAPSHOT
+    app.kubernetes.io/name: incubator-kie-sonataflow-builder
+  name: incubator-kie-sonataflow-builder
+spec:
+  template:
+    spec:
+      containers:
+        - image: apache/incubator-kie-sonataflow-builder:latest
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /q/health/live
+              port: null
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+          name: incubator-kie-sonataflow-builder
+          ports:
+            - containerPort: 8080
+              name: http1
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /q/health/ready
+              port: null
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+      serviceAccountName: incubator-kie-sonataflow-builder
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: incubator-kie-sonataflow-config
+  labels:
+    app.kubernetes.io/name: incubator-kie-sonataflow-builder
+    app.kubernetes.io/version: 1.0.0-SNAPSHOT
+data:
+  application.properties: |
+    quarkus.http.port=8080
+    quarkus.log.level=INFO
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: incubator-kie-sonataflow-secret
+  labels:
+    app.kubernetes.io/name: incubator-kie-sonataflow-builder
+    app.kubernetes.io/version: 1.0.0-SNAPSHOT
+type: Opaque
+data:
+  database-password: cGFzc3dvcmQ= # base64 encoded
+  database-username: dXNlcg==
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: incubator-kie-sonataflow-pvc
+  labels:
+    app.kubernetes.io/name: incubator-kie-sonataflow-builder
+    app.kubernetes.io/version: 1.0.0-SNAPSHOT
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: incubator-kie-sonataflow-hpa
+  labels:
+    app.kubernetes.io/name: incubator-kie-sonataflow-builder
+    app.kubernetes.io/version: 1.0.0-SNAPSHOT
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: incubator-kie-sonataflow-builder
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 75
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: incubator-kie-sonataflow-role
+  labels:
+    app.kubernetes.io/name: incubator-kie-sonataflow-builder
+    app.kubernetes.io/version: 1.0.0-SNAPSHOT
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "services"]
+    verbs: ["get", "list", "watch", "create", "update", "delete"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: incubator-kie-sonataflow-rolebinding
+  labels:
+    app.kubernetes.io/name: incubator-kie-sonataflow-builder
+    app.kubernetes.io/version: 1.0.0-SNAPSHOT
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: incubator-kie-sonataflow-role
+subjects:
+  - kind: ServiceAccount
+    name: incubator-kie-sonataflow-builder
+    namespace: default
