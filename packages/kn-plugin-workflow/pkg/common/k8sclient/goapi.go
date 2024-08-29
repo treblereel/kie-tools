@@ -115,9 +115,7 @@ func (m GoAPI) ExecuteApply(path, namespace string) error {
 		namespace = currentNamespace
 	}
 
-	res := client.Resource(gvr).Namespace(namespace)
-
-	_, err = res.Create(context.Background(), unstructuredMap, metav1.CreateOptions{})
+	_, err = client.Resource(gvr).Namespace(namespace).Create(context.Background(), unstructuredMap, metav1.CreateOptions{})
 	if err != nil {
 		return fmt.Errorf("❌ ERROR: Failed to apply CRD: %w", err)
 	}
@@ -144,9 +142,6 @@ func (m GoAPI) ExecuteDelete(path, namespace string) error {
 	gvk := obj.GroupVersionKind()
 	gvr, _ := meta.UnsafeGuessKindToResource(gvk)
 
-	deletePolicy := metav1.DeletePropagationForeground
-	var res dynamic.ResourceInterface
-
 	if namespace == "" {
 		currentNamespace, err := m.GetNamespace()
 		if err != nil {
@@ -155,9 +150,9 @@ func (m GoAPI) ExecuteDelete(path, namespace string) error {
 		namespace = currentNamespace
 	}
 
-	res = dynamicClient.Resource(gvr).Namespace(namespace)
+	deletePolicy := metav1.DeletePropagationForeground
 
-	err = res.Delete(context.Background(), obj.GetName(), metav1.DeleteOptions{
+	err = dynamicClient.Resource(gvr).Namespace(namespace).Delete(context.Background(), obj.GetName(), metav1.DeleteOptions{
 		PropagationPolicy: &deletePolicy,
 	})
 	if err != nil {

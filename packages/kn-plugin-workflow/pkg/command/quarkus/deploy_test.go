@@ -35,14 +35,17 @@ type testDeploy struct {
 	input      DeployCmdConfig
 	expected   bool
 	createFile string
+	knativeYml string
 }
 
 const defaultPath = "./target/kubernetes"
 
 var testRunDeploy = []testDeploy{
-	{input: DeployCmdConfig{Path: defaultPath}, expected: true, createFile: "kogito.yml"},
-	{input: DeployCmdConfig{Path: "./different/folders"}, expected: true, createFile: "kogito.yml"},
-	{input: DeployCmdConfig{Path: "different/folders"}, expected: true, createFile: "kogito.yml"},
+	{input: DeployCmdConfig{Path: defaultPath}, expected: true, createFile: "kogito.yml", knativeYml: "knative.yml"},
+	{input: DeployCmdConfig{Path: "./different/folders"}, expected: true, createFile: "kogito.yml", knativeYml: "knative.yml"},
+	{input: DeployCmdConfig{Path: "different/folders"}, expected: true, createFile: "kogito.yml", knativeYml: "knative.yml"},
+	{input: DeployCmdConfig{Path: "different/folders"}, expected: true, createFile: "kogito.yml", knativeYml: "complex-knative.yml"},
+	{input: DeployCmdConfig{Path: "different/folders"}, expected: true, createFile: "kogito.yml", knativeYml: "complex-knative2.yml"},
 	{input: DeployCmdConfig{}, expected: false, createFile: "test"},
 	{input: DeployCmdConfig{}, expected: false},
 }
@@ -72,11 +75,12 @@ func TestHelperRunDeploy(t *testing.T) {
 
 func TestRunDeploy(t *testing.T) {
 	common.FS = afero.NewMemMapFs()
+	common.Current = k8sclient.Fake{FS: common.FS} // FIXME: Run this only one for all cases ?
+	defer func() {
+		common.Current = k8sclient.GoAPI{}
+	}()
+
 	for _, test := range testRunDeploy {
-		common.Current = k8sclient.Fake{}
-		defer func() {
-			common.Current = k8sclient.GoAPI{}
-		}()
 
 		if test.createFile != "" {
 			if test.input.Path == "" {
@@ -84,10 +88,10 @@ func TestRunDeploy(t *testing.T) {
 			}
 			common.CreateFolderStructure(t, test.input.Path)
 			common.CreateFileInFolderStructure(t, test.input.Path, test.createFile)
+			common.CopyKnativeYaml(t, test.input.Path, test.knativeYml)
 		}
-
 		out, err := deployKnativeServiceAndEventingBindings(test.input)
-		if err != nil {
+		if err != nil && test.expected {
 			t.Errorf("Expected nil error, got %#v", err)
 		}
 
