@@ -20,32 +20,41 @@
 package quarkus
 
 import (
+	"context"
 	"fmt"
+	"github.com/apache/incubator-kie-tools/packages/kn-plugin-workflow/pkg/common"
 	"github.com/apache/incubator-kie-tools/packages/kn-plugin-workflow/pkg/common/k8sclient"
+	"github.com/spf13/afero"
+	"golang.org/x/exp/slices"
+	"k8s.io/apimachinery/pkg/api/meta"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
+	"k8s.io/client-go/dynamic"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strconv"
 	"testing"
-
-	"github.com/apache/incubator-kie-tools/packages/kn-plugin-workflow/pkg/common"
-	"github.com/spf13/afero"
 )
 
 type testDeploy struct {
-	input      DeployCmdConfig
-	expected   bool
-	createFile string
-	knativeYml string
+	input          DeployCmdConfig
+	expected       bool
+	createFile     string
+	yaml           string
+	resourcesCount int
 }
 
 const defaultPath = "./target/kubernetes"
 
 var testRunDeploy = []testDeploy{
-	{input: DeployCmdConfig{Path: defaultPath}, expected: true, createFile: "kogito.yml", knativeYml: "knative.yml"},
-	{input: DeployCmdConfig{Path: "./different/folders"}, expected: true, createFile: "kogito.yml", knativeYml: "knative.yml"},
-	{input: DeployCmdConfig{Path: "different/folders"}, expected: true, createFile: "kogito.yml", knativeYml: "knative.yml"},
-	{input: DeployCmdConfig{Path: "different/folders"}, expected: true, createFile: "kogito.yml", knativeYml: "complex-knative.yml"},
-	{input: DeployCmdConfig{Path: "different/folders"}, expected: true, createFile: "kogito.yml", knativeYml: "complex-knative2.yml"},
+	{input: DeployCmdConfig{Path: defaultPath}, expected: true, createFile: "kogito.yml", yaml: "knative.yml", resourcesCount: 2},
+	{input: DeployCmdConfig{Path: "./different/folders"}, expected: true, createFile: "kogito.yml", yaml: "knative.yml", resourcesCount: 2},
+	{input: DeployCmdConfig{Path: "different/folders"}, expected: true, createFile: "kogito.yml", yaml: "knative.yml", resourcesCount: 2},
+	{input: DeployCmdConfig{Path: "different/folders"}, expected: true, createFile: "kogito.yml", yaml: "complex-knative.yml", resourcesCount: 8},
+	{input: DeployCmdConfig{Path: "different/folders"}, expected: true, createFile: "kogito.yml", yaml: "complex-knative2.yml", resourcesCount: 5},
+	{input: DeployCmdConfig{Path: "different/folders"}, expected: true, createFile: "kogito.yml", yaml: "01-sonataflow_hello.yaml", resourcesCount: 1},
+	{input: DeployCmdConfig{Path: "different/folders"}, expected: true, createFile: "kogito.yml", yaml: "sonataflow-complex.yaml", resourcesCount: 4},
 	{input: DeployCmdConfig{}, expected: false, createFile: "test"},
 	{input: DeployCmdConfig{}, expected: false},
 }
@@ -75,21 +84,53 @@ func TestHelperRunDeploy(t *testing.T) {
 
 func TestRunDeploy(t *testing.T) {
 	common.FS = afero.NewMemMapFs()
-	common.Current = k8sclient.Fake{FS: common.FS} // FIXME: Run this only one for all cases ?
+	originalParseYamlFile := k8sclient.ParseYamlFile
+	originalDynamicClient := k8sclient.DynamicClient
+	orginalApply := k8sclient.DoApply
+
+	fakeClient := k8sclient.Fake{FS: common.FS}
+
 	defer func() {
-		common.Current = k8sclient.GoAPI{}
+		k8sclient.ParseYamlFile = originalParseYamlFile
+		k8sclient.DynamicClient = originalDynamicClient
+		k8sclient.DoApply = orginalApply
 	}()
 
-	for _, test := range testRunDeploy {
+	k8sclient.ParseYamlFile = fakeClient.FakeParseYamlFile
+	k8sclient.DynamicClient = fakeClient.FakeDynamicClient
 
+	for _, test := range testRunDeploy {
+		expectedResources := []string{}
+		createdResources := []string{}
 		if test.createFile != "" {
 			if test.input.Path == "" {
 				test.input.Path = defaultPath
 			}
 			common.CreateFolderStructure(t, test.input.Path)
 			common.CreateFileInFolderStructure(t, test.input.Path, test.createFile)
-			common.CopyKnativeYaml(t, test.input.Path, test.knativeYml)
+
+			if test.yaml != "" {
+				common.CopyKnativeYaml(t, test.input.Path, test.yaml)
+				if temp, err := k8sclient.ParseYamlFile(filepath.Join(test.input.Path, "knative.yml")); err != nil {
+					t.Errorf("Expected nil error, got %#v", err)
+				} else {
+					if len(temp) != test.resourcesCount {
+						t.Errorf("Expected resources count: %v, actual %v", test.resourcesCount, len(temp))
+					}
+					for _, r := range temp {
+						expectedResources = append(expectedResources, r.GetName())
+					}
+				}
+			}
 		}
+		k8sclient.DoApply = func(client dynamic.Interface, resource unstructured.Unstructured, namespace string) error {
+			createdResources = append(createdResources, resource.GetName())
+			gvk := resource.GroupVersionKind()
+			gvr, _ := meta.UnsafeGuessKindToResource(gvk)
+			_, err := client.Resource(gvr).Namespace(namespace).Create(context.Background(), &resource, metav1.CreateOptions{})
+			return err
+		}
+
 		out, err := deployKnativeServiceAndEventingBindings(test.input)
 		if err != nil && test.expected {
 			t.Errorf("Expected nil error, got %#v", err)
@@ -97,6 +138,10 @@ func TestRunDeploy(t *testing.T) {
 
 		if out != test.expected {
 			t.Errorf("Expected %v, got %v", test.expected, out)
+		}
+
+		if test.yaml != "" && !slices.Equal(expectedResources, createdResources) {
+			t.Errorf("Expected resources count: %v, actual %v", len(expectedResources), len(createdResources))
 		}
 
 		if test.createFile != "" {
