@@ -23,19 +23,7 @@ import (
 type GoAPI struct{}
 
 func (m GoAPI) GetNamespace() (string, error) {
-	fmt.Println("🔎 Checking current namespace in k8s...")
-
-	config, err := KubeApiConfig()
-	if err != nil {
-		return "", fmt.Errorf("❌ ERROR: Failed to get current k8s namespace: %w", err)
-	}
-	namespace := config.Contexts[config.CurrentContext].Namespace
-
-	if len(namespace) == 0 {
-		namespace = "default"
-	}
-	fmt.Printf(" - ✅  k8s current namespace: %s\n", namespace)
-	return namespace, nil
+	return GetNamespace()
 }
 
 func (m GoAPI) CheckContext() (string, error) {
@@ -71,14 +59,26 @@ func (m GoAPI) ExecuteApply(path, namespace string) error {
 	} else {
 		created := make([]unstructured.Unstructured, 0, len(resources))
 		for _, resource := range resources {
-			err := DoApply(client, resource, namespace)
+			gvk := resource.GroupVersionKind()
+			gvr, _ := meta.UnsafeGuessKindToResource(gvk)
+
+			applyNamespace := namespace
+			// Namespace defined in the yaml file will be used if provided, otherwise the current namespace will be used
+			if resource.GetNamespace() != "" {
+				applyNamespace = resource.GetNamespace()
+			}
+
+			_, err := client.Resource(gvr).Namespace(applyNamespace).Create(context.Background(), &resource, metav1.CreateOptions{})
 			if err != nil {
 				// rollback
 				for _, r := range created {
 					gvk := resource.GroupVersionKind()
 					gvr, _ := meta.UnsafeGuessKindToResource(gvk)
+					if r.GetNamespace() != "" {
+						applyNamespace = r.GetNamespace()
+					}
 
-					if err := client.Resource(gvr).Namespace(namespace).Delete(context.Background(), r.GetName(), metav1.DeleteOptions{}); err != nil && !errors.IsNotFound(err) {
+					if err := client.Resource(gvr).Namespace(applyNamespace).Delete(context.Background(), r.GetName(), metav1.DeleteOptions{}); err != nil && !errors.IsNotFound(err) {
 						fmt.Printf("❌ ERROR: Failed to deploy YAML file: %s", path)
 						return fmt.Errorf("❌ ERROR: Failed to rollback resource: %v", err)
 					}
@@ -112,7 +112,14 @@ func (m GoAPI) ExecuteDelete(path, namespace string) error {
 		for _, resource := range resources {
 			gvk := resource.GroupVersionKind()
 			gvr, _ := meta.UnsafeGuessKindToResource(gvk)
-			err = client.Resource(gvr).Namespace(namespace).Delete(context.Background(), resource.GetName(), metav1.DeleteOptions{
+
+			applyNamespace := namespace
+			// Namespace defined in the yaml file will be used if provided, otherwise the current namespace will be used
+			if resource.GetNamespace() != "" {
+				applyNamespace = resource.GetNamespace()
+			}
+
+			err = client.Resource(gvr).Namespace(applyNamespace).Delete(context.Background(), resource.GetName(), metav1.DeleteOptions{
 				PropagationPolicy: &deletePolicy,
 			})
 			if err != nil {
@@ -142,24 +149,6 @@ func (m GoAPI) CheckCrdExists(crd string) (bool, error) {
 		return false, nil
 	}
 
-	return true, nil
-}
-
-func (m GoAPI) CheckResourceExists(resource unstructured.Unstructured, namespace string) (bool, error) {
-	client, err := DynamicClient()
-	if err != nil {
-		return false, fmt.Errorf("❌ ERROR: Failed to create dynamic Kubernetes client: %v", err)
-	}
-	gvk := resource.GroupVersionKind()
-	gvr, _ := meta.UnsafeGuessKindToResource(gvk)
-
-	_, err = client.Resource(gvr).Namespace(namespace).Get(context.Background(), resource.GetName(), metav1.GetOptions{})
-	if err != nil {
-		if errors.IsNotFound(err) {
-			return false, nil
-		}
-		return false, fmt.Errorf("❌ ERROR: Failed to get resource: %v", err)
-	}
 	return true, nil
 }
 
@@ -226,9 +215,18 @@ var ParseYamlFile = func(path string) ([]unstructured.Unstructured, error) {
 	return result, nil
 }
 
-var DoApply = func(client dynamic.Interface, resource unstructured.Unstructured, namespace string) error {
-	gvk := resource.GroupVersionKind()
-	gvr, _ := meta.UnsafeGuessKindToResource(gvk)
-	_, err := client.Resource(gvr).Namespace(namespace).Create(context.Background(), &resource, metav1.CreateOptions{})
-	return err
+var GetNamespace = func() (string, error) {
+	fmt.Println("🔎 Checking current namespace in k8s...")
+
+	config, err := KubeApiConfig()
+	if err != nil {
+		return "", fmt.Errorf("❌ ERROR: Failed to get current k8s namespace: %w", err)
+	}
+	namespace := config.Contexts[config.CurrentContext].Namespace
+
+	if len(namespace) == 0 {
+		namespace = "default"
+	}
+	fmt.Printf(" - ✅  k8s current namespace: %s\n", namespace)
+	return namespace, nil
 }

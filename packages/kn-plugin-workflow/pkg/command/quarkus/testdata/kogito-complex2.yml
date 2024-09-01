@@ -1,24 +1,36 @@
----
-apiVersion: v1
-kind: ConfigMap
+apiVersion: batch/v1
+kind: Job
 metadata:
-  name: hello-config
-  namespace: default
-data:
-  greeting: "Hello, World!"
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: hello-service
+  name: example-job
   namespace: default
 spec:
-  selector:
-    app: hello
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 8080
+  template:
+    spec:
+      containers:
+        - name: example-job-container
+          image: busybox
+          command: ["echo", "Hello, Kubernetes!"]
+      restartPolicy: Never
+  backoffLimit: 4
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: example-cronjob
+  namespace: default
+spec:
+  schedule: "*/5 * * * *" # Запуск каждые 5 минут
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: example-cronjob-container
+              image: busybox
+              command: ["echo", "Hello from CronJob!"]
+          restartPolicy: Never
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
 ---
 apiVersion: sonataflow.org/v1alpha08
 kind: SonataFlow
@@ -52,15 +64,3 @@ spec:
 status:
   address: {}
   lastTimeRecoverAttempt: null
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: hello-pvc
-  namespace: default
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi

@@ -48,19 +48,19 @@ func CreateFileInFolderStructure(t *testing.T, path string, fileName string) {
 	}
 }
 
-func CopyKnativeYaml(t *testing.T, path string, knativeFileName string) {
-	if knativeFileName == "" {
+func CopyFileInFolderStructure(t *testing.T, path, src, dist string) {
+	if src == "" || dist == "" {
 		return
 	}
 
-	r, err := os.Open(filepath.Join("testdata", knativeFileName))
+	r, err := os.Open(filepath.Join("testdata", src))
 	if err != nil {
-		t.Errorf("Unable to open %s", filepath.Join("testdata", knativeFileName))
+		t.Errorf("Unable to open %s", filepath.Join("testdata", src))
 
 	}
 	defer r.Close()
 
-	if err := afero.WriteReader(FS, filepath.Join(path, "knative.yml"), r); err != nil {
-		t.Errorf("Error writing to file: %s", filepath.Join(path, knativeFileName))
+	if err := afero.WriteReader(FS, filepath.Join(path, dist), r); err != nil {
+		t.Errorf("Error writing to file: %s", filepath.Join(path, dist))
 	}
 }

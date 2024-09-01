@@ -15,10 +15,20 @@ type Fake struct {
 	FS afero.Fs
 }
 
-func (m Fake) FakeDynamicClient() (dynamic.Interface, error) {
+var currentDynamicClient = initDynamicClient()
+
+func initDynamicClient() dynamic.Interface {
 	scheme := runtime.NewScheme()
 	fakeDynamicClient := fake.NewSimpleDynamicClient(scheme)
-	return fakeDynamicClient, nil
+	return fakeDynamicClient
+}
+
+func (m Fake) FakeDynamicClient() (dynamic.Interface, error) {
+	return currentDynamicClient, nil
+}
+
+func (m Fake) GetNamespace() (string, error) {
+	return "default", nil
 }
 
 func (m Fake) FakeParseYamlFile(path string) ([]unstructured.Unstructured, error) {

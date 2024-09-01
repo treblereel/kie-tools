@@ -94,18 +94,16 @@ func deployKnativeServiceAndEventingBindings(cfg DeployCmdConfig) (bool, error) 
 
 	err := common.ExecuteApply(filepath.Join(cfg.Path, "knative.yml"), cfg.Namespace)
 	if err != nil {
-		fmt.Println("❌ ERROR: Deploy failed, Knative service was not created.")
 		return isKnativeEventingBindingsCreated, err
 	}
 	fmt.Println("🎉 Knative service successfully created")
 
 	if exists, err := checkIfKogitoFileExists(cfg); exists && err == nil {
 		if err := common.ExecuteApply(filepath.Join(cfg.Path, "kogito.yml"), cfg.Namespace); err != nil {
-			fmt.Println("❌ ERROR:Deploy failed, Knative Eventing binding was not created.")
 			return isKnativeEventingBindingsCreated, err
 		}
 		isKnativeEventingBindingsCreated = true
-		fmt.Println("✅ Knative Eventing bindings successfully created")
+		fmt.Println("🎉 Knative Eventing bindings successfully created")
 	}
 	return isKnativeEventingBindingsCreated, nil
 }
