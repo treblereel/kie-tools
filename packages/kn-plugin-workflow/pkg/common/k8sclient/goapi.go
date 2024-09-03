@@ -69,21 +69,21 @@ func (m GoAPI) ExecuteApply(path, namespace string) error {
 				applyNamespace = resource.GetNamespace()
 			}
 
-			_, err := client.Resource(gvr).Namespace(applyNamespace).Apply(context.Background(), resource.GetName(), &resource, metav1.ApplyOptions{
-				FieldManager: "sample-controller",
-				Force:        true,
-			})
+			_, err := client.Resource(gvr).Namespace(applyNamespace).Create(context.Background(), &resource, metav1.CreateOptions{})
 			if err != nil {
-				// rollback
-				for _, r := range created {
-					gvk := resource.GroupVersionKind()
-					gvr, _ := meta.UnsafeGuessKindToResource(gvk)
-					if r.GetNamespace() != "" {
-						applyNamespace = r.GetNamespace()
+				if errors.IsAlreadyExists(err) {
+					existingResource, err := client.Resource(gvr).Namespace(applyNamespace).Get(context.Background(), resource.GetName(), metav1.GetOptions{})
+					if err != nil {
+						return fmt.Errorf("❌ ERROR: Failed to get existing resource: %v", err)
 					}
-
-					if err := client.Resource(gvr).Namespace(applyNamespace).Delete(context.Background(), r.GetName(), metav1.DeleteOptions{}); err != nil && !errors.IsNotFound(err) {
-						fmt.Printf("❌ ERROR: Failed to deploy YAML file: %s", path)
+					resource.SetResourceVersion(existingResource.GetResourceVersion())
+					_, err = client.Resource(gvr).Namespace(applyNamespace).Update(context.Background(), &resource, metav1.UpdateOptions{})
+					if err != nil {
+						return fmt.Errorf("❌ ERROR: Failed to update resource: %v", err)
+					}
+				} else {
+					// rollback
+					if err := doRollback(created, applyNamespace, client); err != nil {
 						return fmt.Errorf("❌ ERROR: Failed to rollback resource: %v", err)
 					}
 				}
@@ -230,4 +230,19 @@ var GetNamespace = func() (string, error) {
 	}
 	fmt.Printf(" - ✅  k8s current namespace: %s\n", namespace)
 	return namespace, nil
+}
+
+func doRollback(created []unstructured.Unstructured, applyNamespace string, client dynamic.Interface) error {
+	for _, r := range created {
+		gvk := r.GroupVersionKind()
+		gvr, _ := meta.UnsafeGuessKindToResource(gvk)
+		if r.GetNamespace() != "" {
+			applyNamespace = r.GetNamespace()
+		}
+
+		if err := client.Resource(gvr).Namespace(applyNamespace).Delete(context.Background(), r.GetName(), metav1.DeleteOptions{}); err != nil && !errors.IsNotFound(err) {
+			return fmt.Errorf("❌ ERROR: Failed to rollback resource: %v", err)
+		}
+	}
+	return nil
 }
