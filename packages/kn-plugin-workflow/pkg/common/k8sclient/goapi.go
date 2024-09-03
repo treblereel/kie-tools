@@ -63,27 +63,27 @@ func (m GoAPI) ExecuteApply(path, namespace string) error {
 			gvk := resource.GroupVersionKind()
 			gvr, _ := meta.UnsafeGuessKindToResource(gvk)
 
-			applyNamespace := namespace
-			// Namespace defined in the yaml file will be used if provided, otherwise the current namespace will be used
-			if resource.GetNamespace() != "" {
-				applyNamespace = resource.GetNamespace()
+			if resource.GetNamespace() != "" && namespace != resource.GetNamespace() {
+				return fmt.Errorf("❌ ERROR: the namespace from the provided object \"%s\" does not match"+
+					" the namespace \"%s\". You must pass '--namespace=%s' to perform this operation.:",
+					resource.GetNamespace(), namespace, resource.GetNamespace())
 			}
 
-			_, err := client.Resource(gvr).Namespace(applyNamespace).Create(context.Background(), &resource, metav1.CreateOptions{})
+			_, err := client.Resource(gvr).Namespace(namespace).Create(context.Background(), &resource, metav1.CreateOptions{})
 			if err != nil {
 				if errors.IsAlreadyExists(err) {
-					existingResource, err := client.Resource(gvr).Namespace(applyNamespace).Get(context.Background(), resource.GetName(), metav1.GetOptions{})
+					existingResource, err := client.Resource(gvr).Namespace(namespace).Get(context.Background(), resource.GetName(), metav1.GetOptions{})
 					if err != nil {
 						return fmt.Errorf("❌ ERROR: Failed to get existing resource: %v", err)
 					}
 					resource.SetResourceVersion(existingResource.GetResourceVersion())
-					_, err = client.Resource(gvr).Namespace(applyNamespace).Update(context.Background(), &resource, metav1.UpdateOptions{})
+					_, err = client.Resource(gvr).Namespace(namespace).Update(context.Background(), &resource, metav1.UpdateOptions{})
 					if err != nil {
 						return fmt.Errorf("❌ ERROR: Failed to update resource: %v", err)
 					}
 				} else {
 					// rollback
-					if err := doRollback(created, applyNamespace, client); err != nil {
+					if err := doRollback(created, namespace, client); err != nil {
 						return fmt.Errorf("❌ ERROR: Failed to rollback resource: %v", err)
 					}
 				}
@@ -117,13 +117,7 @@ func (m GoAPI) ExecuteDelete(path, namespace string) error {
 			gvk := resource.GroupVersionKind()
 			gvr, _ := meta.UnsafeGuessKindToResource(gvk)
 
-			applyNamespace := namespace
-			// Namespace defined in the yaml file will be used if provided, otherwise the current namespace will be used
-			if resource.GetNamespace() != "" {
-				applyNamespace = resource.GetNamespace()
-			}
-
-			err = client.Resource(gvr).Namespace(applyNamespace).Delete(context.Background(), resource.GetName(), metav1.DeleteOptions{
+			err = client.Resource(gvr).Namespace(namespace).Delete(context.Background(), resource.GetName(), metav1.DeleteOptions{
 				PropagationPolicy: &deletePolicy,
 			})
 			if err != nil {
