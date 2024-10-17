@@ -205,7 +205,7 @@ func pullDockerImage(cli *client.Client, ctx context.Context) (io.ReadCloser, er
 	// of an image.
 	imageNameWithoutRegistry := strings.Split(metadata.DevModeImage, "/")
 	imageFilters := filters.NewArgs()
-	imageFilters.Add("reference", fmt.Sprintf("*/%s", imageNameWithoutRegistry[len(imageNameWithoutRegistry)-1]))
+	imageFilters.Add("reference", fmt.Sprintf("*/*/%s", imageNameWithoutRegistry[len(imageNameWithoutRegistry)-1]))
 	images, err := cli.ImageList(ctx, types.ImageListOptions{Filters: imageFilters})
 	if err != nil {
 		return nil, fmt.Errorf("error listing images: %s", err)
