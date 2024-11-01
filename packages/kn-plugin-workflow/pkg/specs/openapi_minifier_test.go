@@ -214,7 +214,7 @@ func checkResult(t *testing.T, test minifyTest, minifiedFiles map[string]string)
 		minified := minifiedFiles[file]
 		data, err := os.ReadFile(minified)
 		if err != nil {
-			t.Fatalf("Error reading minified file: %v", err)
+			t.Fatalf("Error reading minified file%s : %v", minified, err)
 		}
 		doc, err := openapi3.NewLoader().LoadFromData(data)
 		for _, value := range doc.Paths.Map() {
