@@ -24,6 +24,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 
@@ -115,7 +116,7 @@ func (m *OpenApiMinifier) fetchSpecFromFunction(workflowFile string) error {
 			if len(parts) != 2 {
 				return fmt.Errorf("❌ ERROR: Invalid operation format: %s", function.Operation)
 			}
-			apiFileName := parts[0]
+			apiFileName := path.Base(parts[0])
 			operation := parts[1]
 
 			if _, ok := m.operations[apiFileName]; !ok {
