@@ -81,6 +81,10 @@ func TestRunCommand(t *testing.T) {
 func RunRunTest(t *testing.T, cfgTestInputPrepareCreate CfgTestInputCreate, test cfgTestInputRun) string {
 	var err error
 
+	command.StopContainer = func(containerTool string) error {
+		return nil
+	}
+
 	// Create the project
 	RunCreateTest(t, cfgTestInputPrepareCreate)
 
@@ -98,11 +102,6 @@ func RunRunTest(t *testing.T, cfgTestInputPrepareCreate CfgTestInputCreate, test
 
 	// Run the `run` command
 	go func() {
-		command.StopContainerOnUserCommand = false
-		defer func() {
-			command.StopContainerOnUserCommand = true
-		}();
-
 		defer wg.Done()
 		_, err = ExecuteKnWorkflowWithCmd(cmd, transformRunCmdCfgToArgs(test.input)...)
 		require.Truef(t, err == nil || IsSignalInterrupt(err), "Expected nil error or signal interrupt, got %v", err)
