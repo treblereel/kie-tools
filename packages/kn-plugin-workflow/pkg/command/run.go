@@ -37,6 +37,10 @@ type RunCmdConfig struct {
 	OpenDevUI   bool
 }
 
+
+// for testing purposes, this variable is set to false
+var StopContainerOnUserCommand = true
+
 func NewRunCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "run",
@@ -147,6 +151,10 @@ func runSWFProjectDevMode(containerTool string, cfg RunCmdConfig) (err error) {
 }
 
 func stopContainer(containerTool string) error {
+	if !StopContainerOnUserCommand {
+		return nil
+	}
+
 	fmt.Println("Press ENTER to stop the container")
 
 	reader := bufio.NewReader(os.Stdin)
