@@ -65,6 +65,15 @@ func TestMain(m *testing.M) {
 	os.Exit(exitCode)
 }
 
+func setupCrds(current string) {
+	crdPath := filepath.Join(current, "crd", operatorCRD)
+	err := ExecuteCommand("kubectl", "create", "-f", crdPath)
+	if err != nil {
+		fmt.Println("Failed to create CRD: ", err)
+		os.Exit(1)
+	}
+}
+
 func setUpTempDir(tempDirName string) {
 	var err error
 	err = os.Mkdir(tempDirName, 0750)
