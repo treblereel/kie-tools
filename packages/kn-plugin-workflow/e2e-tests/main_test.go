@@ -30,6 +30,13 @@ import (
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/apache/incubator-kie-tools/packages/kn-plugin-workflow/pkg/common/k8sclient"
+
+	"k8s.io/apimachinery/pkg/api/errors"
+	"k8s.io/apimachinery/pkg/api/meta"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/client-go/dynamic"
 )
 
 var parentPath string
@@ -66,13 +73,44 @@ func TestMain(m *testing.M) {
 }
 
 func setupCrds(current string) {
-	crdPath := filepath.Join(current, "crd", operatorCRD)
-	err := ExecuteCommand("kubectl", "create", "-f", crdPath)
-	if err != nil {
-		fmt.Println("Failed to create CRD: ", err)
-		os.Exit(1)
+	
+			client, err := k8sclient.DynamicClient()
+		if err != nil {
+				fmt.Println("❌ ERROR: Failed to create dynamic client: ", err)
+				os.Exit(1)
+			}
+		crdPath := filepath.Join(current, "crd", operatorCRD)
+		if resources, err := k8sclient.ParseYamlFile(crdPath); err != nil {
+				fmt.Printf("❌ ERROR: Failed to parse YAML file: %v\n", err)
+				os.Exit(1)
+			} else {
+				for _, resource := range resources {
+						gvk := resource.GroupVersionKind()
+						gvr, _ := meta.UnsafeGuessKindToResource(gvk)
+			
+							baseResource := client.Resource(gvr)
+			
+							ns := resource.GetNamespace()
+						var resourceInterface dynamic.ResourceInterface
+			
+							if ns != "" {
+								resourceInterface = baseResource.Namespace(ns)
+							} else {
+								resourceInterface = baseResource
+							}
+			
+							_, err := resourceInterface.Create(context.Background(), &resource, metav1.CreateOptions{})
+						if err != nil {
+								if errors.IsAlreadyExists(err) {
+										continue
+									} else {
+										fmt.Println("❌ ERROR: Failed to create resource: ", err)
+										os.Exit(1)
+									}
+							}
+					}
+			}
 	}
-}
 
 func setUpTempDir(tempDirName string) {
 	var err error
