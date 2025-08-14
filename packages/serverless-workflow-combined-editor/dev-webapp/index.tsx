@@ -22,4 +22,15 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { App } from "./App";
 
+// Dynamically generate and set the nonce (example - in a real app, this comes from the server)
+// For demonstration, a static base64 string is used, but this should be dynamic.
+// declare const __webpack_nonce__: string | undefined;
+// if (typeof __webpack_nonce__ === 'undefined') {
+//   // In a production environment, this value would be provided by the server
+//   // and injected into the HTML. For local development or client-side generation,
+//   // you might have a placeholder or a simple static value.
+//   // Example for a static nonce (not recommended for production CSP):
+//    (window as any).__webpack_nonce__ = 'sha256-gEh1+8U9S1vkEuQSmmUMTZjyNSu5tIoECP4UXIEjMTk=';
+// }
+
 ReactDOM.render(<App />, document.getElementById("app")!);

@@ -24,6 +24,9 @@ const common = require("@kie-tools-core/webpack-base/webpack.common.config");
 const patternflyBase = require("@kie-tools-core/patternfly-base");
 const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
 const swEditorAssets = require("@kie-tools/serverless-workflow-diagram-editor-assets");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CspHtmlWebpackPlugin = require("csp-html-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const { env } = require("../env");
 
 module.exports = (webpackEnv) =>
@@ -48,9 +51,10 @@ module.exports = (webpackEnv) =>
       path: path.resolve("../dist-dev"),
     },
     plugins: [
+      new CleanWebpackPlugin(),
       new CopyPlugin({
         patterns: [
-          { from: path.resolve(__dirname, "./static/index.html"), to: "./index.html" },
+          // { from: path.resolve(__dirname, "./static/index.html"), to: "./index.html" },
           { from: path.resolve(__dirname, "./static/favicon.ico"), to: "./favicon.ico" },
           {
             from: swEditorAssets.swEditorPath(),
@@ -77,6 +81,22 @@ module.exports = (webpackEnv) =>
           },
         ],
       }),
+      new HtmlWebpackPlugin({
+        template: "./dev-webapp/static/index.html", // Path to your HTML template file
+        filename: "index.html", // Output filename for the generated HTML
+      }),
+      new CspHtmlWebpackPlugin({
+        "default-src": "'self'",
+        "base-uri": "'self'",
+        "font-src": ["'self'", "https:", "data:"],
+        // "frame-ancestors": "'self'",
+        "img-src": ["'self'", "data:"],
+        "object-src": "'none'",
+        "script-src": ["'self'", "'strict-dynamic'", "'unsafe-eval'", "https://cdn.segment.com"],
+        "script-src-attr": "'none'",
+        "style-src": ["'self'", "https:", "'unsafe-inline'"],
+        "connect-src": ["'self'", "http:", "https"],
+      }),
       new MonacoWebpackPlugin({
         languages: ["json"],
         customLanguages: [
@@ -96,6 +116,10 @@ module.exports = (webpackEnv) =>
     },
     ignoreWarnings: [/Failed to parse source map/],
     devServer: {
+      headers: {
+        "Content-Security-Policy":
+          "default-src 'self'; base-uri 'self'; font-src 'self' https: data:; frame-ancestors 'self'; img-src 'self' data:; object-src 'none'; script-src 'self' 'unsafe-eval' https://cdn.segment.com; script-src-attr 'none'; style-src 'self' https: 'unsafe-inline'; connect-src 'self' http: https:;",
+      },
       historyApiFallback: true,
       static: [{ directory: path.join(__dirname) }],
       compress: true,
