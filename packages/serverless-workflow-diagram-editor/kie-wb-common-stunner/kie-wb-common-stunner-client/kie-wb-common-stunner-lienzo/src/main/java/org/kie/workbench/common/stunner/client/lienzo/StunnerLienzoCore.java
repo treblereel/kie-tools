@@ -27,8 +27,6 @@ import com.ait.lienzo.client.core.config.LienzoCore;
 import com.ait.lienzo.shared.core.types.ImageSelectionMode;
 import org.gwtbootstrap3.extras.notify.client.NotifyClientBundle;
 import org.kie.j2cl.tools.di.ui.translation.client.annotation.Bundle;
-import org.kie.j2cl.tools.processors.common.injectors.ScriptInjector;
-import org.kie.j2cl.tools.processors.common.injectors.StyleInjector;
 import org.kie.j2cl.tools.processors.common.resources.TextResource;
 import org.kie.workbench.common.stunner.client.lienzo.resources.StunnerLienzoCoreResources;
 
@@ -61,20 +59,20 @@ public class StunnerLienzoCore {
         resources.add(() -> injectScript(NotifyClientBundle.INSTANCE.notifyJS()));
         resources.add(() -> injectScript(StunnerLienzoCoreResources.INSTANCE.bootstrapSelectJs()));
 
-        pollResource();
+        //pollResource();
 
         LienzoCore.get().setDefaultImageSelectionMode(ImageSelectionMode.SELECT_BOUNDS);
     }
 
 
     private void injectStyle(TextResource resource) {
-        StyleInjector.fromString(resource.getText()).inject();
-        pollResource();
+        //StyleInjector.fromString(resource.getText()).inject();
+        //pollResource();
     }
 
     private void injectScript(TextResource resource) {
-        ScriptInjector.fromString(resource.getText()).inject();
-        pollResource();
+        //ScriptInjector.fromString(resource.getText()).inject();
+        //pollResource();
     }
 
     private void pollResource() {

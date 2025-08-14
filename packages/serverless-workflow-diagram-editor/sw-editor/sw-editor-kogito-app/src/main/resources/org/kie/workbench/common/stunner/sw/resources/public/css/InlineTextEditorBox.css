@@ -17,26 +17,27 @@
  * under the License.
  */
 
+.inlineNameEditBoxNameBox {
+  position: absolute;
+  content: "\a";
+  white-space: pre-line;
+  outline: none;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  height: auto;
+  border: none;
+  resize: none;
+  background-color: transparent;
+  font-weight: normal;
+  line-height: 1.2;
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  border-radius: 7px;
+  -webkit-user-modify: read-write-plaintext-only;
+}
 
-package org.uberfire.ext.editor.commons.client.file.exports;
-
-import org.kie.j2cl.tools.processors.common.resources.ClientBundle;
-import org.kie.j2cl.tools.processors.common.resources.TextResource;
-
-/**
- * Static resources related to the file export.
- */
-public interface FileExportResources extends ClientBundle {
-
-
-    // The File Saver js.
-    @Source("js/FileSaver.min.js.back")
-    TextResource fileSaver();
-
-    // The jsPDF js.
-    @Source("js/jspdf.min.js.back")
-    TextResource jsPdf();
-
-    @Source("js/canvas2svg.js.back")
-    TextResource canvas2svg();
+[data-text]:empty:before {
+  content: attr(data-text);
+  color: #888;
+  font-style: italic;
 }

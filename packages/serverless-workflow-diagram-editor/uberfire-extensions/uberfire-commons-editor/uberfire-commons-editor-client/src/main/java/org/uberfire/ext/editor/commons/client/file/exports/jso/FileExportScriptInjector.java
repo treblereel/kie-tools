@@ -25,7 +25,6 @@ import java.util.function.Consumer;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import org.kie.j2cl.tools.di.ui.common.client.injectors.ScriptInjector;
-import org.uberfire.ext.editor.commons.client.file.exports.FileExportResources;
 
 /**
  * This bean wraps third party libraries related to file exporting
@@ -53,33 +52,7 @@ public class FileExportScriptInjector {
     }
 
     public void inject() {
-        final String fileSaver = getFileSaverSource();
-        final String jsPdf = getJsPdfSource();
-        final String c2sSource = getC2SSource();
-        scriptInjector.accept("var " + fileSaver + "\n" +
-                                      jsPdf + "\n" +
-                                      c2sSource + "\n");
-    }
 
-    private String getFileSaverSource() {
-        final String fsScript = FileExportResources.INSTANCE.fileSaver().getText();
-        final String fsNsObject = buildNamespaceObject(NS + "JsFileSaver.saveAs");
-        return fsNsObject + " = function(blob, fileName, disableAutoBOM) {" + "\n" +
-                fsScript + "\n" +
-                "return saveAs(blob, fileName, disableAutoBOM);};";
-    }
-
-    private String getJsPdfSource() {
-        final String jsPdfScript = FileExportResources.INSTANCE.jsPdf().getText();
-        final String jsPdfNsObject = buildNamespaceObject(NS + "JsPdf");
-        return jsPdfNsObject + " = function(settings) {" + "\n" +
-                jsPdfScript + "\n" +
-                "var saveAs = " + NS + "JsFileSaver.saveAs; " +
-                "return new jsPDF(settings);};";
-    }
-
-    private String getC2SSource() {
-        return FileExportResources.INSTANCE.canvas2svg().getText();
     }
 
     private static void inject(final String raw) {

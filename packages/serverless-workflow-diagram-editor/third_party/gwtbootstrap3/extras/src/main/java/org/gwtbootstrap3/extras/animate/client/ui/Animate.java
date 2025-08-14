@@ -24,6 +24,7 @@ import java.util.ArrayList;
 
 import elemental2.core.JsArray;
 import elemental2.core.JsObject;
+import elemental2.dom.DomGlobal;
 import elemental2.dom.Event;
 import elemental2.dom.HTMLElement;
 import jsinterop.annotations.JsFunction;
@@ -34,7 +35,6 @@ import jsinterop.base.JsPropertyMap;
 import org.gwtbootstrap3.client.shared.js.JQuery;
 import org.gwtbootstrap3.extras.animate.client.ui.constants.Animation;
 import org.gwtproject.core.client.Scheduler;
-import org.kie.j2cl.tools.processors.common.injectors.StyleInjector;
 
 import static org.gwtbootstrap3.client.shared.js.JQuery.$;
 
@@ -283,7 +283,10 @@ public class Animate {
             styleSheet += "}";
 
             // inject new style
-            StyleInjector.fromString(styleSheet).inject();
+
+            DomGlobal.console.log("Injecting style: Animate"  + styleSheet);
+
+            //StyleInjector.fromString(styleSheet).inject();
 
             usedStyles.add(animation + " " + getStyleNameFromAnimation(animation, count, duration, delay));
 
